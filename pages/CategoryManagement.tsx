@@ -9,9 +9,9 @@ import {Card, CardActionArea, CardContent, CardMedia, CardActions, CircularProgr
 import {PhotoCamera, Edit, Delete, AddAPhoto, Refresh, TableChart, ExpandLess, ExpandMore, Add, Check, Clear}  from '@material-ui/icons/';
 
 import {API} from '../config';
-import {getCategories, addSubCategory, editSubCategory, deleteSubCategory} from '../api/categoryApi'
-import InitializeCategory from './InitializeCategory';
-import LoadingBackdrop from '../components/LoadingBackdrop';
+import {getCategories, addSubCategory, editSubCategory, getTransactionCount, deleteSubCategory} from '../api/categoryApi'
+import InitializeCategory from '../components/InitializeCategory';
+import LoadingBackdrop, {LoadingDiv} from '../components/LoadingBackdrop';
 
 const useStyles = makeStyles((theme) => ({  
   addSubCategory:{
@@ -165,6 +165,7 @@ const Category = ({categoryData:{_id, name, subCategories}, refresh}) => {
 					idSubToDelete!=='' &&
 					<DeleteSubCategoryDialog cancelDelete={()=>setIdSubToDelete('')} 
 											 deleteSub={submitDeleteAndRefresh} 
+											 categoryId={_id}
 											 categoryName={name}
 											 subToDelete={subCategories.filter(d => d._id===idSubToDelete)[0]}/>
 				}
@@ -318,9 +319,27 @@ const EditingSubCategory = ({sub:{_id, name}, submitEdit, cancelEdit}) => {
 	)
 }
 
-function DeleteSubCategoryDialog({cancelDelete, deleteSub, categoryName, subToDelete:{_id, name} }) {      
+function DeleteSubCategoryDialog({cancelDelete, deleteSub, categoryId, categoryName, subToDelete:{_id, name} }) {      
   const [isSubmittingData, setIsSubmitting] = useState<boolean>(false);
-  useEffect(()=>{        
+  const [isCountingTransaction, setIsCountingTransaction] = useState<boolean>(true);
+  const [transactionCount, setTransactionCount] = useState<number>(0);
+
+  useEffect(()=>{  
+  	getTransactionCount(categoryId, _id)
+  		.then(data=>{
+  			if(typeof data === 'undefined'){
+  				console.log('No connection!?');
+  				setIsCountingTransaction(false);
+  				return;
+  			}
+  			if(data.error){
+  				console.log(data.error)
+  			}else{
+  				const {transactionCount} = data;  				
+  				setTransactionCount(transactionCount);
+  			}
+  			setIsCountingTransaction(false);
+  		})
   }, []);
 //key={Date.now()}
   const submitData = (e) => {
@@ -330,21 +349,40 @@ function DeleteSubCategoryDialog({cancelDelete, deleteSub, categoryName, subToDe
 
   return (
     <Dialog fullWidth={true} maxWidth={'sm'}
-      onClose={()=>!isSubmittingData && onClose()} aria-labelledby="simple-dialog-title" open={open}>
+      onClose={()=>{}} aria-labelledby="simple-dialog-title" open={open}>
       <DialogTitle id="simple-dialog-title">
-        Delete this sub category?        
+        {isCountingTransaction?'Counting transactions....':transactionCount===0?'Delete this sub category?':'There are transaction(s)'}        
       </DialogTitle>
-      <DialogContent>        
-        {name} in {categoryName}
-        
+      <DialogContent>
+      	{
+      		isCountingTransaction && <LoadingDiv />
+      	}
+      	{
+      		!isCountingTransaction &&
+      		transactionCount === 0 &&
+      		<>      	
+      			{name} in {categoryName}
+      		</>                
+      	}
+      	{
+      		!isCountingTransaction &&
+      		transactionCount > 0 &&
+      		<>      	
+      			{transactionCount} transaction(s) under {name} in {categoryName}. Cannot delete.
+      		</>                
+      	}       	        
       </DialogContent>
       <DialogActions>
-        <Button onClick={deleteSub} color="primary"          
-        >
-          Delete
-        </Button>
+      	{
+      		transactionCount === 0 &&
+      		<Button onClick={deleteSub} color="primary"  
+        		disabled={isCountingTransaction}        
+        	>
+          		Delete
+        	</Button>
+      	}        
         <Button onClick={()=>!isSubmittingData && cancelDelete()} color="secondary"
-          disabled={isSubmittingData}
+          disabled={isSubmittingData || isCountingTransaction}
         >
           Cancel
         </Button>        

@@ -7,7 +7,7 @@ export function getCategories() {
     })
     .catch(err => {
       console.log(err);
-    })
+    });
   /*let wallets = [];
   
   try{
@@ -81,6 +81,16 @@ export function deleteSubCategory(categoryId, subCategoryId){
    return fetch(`${API}category/removeSubCategory/${categoryId}/${subCategoryId}`, {
       method: 'DELETE'
     })
+    .then(res => {
+      return res.json();
+    })
+    .catch(err => {
+      console.log(err);
+    })
+}
+
+export function getTransactionCount(categoryId, subCategoryId){
+  return fetch(`${API}category/getTransactionsOfSubCategory/${categoryId}/${subCategoryId}`)
     .then(res => {
       return res.json();
     })

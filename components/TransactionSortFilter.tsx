@@ -40,9 +40,7 @@ export default function SortFilter({categories, sort, dispatchSort, filter, disp
   }
 
   const checkFilterChanged = () =>{    
-    const {category, subCategory, dateFilter} = filter;
-    console.log('checkFilterChanged');
-    console.log(filter);
+    const {category, subCategory, dateFilter} = filter;   
     if(category==='0' && subCategory==='0' && dateFilter.hasOwnProperty('Month') && dateFilter.Month==='All'){
       console.log('filter intact');
       return false;
@@ -89,13 +87,24 @@ const CategoryAndSubFilter = (props) => {
     if(props.categories.length > 0){
       initializeStates();
     }
-  }, []);
+  }, [props.transactionFilter]);
 
   const initializeStates = () => {
     const initCategories = [{_id:'0', name:'All'}].concat(props.categories.map(d => {return {_id:d._id, name:d.name};}));
-    const initSubCategories = [{_id:'0', name:'All', category:''}]                                                      
-                                                     .concat(props.categories[0].subCategories.map(d => {return {_id:d._id, name:d.name, category:'Income'}}))
-                                                     .concat(props.categories[1].subCategories.map(d => {return {_id:d._id, name:d.name, category:'Expense'}}));    
+    const {category} = props.transactionFilter;
+    let initSubCategories = [{_id:'0', name:'All', category:''}];
+    if(category!=="0"){
+      /*initSubCategories = initSubCategories
+        .concat(props.categories.filter(d=>d._id===category)[0].subCategories);*/
+      const selectedCategory = props.categories.filter(d=>d._id===category);
+      if(selectedCategory.length > 0){
+        initSubCategories = initSubCategories.concat(selectedCategory[0].subCategories);
+      }
+    }else{
+      initSubCategories = initSubCategories                                                     
+        .concat(props.categories[0].subCategories.map(d => {return {_id:d._id, name:d.name, category:'Income'}}))
+        .concat(props.categories[1].subCategories.map(d => {return {_id:d._id, name:d.name, category:'Expense'}}));    
+    }    
 
     setCategories(initCategories);
     setSubCategories(initSubCategories);                                                     

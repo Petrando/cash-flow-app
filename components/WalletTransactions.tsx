@@ -94,7 +94,7 @@ const filterReducer = (state, action) => {
 
 const itemPerPage = 5;
 
-const WalletTransactions = () => {
+const WalletTransactions = (props) => {
 	const router = useRouter()
 	const transactionClasses = useStyles_transaction();
 
@@ -118,14 +118,14 @@ const WalletTransactions = () => {
 	const {transactionCount, currentPage, maxPage} = paginationData;
 
   const [sort, dispatchSort] = useReducer(sortReducer, initialSort);  
-  const [filter, dispatchFilter] = useReducer(filterReducer, initialFilter);
-  
+  const [filter, dispatchFilter] = useReducer(filterReducer, initialFilter);    
+
 	useEffect(()=>{
 		const {_id, name, balance} = router.query;
     if(typeof _id !== 'undefined'){
       setWalletId(_id);
       setWalletName(name);
-      setWalletBalance(balance);    
+      setWalletBalance(balance);      
       getFirstPage();
     }		
 	}, []);
@@ -153,6 +153,14 @@ const WalletTransactions = () => {
         setIsLoading(false);
       });
   }
+
+  useEffect(()=>{
+    if(firstLoaded){      
+      if(props.selectedCategory!=="All" && props.selectedSubCategory!=="All"){
+        dispatchFilter({type:'SET_CATEGORY_SUBCATEGORY', category:props.selectedCategory, subCategory:props.selectedSubCategory});
+      }  
+    }         
+  }, [firstLoaded]);
 
 	useEffect(()=>{      
 		if(refreshMe && firstLoaded){			      
@@ -346,7 +354,7 @@ const WalletTransactions = () => {
                         dispatchSort={dispatchSort}
                 />
               </>
-            }                 		
+            }             
       	</>
 	)
 }    			

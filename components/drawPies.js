@@ -12,7 +12,7 @@ const margin = {top: 0, right: 10, bottom: 10, left: 10},
 
 const radius = Math.min(width, height) / 2                              
 
-export default function drawPies(myGraphData, containerId){
+export default function drawPies(myGraphData, containerId, changeSelectedCategory){
     let mySvgCanvas = d3.select("#" +  containerId)
         .attr(
             "style",
@@ -33,7 +33,7 @@ export default function drawPies(myGraphData, containerId){
             .append("g").attr("id", "canvas")
                     .attr("transform", "translate(" + width/2 + "," + height/2 + ")");                                                      
 
-    console.log(myGraphData);    
+    //console.log(myGraphData);    
 
     const colorExpense = d3.scaleOrdinal(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
     const colorIncome =  d3.scaleOrdinal(["blue", "yellow", "pink", "orange", "lightsteelblue", "red", "grey"]);
@@ -57,13 +57,14 @@ export default function drawPies(myGraphData, containerId){
 
     const arcPath = arc.append("path")
         .attr("d", path)
-        .attr("fill", function(d) { return containerId==="income"?colorIncome(d.data.value):colorExpense(d.data.value); });
+        .attr("fill", function(d) { return containerId==="income"?colorIncome(d.data.value):colorExpense(d.data.value); })
+        .style("cursor", "pointer");
 
     const arcText = arc.append("text")
         .attr("class", "valueText")
         .attr("transform", 
             function(d) { 
-                console.log(d);
+                //console.log(d);
                 //return "translate(" + labelValue.centroid(d) + ")"; 
                 var midAngle = d.endAngle < Math.PI ? d.startAngle/2 + d.endAngle/2 : d.startAngle/2  + d.endAngle/2 + Math.PI ;
                 return "translate(" + labelValue.centroid(d)[0] + "," + labelValue.centroid(d)[1] + ") rotate(-90) rotate(" + (midAngle * 180/Math.PI) + ")"; 
@@ -109,6 +110,10 @@ export default function drawPies(myGraphData, containerId){
                 .style("opacity", 1);                            
 
             tooltip.transition().duration(250).style("opacity", 0);
+        })
+        .on("click", function(e, d){
+            const {data:{_id}} = d;
+            changeSelectedCategory(myGraphData._id, _id);
         });
 
     function processTooltip(d){       

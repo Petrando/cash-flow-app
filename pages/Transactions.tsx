@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import SwipeableViews from 'react-swipeable-views';
@@ -59,15 +59,25 @@ const useStyles = makeStyles((theme: Theme) => ({
 export default function FullWidthTabs() {
   const classes = useStyles();
   const theme = useTheme();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [selectedSubCategory, setSelectedSubCategory] = useState<string>("All");
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
+    setSelectedCategory("All");
+    setSelectedSubCategory("All");    
   };
 
   const handleChangeIndex = (index: number) => {
     setValue(index);
   };
+
+  const resetIndex_setCategory = (selectedCategory: string, selectedSubCategory: string) => {
+    setValue(0);
+    setSelectedCategory(selectedCategory);
+    setSelectedSubCategory(selectedSubCategory);
+  }
 
   return (     
     <Layout>      
@@ -79,7 +89,7 @@ export default function FullWidthTabs() {
       <div className={styles.backToHome}>
       <Link href="/WalletList">
           <a>← Back to Wallets</a>
-      </Link>
+      </Link>       
     </div>
       <AppBar position="static" color="default">
         <Tabs
@@ -101,38 +111,17 @@ export default function FullWidthTabs() {
         onChangeIndex={handleChangeIndex}
       >
         <TabPanel value={value} index={0} dir={theme.direction}>         
-          <WalletTransactions />
+          <WalletTransactions 
+            selectedCategory={selectedCategory}
+            selectedSubCategory={selectedSubCategory}
+          />
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
-          <WalletGraph />
+          <WalletGraph 
+            changeSelectedCategory={resetIndex_setCategory}
+          />
         </TabPanel>        
       </SwipeableViews>
     </Layout>
   );
-}
-
-const ComponentOne = () => {
-  useEffect(()=>{
-    console.log('ComponentOne loaded');
-    return () =>{
-      console.log('ComponentOne unloaded');
-    }
-  }, []);
-
-  return (
-    <Typography variant="h5">ComponentOne</Typography>
-  )
-}
-
-const ComponentTwo = () => {
-  useEffect(()=>{
-    console.log('ComponentTwo loaded');
-    return () =>{
-      console.log('ComponentTwo unloaded');
-    }
-  }, []);
-
-  return (
-    <Typography variant="h5">ComponentTwo</Typography>
-  )
 }

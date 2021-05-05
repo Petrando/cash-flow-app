@@ -30,7 +30,7 @@ const graphReducer = (state, action) => {
 };
 
 
-const WalletGraph = (props) => {
+const WalletGraph = ({changeSelectedCategory}) => {
       const router = useRouter();
       const classes = useStyles();
 
@@ -61,8 +61,8 @@ const WalletGraph = (props) => {
                               }else{
                                     const {categoryGraphData} = data;                                                                    
                                     setMyGraphData(categoryGraphData);                                    
-                                    drawPies(categoryGraphData[0], "income");
-                                    drawPies(categoryGraphData[1], "expense");
+                                    drawPies(categoryGraphData[0], "income", changeSelectedCategory);
+                                    drawPies(categoryGraphData[1], "expense", changeSelectedCategory);
                               }
                               setIsLoading(false);
                         });

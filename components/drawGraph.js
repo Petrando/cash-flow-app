@@ -7,15 +7,8 @@ let sideMargin = 40;
 let topBottomMargin = 30;
 let barPadding = 1;
 
-
-export default function drawGraph(myGraphData){
-	const margin = {top: 20, right: 20, bottom: 30, left: 40},
-                              width = w - margin.left - margin.right,
-                              height = h - margin.top - margin.bottom;
-
-	console.log(myGraphData);                              
-
-	let mySvgCanvas = d3
+export default function drawGraph(myGraphData, drawSelection){
+    let mySvgCanvas = d3
     .select("#chart")
         .attr(
             "style",
@@ -32,7 +25,24 @@ export default function drawGraph(myGraphData){
                         .concat(" ")
                         .concat(h + 2 * topBottomMargin)
                 )
-            .classed("svg-content", true)
+            .classed("svg-content", true);
+
+    if(typeof mySvgCanvas !== 'undefined'){
+        mySvgCanvas.selectAll().remove();
+    }            
+}
+
+const margin = {top: 20, right: 20, bottom: 30, left: 40},
+                              width = w - margin.left - margin.right,
+                              height = h - margin.top - margin.bottom;
+
+export function drawFullBargraph(myGraphData, mySvg){
+	
+    mySvg.selectAll().remove()                              
+
+	console.log(myGraphData);                              
+
+	const mySvgCanvas = mySvg
                 .append("g").attr("id", "canvas")
                     .attr("transform", "translate(" + sideMargin + "," + topBottomMargin + ")");                                                  
 
@@ -279,4 +289,89 @@ export default function drawGraph(myGraphData){
         .style("text-anchor", "middle")
         .attr("font-size", "12px")
         .attr("font-weight", "bold");
+}
+
+export function drawHalfBargraph(myGraphData, mySvg, leftOrRight){
+    const margin = {top: 20, right: 20, bottom: 30, left: 40},
+                              width = w - margin.left - margin.right,
+                              height = h - margin.top - margin.bottom;
+                                    
+    const mySvgCanvas = mySvg
+                .append("g").attr("id", "canvas")
+                    .attr("transform", "translate(" + (leftOrRight==='left'?sideMargin:sideMargin + (width/2)) + "," + topBottomMargin + ")");                                                  
+
+    let x = d3.scaleBand()
+        .rangeRound([0, width/2])
+        .paddingInner(0.05)
+        .align(0.1);
+
+    let y = d3.scaleLinear()    
+        .rangeRound([height, 0]);        
+
+    const colorRange = ["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"];
+    const colorRange1 = ["red", "grey", "blue", "yellow", "pink", "orange", "lightsteelblue"];
+    let  color1 = d3.scaleOrdinal()
+                    .range(colorRange);
+    let color2 = d3.scaleOrdinal()
+                    .range(colorRange1);                                                                      
+            
+    x.domain(myGraphData.map(function(d) { return d.name; }));
+
+    const yMax = d3.max(myGraphData, function(d) { return d.total; });
+    y.domain([0, 1]).nice();//.domain([0, yMax]).nice();    
+
+    const keys1 = myGraphData[0].layers.map(d=>d.name);
+    color1.domain(keys1);
+    const keys2 = myGraphData[1].layers.map(d=>d.name);
+    color2.domain(keys2);        
+            
+    let xaxis = mySvgCanvas.append("g")
+        .attr("class", "bargraphStyles axis x")
+        .attr("transform", "translate(0," + height + ")") 
+        .transition().duration(250)                       
+        .call(d3.axisBottom(x));
+           
+    let yaxis = mySvgCanvas.append("g")
+        .attr("class", "bargraphStyles axis y")                                          
+        .call(d3.axisLeft(y).ticks(10, "%"))
+        .transition().duration(250);
+
+    const dataLayers1 = d3.stack().keys(keys1)([myGraphData[0]]) 
+    dataLayers1.forEach((d,i)=>{
+        d[0].push(i);       
+        d[0].data.subCategoryIdx = i;        
+    })       
+      
+    let graphG1 = mySvgCanvas.selectAll("g.graphG-income")
+        .data(dataLayers1)
+        .enter().append("g").attr("class", "graphG-income")                  
+        .attr("fill", function(d) { return color1(d.key); });
+            
+    let graphRect_income = graphG1.selectAll("rect")
+            .data(function(d) { return d; }, function(d){return d.data.name})
+                .enter().append("rect")//.attr("class", "graphRect")
+                    .attr("x", function(d) { return x(d.data.name); })                                                                        
+                    .attr("width", x.bandwidth())
+                    .attr("y", height);
+
+    graphRect_income                    
+            .transition().duration(250)
+                .attr("height", function(d) { 
+                    const myHeight = y(d[0]/d.data.total) - y(d[1]/d.data.total);                           
+                    return myHeight; })
+                .attr("y", function(d) {                            
+                    return y(d[1]/d.data.total); 
+                });
+
+    graphRect_income.exit().remove();
+}        
+
+export function drawHalfPie(myGraphData, mySvg, leftOrRight){
+    const margin = {top: 20, right: 20, bottom: 30, left: 40},
+                              width = w - margin.left - margin.right,
+                              height = h - margin.top - margin.bottom;
+                                  
+    const mySvgCanvas = mySvg
+            .append("g").attr("id", "pieCanvas")
+            .attr("transform", "translate(" + (leftOrRight==='left'?sideMargin:sideMargin + (width/2)) + "," + topBottomMargin + ")");                                                  
 }

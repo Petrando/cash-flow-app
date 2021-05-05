@@ -1,9 +1,11 @@
 import React, {useState, useEffect, useReducer} from 'react';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
-import {FormControl, InputLabel, Select, MenuItem} from '@material-ui/core/';
+import {FormControl, Grid, InputLabel, Select, MenuItem} from '@material-ui/core/';
 import {getWalletGraphData} from '../api/transactionApi';
 import drawGraph from '../components/drawGraph';
+import drawPies from '../components/drawPies';
+import LoadingBackdrop from '../components/LoadingBackdrop';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -38,6 +40,7 @@ const WalletGraph = (props) => {
                                                       xAxis:null, yAxis: null,
                                                       layers:null, 
                                                       x:null, y:null});
+      const [isLoading, setIsLoading] = useState<boolean>(false);
 
       const [graphState, dispatchGraphState] = useReducer(graphReducer, initialGraph);
 
@@ -46,9 +49,11 @@ const WalletGraph = (props) => {
       useEffect(()=>{                
             const {_id, name, balance} = router.query;             
             if(typeof _id !== 'undefined' && myGraphData.length === 0){
+                  setIsLoading(true);
                   getWalletGraphData(_id)
                         .then(data=>{
                               if(typeof data==='undefined'){
+                                    setIsLoading(false);
                                     return;
                               }                              
                               if(data.error){
@@ -56,15 +61,30 @@ const WalletGraph = (props) => {
                               }else{
                                     const {categoryGraphData} = data;                                                                    
                                     setMyGraphData(categoryGraphData);                                    
-                                    drawGraph(categoryGraphData);
+                                    drawPies(categoryGraphData[0], "income");
+                                    drawPies(categoryGraphData[1], "expense");
                               }
+                              setIsLoading(false);
                         });
             }     
                     
       }, [myGraphData]);      
       
       return ( 
-        <> 
+        <>
+          {isLoading && <LoadingBackdrop isLoading={isLoading} />}          
+          <Grid container>
+            <Grid item xs={6} id="income">
+            </Grid>
+            <Grid item xs={6} id="expense">
+            </Grid>
+          </Grid>
+        </>
+      )
+}
+
+/*
+<> 
             <div>
                   <FormControl className={classes.formControl}>                        
                         <label><input className="graphBy" type="radio" name="mode" value="bypercent" checked />Percentage</label>
@@ -73,7 +93,6 @@ const WalletGraph = (props) => {
             </div>          
             <div id="chart" className="svg-container" />                        
         </>
-      )
-}
+*/        
 
 export default WalletGraph;

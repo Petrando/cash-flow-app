@@ -12,9 +12,6 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import { ButtonGroup, FormControl, FormControlLabel, FormLabel, RadioGroup, Radio} from '@material-ui/core/';
 
-import SelectControl from './SelectControl';
-import CustomizedTooltips from './CustomizedTooltips';
-import DateRange from './DateRange';
 import DatePickers from './DatePickers';
 
 const useStyles = makeStyles({

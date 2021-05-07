@@ -13,6 +13,7 @@ const margin = {top: 0, right: 10, bottom: 10, left: 10},
 const radius = Math.min(width, height) / 2                              
 
 export default function drawPies(myGraphData, containerId, changeSelectedCategory){
+    d3.select("#" + containerId).selectAll("*").remove();
     let mySvgCanvas = d3.select("#" +  containerId)
         .attr(
             "style",
@@ -55,10 +56,17 @@ export default function drawPies(myGraphData, containerId, changeSelectedCategor
             .enter().append("g")
             .attr("class", "arc");
 
-    const arcPath = arc.append("path")
-        .attr("d", path)
+    const arcPath = arc.append("path")        
         .attr("fill", function(d) { return containerId==="income"?colorIncome(d.data.value):colorExpense(d.data.value); })
         .style("cursor", "pointer");
+
+    arcPath        
+        .transition()
+        .duration(250)
+        .attrTween("d", arcTween)
+
+    arcPath.exit().remove();
+        
 
     const arcText = arc.append("text")
         .attr("class", "valueText")
@@ -115,6 +123,17 @@ export default function drawPies(myGraphData, containerId, changeSelectedCategor
             const {data:{_id}} = d;
             changeSelectedCategory(myGraphData._id, _id);
         });
+
+    function arcTween(d) {
+
+        var i = d3.interpolate(this._current, d);
+
+        this._current = i(0);
+
+        return function(t) {
+            return path(i(t))
+        }
+    }
 
     function processTooltip(d){       
         const {data:{name, value}} = d;  

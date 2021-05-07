@@ -3,9 +3,10 @@ import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
 import {FormControl, Grid, InputLabel, Select, MenuItem} from '@material-ui/core/';
 import {getWalletGraphData} from '../api/transactionApi';
-import drawGraph from '../components/drawGraph';
-import drawPies from '../components/drawPies';
-import LoadingBackdrop from '../components/LoadingBackdrop';
+import drawGraph from '../components/charts/drawGraph';
+import drawPies from '../components/charts/drawPies';
+import LoadingBackdrop, {LoadingDiv} from '../components/LoadingBackdrop';
+import TimeFilter from '../components/filterComponents/TimeFilter';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -29,8 +30,8 @@ const graphReducer = (state, action) => {
   }
 };
 
-
-const WalletGraph = ({changeSelectedCategory}) => {
+let componentLoaded = false;
+const WalletGraph = ({changeSelectedCategory, filter, dispatchFilter}) => {
       const router = useRouter();
       const classes = useStyles();
 
@@ -45,12 +46,18 @@ const WalletGraph = ({changeSelectedCategory}) => {
       const [graphState, dispatchGraphState] = useReducer(graphReducer, initialGraph);
 
       const { x, y, width, height} = graphParams;
+      useEffect(()=>{
+        componentLoaded = true;
+        return ()=>{
+          componentLoaded = false;
+        }
+      }, [])
 
-      useEffect(()=>{                
+      useEffect(()=>{             
             const {_id, name, balance} = router.query;             
-            if(typeof _id !== 'undefined' && myGraphData.length === 0){
+            if(typeof _id !== 'undefined' && componentLoaded){                
                   setIsLoading(true);
-                  getWalletGraphData(_id)
+                  getWalletGraphData(_id, filter)
                         .then(data=>{
                               if(typeof data==='undefined'){
                                     setIsLoading(false);
@@ -58,7 +65,7 @@ const WalletGraph = ({changeSelectedCategory}) => {
                               }                              
                               if(data.error){
                                     console.log(data.error)
-                              }else{
+                              }else{                                    
                                     const {categoryGraphData} = data;                                                                    
                                     setMyGraphData(categoryGraphData);                                    
                                     drawPies(categoryGraphData[0], "income", changeSelectedCategory);
@@ -68,11 +75,12 @@ const WalletGraph = ({changeSelectedCategory}) => {
                         });
             }     
                     
-      }, [myGraphData]);      
+      }, [filter]);      
       
       return ( 
         <>
-          {isLoading && <LoadingBackdrop isLoading={isLoading} />}          
+          {isLoading && <LoadingBackdrop isLoading={isLoading} />} 
+          <TimeFilter transactionFilter={filter} dispatchFilter={dispatchFilter} />         
           <Grid container>
             <Grid item xs={6} id="income">
             </Grid>

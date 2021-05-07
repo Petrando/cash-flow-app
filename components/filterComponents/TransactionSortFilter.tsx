@@ -9,9 +9,9 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import FilterDateRange from './FilterDateRange';
+
+import TimeFilter from './TimeFilter';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -93,9 +93,7 @@ const CategoryAndSubFilter = (props) => {
     const initCategories = [{_id:'0', name:'All'}].concat(props.categories.map(d => {return {_id:d._id, name:d.name};}));
     const {category} = props.transactionFilter;
     let initSubCategories = [{_id:'0', name:'All', category:''}];
-    if(category!=="0"){
-      /*initSubCategories = initSubCategories
-        .concat(props.categories.filter(d=>d._id===category)[0].subCategories);*/
+    if(category!=="0"){      
       const selectedCategory = props.categories.filter(d=>d._id===category);
       if(selectedCategory.length > 0){
         initSubCategories = initSubCategories.concat(selectedCategory[0].subCategories);
@@ -187,73 +185,3 @@ const CategoryAndSubFilter = (props) => {
   )
 }
 
-//const initialFilter = {category:'0', subCategory:'0', dateFilter:{month:'All'}}
-const TimeFilter = (props) => {
-  const classes = useStyles();  
-  const months = ["All", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", "Date range"];
-
-  const [age, setAge] = React.useState('');
-  //const [selectedMonth, setMonth] = useState<string>("All");
-
-  useEffect(()=>{        
-    props.dispatchFilter({type:'RESET_FILTER'});
-  }, []);
-
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
-
-  const monthItem = (d, i) => (
-    <MenuItem key={i} value={d}>{d}</MenuItem>
-  )
-
-  const handleChangeMonth = (e) => {        
-    const newMonth = e.target.value;
-    if(newMonth!=='Date range'){
-      props.dispatchFilter({type:'SET_MONTH', month:newMonth});
-    }    
-  }
-
-  const handleDispatchDateRange = (startDate, endDate) => {
-    props.dispatchFilter({type:'SET_DATE_RANGE', startDate, endDate});
-  }
-
-  const monthSelectText = () => {
-    const {dateFilter} = props.transactionFilter;
-    const {month, startDate, endDate} = dateFilter;
-    if(month!=='Date range'){
-      return ''
-    }else{
-      return startDate===endDate?`Single day : ${startDate}`:`${startDate} to ${endDate}`;
-    }
-  }
-
-  return (
-    <>
-      <FormControl className={classes.formControl}>
-        <InputLabel shrink id="demo-simple-select-placeholder-label-label">
-          Select Month
-        </InputLabel>
-        <Select
-          labelId="demo-simple-select-placeholder-label-label"
-          id="demo-simple-select-placeholder-label"
-          value={props.transactionFilter.dateFilter.month}
-          onChange={handleChangeMonth}
-          displayEmpty
-          className={classes.selectEmpty}          
-        >
-          {months.map(monthItem)}         
-        </Select>        
-        {
-          props.transactionFilter.dateFilter.month === 'Date range' &&
-          <Typography variant='caption' gutterBottom>
-            {monthSelectText()}
-          </Typography>
-        }
-      </FormControl>
-      <FormControl className={classes.formControl}> 
-        <FilterDateRange transactionFilter={props.transactionFilter} dispatchDateRange={handleDispatchDateRange} />     
-      </FormControl>      
-    </>
-  )
-}

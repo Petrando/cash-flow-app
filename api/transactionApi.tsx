@@ -97,8 +97,15 @@ export function deleteTransaction(walletId, transactionId, updatedWalletBalance)
   }) 
 }
 
-export function getWalletGraphData(walletId){
-   return fetch(`${API}transaction/graphData/${walletId}`)
+export function getWalletGraphData(walletId, filterData){
+   return fetch(`${API}transaction/graphData/${walletId}`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',     
+    },
+    body: JSON.stringify({filterData})
+  })
     .then(res => {
       return res.json();
     })

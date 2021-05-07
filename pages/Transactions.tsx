@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useReducer, useEffect, useState} from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import SwipeableViews from 'react-swipeable-views';
@@ -14,6 +14,7 @@ import utilStyles from '../styles/utils.module.css'
 import styles from '../styles/Home.module.css'
 import WalletTransactions from '../components/WalletTransactions';
 import WalletGraph from '../components/WalletGraph';
+import getCurrentMonthName from '../api/currentMonthName';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -56,6 +57,34 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
+const initialFilter = {category:'0', subCategory:'0', dateFilter:{month:getCurrentMonthName(), startDate:'', endDate:''}}
+
+const filterReducer = (state, action) => {  
+  switch (action.type){
+    case 'INITIALIZE':
+      const {category, subCategory} = action;    
+      return {...state, category, subCategory}  
+    case 'RESET_FILTER':            
+      return {...initialFilter, dateFilter:{month:getCurrentMonthName(), startDate:'', endDate:''}};
+    case 'SET_CATEGORY':      
+      return {...state, category:action.category, subCategory:'0'}
+    case 'SET_SUBCATEGORY':      
+      return {...state, subCategory:action.subCategory}
+    case 'SET_CATEGORY_SUBCATEGORY':      
+      return {...state, category:action.category, subCategory:action.subCategory}
+    case 'RESET_CATEGORY_SUBCATEGORY':     
+      return {...state, category:'0', subCategory:'0'}
+    case 'SET_MONTH':
+      const {month} = action;      
+      return {...state, dateFilter:{month, startDate:'', endDate:''}};
+    case 'SET_DATE_RANGE':
+      const {startDate, endDate} = action;
+      return {...state, dateFilter:{month:'Date range', startDate, endDate}}
+    default:
+      return state;
+  }
+}
+
 export default function FullWidthTabs() {
   const classes = useStyles();
   const theme = useTheme();
@@ -63,33 +92,36 @@ export default function FullWidthTabs() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [selectedSubCategory, setSelectedSubCategory] = useState<string>("All");
 
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+  const [filter, dispatchFilter] = useReducer(filterReducer, initialFilter);
+
+  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {    
+    dispatchFilter({type:'RESET_CATEGORY_SUBCATEGORY'});    
+    if(newValue===1){
+      dispatchFilter({type:'SET_MONTH', month:getCurrentMonthName()});
+    }
     setValue(newValue);
-    setSelectedCategory("All");
-    setSelectedSubCategory("All");    
   };
 
   const handleChangeIndex = (index: number) => {
     setValue(index);
   };
 
-  const resetIndex_setCategory = (selectedCategory: string, selectedSubCategory: string) => {
-    setValue(0);
-    setSelectedCategory(selectedCategory);
-    setSelectedSubCategory(selectedSubCategory);
+  const resetIndex_setCategory = (selectedCategory: string, selectedSubCategory: string) => {        
+    dispatchFilter({type:'SET_CATEGORY_SUBCATEGORY', category:selectedCategory, subCategory:selectedSubCategory});
+    setValue(0);    
   }
 
   return (     
     <Layout>      
       <Head>
         <title>
-          Transactions Table & Bargraph
+          Transactions Table Details & Charts
         </title>
       </Head>
       <div className={styles.backToHome}>
       <Link href="/WalletList">
           <a>← Back to Wallets</a>
-      </Link>       
+      </Link>            
     </div>
       <AppBar position="static" color="default">
         <Tabs
@@ -112,13 +144,15 @@ export default function FullWidthTabs() {
       >
         <TabPanel value={value} index={0} dir={theme.direction}>         
           <WalletTransactions 
-            selectedCategory={selectedCategory}
-            selectedSubCategory={selectedSubCategory}
+            filter={filter}
+            dispatchFilter={dispatchFilter}
           />
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
           <WalletGraph 
             changeSelectedCategory={resetIndex_setCategory}
+            filter={filter}
+            dispatchFilter={dispatchFilter}
           />
         </TabPanel>        
       </SwipeableViews>

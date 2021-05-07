@@ -13,11 +13,9 @@ import {PhotoCamera, Edit, Delete, AddAPhoto, Refresh, TableChart, ExpandLess, E
 import {API} from '../config';
 import {getCategories} from '../api/categoryApi';
 import {getTransactionsByWallet, getFirstPageTransaction_and_category, addNewTransaction, updateTransaction, deleteTransaction} from '../api/transactionApi';
-import getCurrentMonthName from '../api/currentMonthName';
 import Date from './date';
-import DatePickers, {DatePickersB} from './DatePickers';
 import LoadingBackdrop, {LoadingDiv} from './LoadingBackdrop';
-import SortFilter from './TransactionSortFilter';
+import SortFilter from './filterComponents/TransactionSortFilter';
 import FilterSortDrawer from './FilterSortDrawer';
 import TablePaging from './TablePaging';
 import SelectControl from './SelectControl';
@@ -66,35 +64,9 @@ const sortReducer = (state, action) => {
   }
 };
 
-const initialFilter = {category:'0', subCategory:'0', dateFilter:{month:getCurrentMonthName(), startDate:'', endDate:''}}
-
-const filterReducer = (state, action) => {
-  switch (action.type){
-    case 'INITIALIZE':
-      const {category, subCategory} = action;    
-      return {...state, category, subCategory}  
-    case 'RESET_FILTER':            
-      return {...initialFilter, dateFilter:{month:getCurrentMonthName(), startDate:'', endDate:''}};
-    case 'SET_CATEGORY':      
-      return {...state, category:action.category, subCategory:'0'}
-    case 'SET_SUBCATEGORY':      
-      return {...state, subCategory:action.subCategory}
-    case 'SET_CATEGORY_SUBCATEGORY':      
-      return {...state, category:action.category, subCategory:action.subCategory}
-    case 'SET_MONTH':
-      const {month} = action;      
-      return {...state, dateFilter:{month, startDate:'', endDate:''}};
-    case 'SET_DATE_RANGE':
-      const {startDate, endDate} = action;
-      return {...state, dateFilter:{month:'Date range', startDate, endDate}}
-    default:
-      return state;
-  }
-}
-
 const itemPerPage = 5;
 
-const WalletTransactions = (props) => {
+const WalletTransactions = ({filter, dispatchFilter}) => {
 	const router = useRouter()
 	const transactionClasses = useStyles_transaction();
 
@@ -117,8 +89,7 @@ const WalletTransactions = (props) => {
 
 	const {transactionCount, currentPage, maxPage} = paginationData;
 
-  const [sort, dispatchSort] = useReducer(sortReducer, initialSort);  
-  const [filter, dispatchFilter] = useReducer(filterReducer, initialFilter);    
+  const [sort, dispatchSort] = useReducer(sortReducer, initialSort);      
 
 	useEffect(()=>{
 		const {_id, name, balance} = router.query;
@@ -153,15 +124,7 @@ const WalletTransactions = (props) => {
         setIsLoading(false);
       });
   }
-
-  useEffect(()=>{
-    if(firstLoaded){      
-      if(props.selectedCategory!=="All" && props.selectedSubCategory!=="All"){
-        dispatchFilter({type:'SET_CATEGORY_SUBCATEGORY', category:props.selectedCategory, subCategory:props.selectedSubCategory});
-      }  
-    }         
-  }, [firstLoaded]);
-
+  
 	useEffect(()=>{      
 		if(refreshMe && firstLoaded){			      
 			getNewPageData();

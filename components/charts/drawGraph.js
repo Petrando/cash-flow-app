@@ -241,54 +241,7 @@ export function drawFullBargraph(myGraphData, mySvg){
 			.transition().duration(250)
 			.call(d3.axisLeft(y).ticks(null, "s"));
 	} 
-
-	var tooltip = mySvgCanvas.append("g")
-    	.attr("class", "tooltip")
-    	.style("display", "none")
-        .style("pointer-events", "none");
-      
-  	tooltip.append("rect")
-        .attr("x", -40)
-    	.attr("width", 150)
-    	.attr("height", 100)
-    	.attr("fill", "white")
-    	.style("opacity", 0.5)
-        .style("pointer-events", "none");
-
-  	tooltip.append("text")
-        .attr("class", "subCategoryName")
-    	.attr("x", 30)
-    	.attr("dy", "1.2em")
-    	.style("text-anchor", "middle")
-    	.attr("font-size", "12px")
-    	.attr("font-weight", "bold");
-
-    tooltip.append("text")
-        .attr("class", "subCategoryValue")
-        .attr("x", 25)
-        .attr("y", 20)
-        .attr("dy", "1.2em")
-        .style("text-anchor", "middle")
-        .attr("font-size", "12px")
-        .attr("font-weight", "bold");
-
-    tooltip.append("text")
-        .attr("class", "categoryName")
-        .attr("x", 30)
-        .attr("y", 40)
-        .attr("dy", "1.2em")
-        .style("text-anchor", "middle")
-        .attr("font-size", "12px")
-        .attr("font-weight", "bold");                                            			
-
-    tooltip.append("text")
-        .attr("class", "categoryValue")
-        .attr("x", 30)
-        .attr("y", 60)
-        .attr("dy", "1.2em")
-        .style("text-anchor", "middle")
-        .attr("font-size", "12px")
-        .attr("font-weight", "bold");
+	
 }
 
 export function drawHalfBargraph(myGraphData, mySvg, leftOrRight){

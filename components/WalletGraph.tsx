@@ -46,6 +46,7 @@ const WalletGraph = ({changeSelectedCategory, filter, dispatchFilter}) => {
       const [graphState, dispatchGraphState] = useReducer(graphReducer, initialGraph);
 
       const { x, y, width, height} = graphParams;
+      
       useEffect(()=>{
         componentLoaded = true;
         return ()=>{

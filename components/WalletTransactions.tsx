@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useReducer} from 'react';
 import { useRouter } from 'next/router'
-import Layout from '../components/layout.tsx'
+import Layout from '../components/layout'
 import utilStyles from '../styles/utils.module.css'
 import styles from '../styles/Home.module.css'
 import Link from 'next/link'

@@ -9,7 +9,7 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
-import Layout from '../components/layout.tsx'
+import Layout from '../components/layout'
 import utilStyles from '../styles/utils.module.css'
 import styles from '../styles/Home.module.css'
 import WalletTransactions from '../components/WalletTransactions';
@@ -119,7 +119,7 @@ export default function FullWidthTabs() {
         </title>
       </Head>
       <div className={styles.backToHome}>
-      <Link href="/WalletList">
+      <Link href="/wallet-list">
           <a>← Back to Wallets</a>
       </Link>            
     </div>

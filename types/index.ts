@@ -4,3 +4,14 @@ export interface walletMenuI {
     linkTo:string;
     avatar:JSX.Element;
 }
+
+interface subCategoryI {
+    _id:string;
+    name:string;
+}
+
+export interface categoryI {
+    _id:string;
+    name:string;
+    subCategories:subCategoryI[];
+}

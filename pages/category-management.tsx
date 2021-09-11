@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import Head from 'next/head'
-import Layout from '../components/layout.tsx'
+import Layout from '../components/layout'
 import utilStyles from '../styles/utils.module.css'
 import Link from 'next/link'
 import { GetStaticProps } from 'next'

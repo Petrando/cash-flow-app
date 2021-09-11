@@ -7,12 +7,9 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { green } from '@material-ui/core/colors';
 import ForwardIcon from '@material-ui/icons/Forward';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
 import { walletMenuI } from '../../types';
 
 const useStyles = makeStyles((theme: Theme) =>

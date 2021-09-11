@@ -5,7 +5,7 @@ import utilStyles from '../styles/utils.module.css'
 import Link from 'next/link'
 import { GetStaticProps } from 'next'
 import { Box, Button, CssBaseline, Container, Dialog, DialogTitle, DialogContent, DialogActions, Grid, IconButton, TextField } from "@material-ui/core";
-import {Card, CardActionArea, CardContent, CardMedia, CardActions, CircularProgress, Divider, InputBase, Paper, Typography, makeStyles} from "@material-ui/core";
+import {Divider, Paper, Typography, makeStyles} from "@material-ui/core";
 import {PhotoCamera, Edit, Delete, AddAPhoto, Refresh, TableChart, ExpandLess, ExpandMore, Add, Check, Clear}  from '@material-ui/icons/';
 
 import {API} from '../config';
@@ -25,6 +25,7 @@ const CategoryManagement = () => {
 	const [categories, setCategoryData] = useState([]);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [refreshMe, setRefresh] = useState<boolean>(true);
+	const [error, setError] = useState<string>("");
 
 	useEffect(()=>{
 		if(refreshMe){
@@ -53,14 +54,14 @@ const CategoryManagement = () => {
           			Category Management
         		</title>
       		</Head>
-      		{
-        		isLoading &&
-        		<LoadingBackdrop isLoading={isLoading} />
-      		} 
-      		<Container>
+      		<Container>				
       			<Typography variant="h4">
       				{!isLoading && categories.length > 0?'Category Management':'To start, please enter initial sub category data.'}
       			</Typography>
+				{
+        			isLoading &&
+        			<LoadingBackdrop isLoading={isLoading} />
+      			} 
       			{
       				!isLoading &&
       				categories.length === 0 &&

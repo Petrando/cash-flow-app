@@ -10,7 +10,7 @@ import {PhotoCamera, Edit, Delete, AddAPhoto, Refresh, TableChart, ExpandLess, E
 
 import {API} from '../config';
 import {getCategories, addSubCategory, editSubCategory, getTransactionCount, deleteSubCategory} from '../api/categoryApi'
-import InitializeCategory from '../components/InitializeCategory';
+import InitializeCategory from '../components/category-management/InitializeCategory';
 import LoadingBackdrop, {LoadingDiv} from '../components/LoadingBackdrop';
 
 const useStyles = makeStyles((theme) => ({  

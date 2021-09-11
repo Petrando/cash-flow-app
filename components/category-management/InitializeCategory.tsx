@@ -1,12 +1,12 @@
-import React, {useState} from 'react';
+import React, {useState, ChangeEvent} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
-import {Container, Typography, TextField, IconButton, Paper} from '@material-ui/core';
+import {Container, Typography, TextField, Paper} from '@material-ui/core';
 
-import {initCategories} from '../api/categoryApi';
+import {initCategories} from '../../api/categoryApi';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,19 +25,6 @@ function getSteps() {
   return ["Let's get started!", 'Create starter sub category for Income', 'Create starter sub category for Expenses'];
 }
 
-function getStepContent(stepIndex) {
-  switch (stepIndex) {
-    case 0:
-      return 'Begin intitializing.';
-    case 1:
-      return 'For income, enter a starter sub category';
-    case 2:
-      return 'For expense, enter a starter sub category';
-    default:
-      return 'Unknown stepIndex';
-  }
-}
-
 export default function InitializeCategory({refresh}) {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState<number>(0);
@@ -53,13 +40,13 @@ export default function InitializeCategory({refresh}) {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleReset = () => {
+  const handleReset = ():void => {
     setExpenseSub('');
     setIncomeSub('');
     setActiveStep(0);
   };
 
-  const submitInitialize = (e) => {
+  const submitInitialize = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>):void => {
     e.preventDefault()    
     initCategories({incomeSub, expenseSub})
       .then(data=>{
@@ -89,7 +76,13 @@ export default function InitializeCategory({refresh}) {
           <div>
             <Finalize incomeSub={incomeSub} expenseSub={expenseSub} />
             <Typography className={classes.instructions}>All steps completed</Typography>
-            <Button variant="contained" color="primary" onClick={submitInitialize}>Submit</Button>
+            <Button 
+              variant="contained" 
+              color="primary" 
+              onClick={(e)=>{submitInitialize(e)}}
+            >
+              Submit
+            </Button>
             <Button onClick={handleReset}>Reset</Button>
           </div>
         ) : (
@@ -102,7 +95,7 @@ export default function InitializeCategory({refresh}) {
               activeStep===1 &&
               <SubCategoryInput 
                 value={incomeSub}
-                changeHandler={(e)=>setIncomeSub(e.target.value)}
+                changeHandler={(e)=>{setIncomeSub(e.target.value)}}
                 label={'Income sub category'}
               />
             }
@@ -110,7 +103,7 @@ export default function InitializeCategory({refresh}) {
               activeStep===2 &&
               <SubCategoryInput 
                 value={expenseSub}
-                changeHandler={(e)=>setExpenseSub(e.target.value)}
+                changeHandler={(e)=>{setExpenseSub(e.target.value)}}
                 label={'Expense sub category'}
               />
             }
@@ -141,7 +134,12 @@ export default function InitializeCategory({refresh}) {
   );
 }
 
-const SubCategoryInput = ({value, changeHandler, label}) => {
+const SubCategoryInput = ({value, changeHandler, label}:
+                          {
+                            value:string,
+                            changeHandler:(e:ChangeEvent<HTMLInputElement>)=>void,
+                            label:string
+                          }) => {
   return (
     <TextField
       autoFocus       
@@ -155,22 +153,21 @@ const SubCategoryInput = ({value, changeHandler, label}) => {
   )
 }
 
-const Finalize = ({incomeSub, expenseSub}) => {
+const Finalize = ({incomeSub, expenseSub}:{incomeSub:string, expenseSub:string}):JSX.Element => {
   return (  
     <Container>  
       <Button variant="contained" color="primary" fullWidth>
         Income
       </Button>    
-      <Paper xs={12}>
+      <Paper>
         {incomeSub} 
       </Paper>
       <Button variant="contained" color="primary" fullWidth>
         Expense
       </Button>
-      <Paper xs={12}>
+      <Paper>
         {expenseSub}
       </Paper>
     </Container>
   )
 }
-//<Typography className={classes.instructions}>{getStepContent(activeStep)}</Typography>

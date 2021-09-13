@@ -2,17 +2,11 @@ import React, {useState, useEffect} from 'react';
 import Head from 'next/head'
 import Layout from '../components/layout'
 import utilStyles from '../styles/utils.module.css'
-import { Box, ButtonGroup, Button, CssBaseline, Container, Dialog, DialogTitle, DialogContent, DialogActions, Grid, IconButton, TextField } from "@material-ui/core";
-import {Card, CardActionArea, CardContent, CardMedia, CardActions, CircularProgress, Paper, Typography, makeStyles} from "@material-ui/core";
-import {PhotoCamera, Edit, Delete, AddAPhoto, TableChart}  from '@material-ui/icons/';
-import imageCompression from 'browser-image-compression';
-import {getWallets, updateWallet, deleteWallet} from '../api/walletApi';
-import {API} from '../config';
-import { walletI } from '../types';
+import { Box, Button, Container, Grid } from "@material-ui/core";
 import Wallet from '../components/wallets-and-transactions/Wallet';
 import AddWalletDialog from '../components/wallets-and-transactions/AddWallet';
 import EditWalletDialog from '../components/wallets-and-transactions/EditWallet';
-import LoadedImage from '../components/globals/ImageLoad';
+import DeleteWalletDialog from '../components/wallets-and-transactions/DeleteWallet';
 import LoadingBackdrop from '../components/globals/LoadingBackdrop';
 
 export default function WalletList() {
@@ -110,81 +104,13 @@ export default function WalletList() {
       }
       {
         idToDelete!=="" &&
-        <DeleteWalletDialog open={idToDelete!==""} onClose={() => setIdToDelete("")}
-          closeAndRefresh={deleteAndRefresh}
+        <DeleteWalletDialog 
+          open={idToDelete!==""} 
+          cancelDelete={() => {setIdToDelete("")}}
+          deleteAndRefresh={()=>{deleteAndRefresh()}}
           walletToDelete={wallets.filter(d=>d._id===idToDelete)[0]}
         />
       }
     </Layout>       
   )
 }
-
-function DeleteWalletDialog({ onClose, open, closeAndRefresh, walletToDelete:{_id, name, balance} }) {      
-  const [isSubmittingData, setIsSubmitting] = useState<boolean>(false);
-  useEffect(()=>{        
-  }, []);
-//key={Date.now()}
-  const submitData = (e) => {
-    e.preventDefault();     
-    deleteWallet(_id)
-      .then(data => {        
-        closeAndRefresh();
-      })
-  }
-
-  return (
-    <Dialog fullWidth={true} maxWidth={'sm'}
-      onClose={()=>!isSubmittingData && onClose()} aria-labelledby="simple-dialog-title" open={open}>
-      <DialogTitle id="simple-dialog-title">
-        You sure want to delete this wallet?
-        {isSubmittingData && <CircularProgress />}
-      </DialogTitle>
-      <DialogContent>        
-        <Grid container>          
-          <Grid item xs={12} >                          
-              <Typography variant="h5" gutterBottom>
-                {name}
-              </Typography>            
-          </Grid>
-        </Grid>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={submitData} color="primary"          
-        >
-          Delete
-        </Button>
-        <Button onClick={()=>!isSubmittingData && onClose()} color="secondary"
-          disabled={isSubmittingData}
-        >
-          Cancel
-        </Button>        
-      </DialogActions>
-    </Dialog>
-  );
-}
-/*
-export const getStaticProps: GetStaticProps = async () => {
-  const allWallets = getWallets();
-  console.log(allWallets);
-  return {
-    props: {
-      
-    }
-  }
-}*/
-
-/*
-<ul className={utilStyles.list}>
-          {allPostsData.map(({ id, date, title }) => (
-            <li className={utilStyles.listItem} key={id}>
-              <Link href={`/posts/${id}`}>
-                <a>{title}</a>
-              </Link>
-              <br />
-              <small className={utilStyles.lightText}>
-                <Date dateString={date} />
-              </small>
-            </li>
-          ))}
-        </ul>
-        */

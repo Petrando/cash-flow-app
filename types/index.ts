@@ -5,13 +5,13 @@ export interface walletMenuI {
     avatar:JSX.Element;
 }
 
-interface subCategoryI {
-    _id:string;
+export interface subCategoryI {
+    _id?:string;
     name:string;
 }
 
 export interface categoryI {
-    _id:string;
+    _id?:string;
     name:string;
     subCategories:subCategoryI[];
 }

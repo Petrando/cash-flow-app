@@ -25,7 +25,7 @@ function getSteps() {
   return ["Let's get started!", 'Create starter sub category for Income', 'Create starter sub category for Expenses'];
 }
 
-export default function InitializeCategory({refresh}) {
+export default function InitializeCategory({refresh}:{refresh:()=>void}) {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState<number>(0);
   const [incomeSub, setIncomeSub] = useState<string>('');

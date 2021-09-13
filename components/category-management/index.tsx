@@ -4,7 +4,8 @@ import { ExpandLess, ExpandMore, Add}  from '@material-ui/icons/';
 import {addSubCategory, editSubCategory, deleteSubCategory} from "../../api/categoryApi";
 import SubCategory from './sub-category';
 import NewSubCategory from './sub-category/NewSubCategory';
-import { categoryI, subCategoryI } from '../../types';
+import DeleteSubCategoryDialog from './sub-category/DeleteSubCategory';
+import { categoryI } from '../../types';
 
 const useStyles = makeStyles((theme) => ({  
     addSubCategory:{
@@ -118,18 +119,17 @@ return (
             {
                 idSubToDelete!=='' &&
                 <DeleteSubCategoryDialog 
-                               cancelDelete={()=>setIdSubToDelete('')} 
-                               deleteSub={submitDeleteAndRefresh} 
+                               cancelDelete={()=>{setIdSubToDelete('')}} 
+                               deleteSub={()=>{submitDeleteAndRefresh()}} 
                                categoryId={_id}
                                categoryName={name}
                                subToDelete={subCategories.filter(d => d._id===idSubToDelete)[0]}
                 />
             }
-  </>
-}
-</Container>
-)
-}    
+            </>
+        }
+    </Container>
+)}    
 
 export default Category;
 

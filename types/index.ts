@@ -15,3 +15,10 @@ export interface categoryI {
     name:string;
     subCategories:subCategoryI[];
 }
+
+export interface walletI {
+    _id?:string;
+    name:string;
+    icon?:string;
+    balance:number;
+}

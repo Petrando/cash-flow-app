@@ -1,6 +1,6 @@
 import {API} from '../config';
 
-export async function getWallets(args) {    
+export async function getWallets() {    
   return fetch(`${API}wallet`)
     .then(res => {
       return res.json();

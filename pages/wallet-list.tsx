@@ -1,38 +1,26 @@
 import React, {useState, useEffect} from 'react';
 import Head from 'next/head'
-import Layout from '../components/layout.tsx'
+import Layout from '../components/layout'
 import utilStyles from '../styles/utils.module.css'
-import Link from 'next/link'
-import { GetStaticProps } from 'next'
 import { Box, ButtonGroup, Button, CssBaseline, Container, Dialog, DialogTitle, DialogContent, DialogActions, Grid, IconButton, TextField } from "@material-ui/core";
 import {Card, CardActionArea, CardContent, CardMedia, CardActions, CircularProgress, Paper, Typography, makeStyles} from "@material-ui/core";
 import {PhotoCamera, Edit, Delete, AddAPhoto, TableChart}  from '@material-ui/icons/';
 import imageCompression from 'browser-image-compression';
 import {getWallets, createWallet, updateWallet, deleteWallet} from '../api/walletApi';
-
 import {API} from '../config';
-import LoadedImage from '../components/LoadedImage';
-import LoadingBackdrop from '../components/LoadingBackdrop';
-
-const useStyles = makeStyles((theme) => ({  
-  cardAction:{
-    //display:'flex', flexWrap: 'wrap'
-  },
-  buttonStyle: {
-    fontSize:'10px'
-  }
-}));
+import { walletI } from '../types';
+import Wallet from '../components/wallets-and-transactions/Wallet';
+import LoadedImage from '../components/globals/ImageLoad';
+import LoadingBackdrop from '../components/globals/LoadingBackdrop';
 
 export default function WalletList() {
-  const classes = useStyles();
 
   const [wallets, setWallets] = useState([]);
   const [refreshMe, setRefresh] = useState(true);
   const [addingWallet, setAddingWallet] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
-  const [_idEdit, setIdEdit] = useState<string>('');
-  const [_idToDelete, setIdToDelete] = useState<string>('');
+  const [idEdited, setIdEdit] = useState<string>('');
+  const [idToDelete, setIdToDelete] = useState<string>('');
 
   const [error, setError] = useState<string>("");
   
@@ -55,56 +43,8 @@ export default function WalletList() {
     }        
   }, [refreshMe]);
 
-  const aWallet = (wallet, i) => {
-    const {_id, name, icon, balance} = wallet
-    return (
-      <Grid item md={4} sm={6} xs={12} key={_id}>
-        <Card>
-          <CardActionArea>
-            <LoadedImage key={Date.now()}
-              source={`${API}/wallet/photo/${_id}`} imgStyle={{width:'auto', height:'80px'}} />
-            <CardContent>
-              <Typography variant="subtitle1" gutterBottom>
-                {name}
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                {balance}
-              </Typography>
-            </CardContent>
-          </CardActionArea>
-          <CardActions className={classes.cardAction} >                                          
-            <Link href={{ pathname: `/Transactions`, query: { _id, name, balance } }} >
-            <a>
-            <Button color="primary" variant="contained"
-              startIcon={<TableChart />}
-              className={classes.buttonStyle}
-            >        
-              Transactions
-            </Button>
-            </a>
-            </Link>                                    
-            <ButtonGroup>
-              <IconButton color="primary" variant="contained"                
-                onClick={()=>setIdEdit(_id)}
-                className={classes.buttonStyle}             
-              > 
-                <Edit />
-              </IconButton>
-              <IconButton color="secondary" variant="contained"                
-                onClick={()=>setIdToDelete(_id)}
-                className={classes.buttonStyle}
-              >
-                <Delete />
-              </IconButton> 
-            </ButtonGroup>      
-          </CardActions>
-        </Card>
-      </Grid>
-    )
-  }
-
   const deleteAndRefresh = () => {
-    //setWallets(wallets.filter(d => d._id!==_idToDelete));
+    //setWallets(wallets.filter(d => d._id!==idToDelete));
     setIdToDelete("");
     setRefresh(true);
   }
@@ -136,7 +76,13 @@ export default function WalletList() {
           (
             wallets.length > 0 ?
             <Grid container spacing={1}>
-              {wallets.filter(d=>d._id!==_idEdit).map(aWallet)}
+              {wallets.map((d, i) => <Wallet 
+                                        key={d._id}
+                                        walletData={d}
+                                        setEdit={()=>{setIdEdit(d._id)}}
+                                        setDelete={()=>{setIdToDelete(d._id)}}
+                                     />
+                          )}
             </Grid>:
             <p>No Wallets...</p>
           )
@@ -149,17 +95,17 @@ export default function WalletList() {
         />
       }
       {
-        _idEdit!=="" &&
-        <EditWalletDialog open={_idEdit!==""} onClose={() => setIdEdit("")}
+        idEdited!=="" &&
+        <EditWalletDialog open={idEdited!==""} onClose={() => setIdEdit("")}
           closeAndRefresh={()=>{setRefresh(true); setIdEdit("");}}
-          walletToEdit={wallets.filter(d=>d._id===_idEdit)[0]}
+          walletToEdit={wallets.filter(d=>d._id===idEdited)[0]}
         />
       }
       {
-        _idToDelete!=="" &&
-        <DeleteWalletDialog open={_idToDelete!==""} onClose={() => setIdToDelete("")}
+        idToDelete!=="" &&
+        <DeleteWalletDialog open={idToDelete!==""} onClose={() => setIdToDelete("")}
           closeAndRefresh={deleteAndRefresh}
-          walletToDelete={wallets.filter(d=>d._id===_idToDelete)[0]}
+          walletToDelete={wallets.filter(d=>d._id===idToDelete)[0]}
         />
       }
     </Layout>       

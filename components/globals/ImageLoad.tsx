@@ -8,13 +8,17 @@ interface ItemImageProps {
 
 let _isLoaded:boolean = false;
 
-const LoadedImage = ({source, imgStyle}:ItemImageProps):JSX.Element => {
+/*
+This is a component which displays a spinning loading indicator while an image is loading,
+or the image itself after loaded
+*/
+
+const ImageLoad = ({source, imgStyle}:ItemImageProps):JSX.Element => {
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
   const [imgUrl, setImgUrl] = useState<string>('');
 
   useEffect(() => {		
-		_isLoaded = true;
-		//getImageData();	
+		_isLoaded = true;	
 		if(_isLoaded){
 			setImgUrl(source);
 		}
@@ -41,4 +45,4 @@ const LoadedImage = ({source, imgStyle}:ItemImageProps):JSX.Element => {
   )
 }
 
-export default LoadedImage;
+export default ImageLoad;

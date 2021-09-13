@@ -1,13 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import Head from 'next/head'
 import Layout from '../components/layout'
-import utilStyles from '../styles/utils.module.css'
-import Link from 'next/link'
-import { GetStaticProps } from 'next'
-import { Box, Button, CssBaseline, Container, Dialog, DialogTitle, DialogContent, DialogActions, Grid, IconButton, TextField } from "@material-ui/core";
-import {Divider, Paper, Typography, makeStyles} from "@material-ui/core";
-
-import {API} from '../config';
+import { Container } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import {getCategories} from '../api/categoryApi'
 import InitializeCategory from '../components/category-management/InitializeCategory';
 import LoadingBackdrop from '../components/globals/LoadingBackdrop';
@@ -82,7 +77,5 @@ const CategoryManagement = () => {
       	</Layout>
 	)
 }
-
-
 
 export default CategoryManagement;

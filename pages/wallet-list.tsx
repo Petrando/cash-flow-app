@@ -3,10 +3,10 @@ import Head from 'next/head'
 import Layout from '../components/layout'
 import utilStyles from '../styles/utils.module.css'
 import { Box, Button, Container, Grid } from "@material-ui/core";
-import Wallet from '../components/wallets-and-transactions/Wallet';
-import AddWalletDialog from '../components/wallets-and-transactions/AddWallet';
-import EditWalletDialog from '../components/wallets-and-transactions/EditWallet';
-import DeleteWalletDialog from '../components/wallets-and-transactions/DeleteWallet';
+import Wallet from '../components/wallets-management/Wallet';
+import AddWalletDialog from '../components/wallets-management/AddWallet';
+import EditWalletDialog from '../components/wallets-management/EditWallet';
+import DeleteWalletDialog from '../components/wallets-management/DeleteWallet';
 import LoadingBackdrop from '../components/globals/LoadingBackdrop';
 
 export default function WalletList() {

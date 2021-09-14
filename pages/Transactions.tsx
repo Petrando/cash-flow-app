@@ -1,96 +1,22 @@
-import React, {useReducer, useEffect, useState} from 'react';
+import React, {useReducer, useState} from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import SwipeableViews from 'react-swipeable-views';
-import { makeStyles, Theme, useTheme } from '@material-ui/core/styles';
+import { useTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
-
 import Layout from '../components/layout'
-import utilStyles from '../styles/utils.module.css'
 import styles from '../styles/Home.module.css'
-import WalletTransactions from '../components/WalletTransactions';
-import WalletGraph from '../components/WalletGraph';
+import WalletTransactions from '../components/transaction-management/WalletTransactions';
+import WalletGraph from '../components/transaction-management/WalletGraph';
 import getCurrentMonthName from '../api/currentMonthName';
+import TabPanel, {a11yProps} from "../components/transaction-management/TransactionTab"
+import { initialFilter, filterReducer } from '../components/transaction-management/StoreNReducer';
 
-interface TabPanelProps {
-  children?: React.ReactNode;
-  dir?: string;
-  index: any;
-  value: any;
-}
-
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`full-width-tabpanel-${index}`}
-      aria-labelledby={`full-width-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box p={3}>
-          {children}
-        </Box>
-      )}
-    </div>
-  );
-}
-
-function a11yProps(index: any) {
-  return {
-    id: `full-width-tab-${index}`,
-    'aria-controls': `full-width-tabpanel-${index}`,
-  };
-}
-
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    backgroundColor: theme.palette.background.paper,
-    width: 500,
-  },
-}));
-
-const initialFilter = {category:'0', subCategory:'0', dateFilter:{month:getCurrentMonthName(), startDate:'', endDate:''}}
-
-const filterReducer = (state, action) => {  
-  switch (action.type){
-    case 'INITIALIZE':
-      const {category, subCategory} = action;    
-      return {...state, category, subCategory}  
-    case 'RESET_FILTER':            
-      return {...initialFilter, dateFilter:{month:getCurrentMonthName(), startDate:'', endDate:''}};
-    case 'SET_CATEGORY':      
-      return {...state, category:action.category, subCategory:'0'}
-    case 'SET_SUBCATEGORY':      
-      return {...state, subCategory:action.subCategory}
-    case 'SET_CATEGORY_SUBCATEGORY':      
-      return {...state, category:action.category, subCategory:action.subCategory}
-    case 'RESET_CATEGORY_SUBCATEGORY':     
-      return {...state, category:'0', subCategory:'0'}
-    case 'SET_MONTH':
-      const {month} = action;      
-      return {...state, dateFilter:{month, startDate:'', endDate:''}};
-    case 'SET_DATE_RANGE':
-      const {startDate, endDate} = action;
-      return {...state, dateFilter:{month:'Date range', startDate, endDate}}
-    default:
-      return state;
-  }
-}
-
-export default function FullWidthTabs() {
-  const classes = useStyles();
+export default function Transactions() {
   const theme = useTheme();
   const [value, setValue] = useState(0);
-  const [selectedCategory, setSelectedCategory] = useState<string>("All");
-  const [selectedSubCategory, setSelectedSubCategory] = useState<string>("All");
 
   const [filter, dispatchFilter] = useReducer(filterReducer, initialFilter);
 

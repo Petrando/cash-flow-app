@@ -1,6 +1,8 @@
 import {useState, useEffect} from 'react';
 import {addNewTransaction} from "../../api/transactionApi"
-import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@material-ui/core';
+import { Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@material-ui/core';
+import SelectControl from '../globals/SelectControl';
+import { LoadingDiv } from '../globals/LoadingBackdrop';
 import useStyles from './styles';
 
 export default function AddTransactionDialog({submitAdd, cancelAdd, categories, walletId, walletBalance}) {  

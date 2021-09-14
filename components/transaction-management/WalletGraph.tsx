@@ -2,11 +2,11 @@ import React, {useState, useEffect, useReducer} from 'react';
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles';
 import {FormControl, Grid, InputLabel, Select, MenuItem} from '@material-ui/core/';
-import {getWalletGraphData} from '../api/transactionApi';
-import drawGraph from '../components/charts/drawGraph';
-import drawPies from '../components/charts/drawPies';
-import LoadingBackdrop, {LoadingDiv} from '../components/LoadingBackdrop';
-import TimeFilter from '../components/filterComponents/TimeFilter';
+import {getWalletGraphData} from '../../api/transactionApi';
+import drawGraph from '../../components/charts/drawGraph';
+import drawPies from '../../components/charts/drawPies';
+import LoadingBackdrop from '../../components/globals/LoadingBackdrop';
+import TimeFilter from '../../components/filterComponents/TimeFilter';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {

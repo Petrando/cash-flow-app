@@ -1,6 +1,5 @@
 import React, {useReducer, useState} from 'react';
 import Head from 'next/head';
-import Link from 'next/link';
 import SwipeableViews from 'react-swipeable-views';
 import { useTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -44,10 +43,7 @@ export default function Transactions() {
           Transactions Table Details & Charts
         </title>
       </Head>
-      <div className={styles.backToHome}>
-      <Link href="/wallet-list">
-          <a>← Back to Wallets</a>
-      </Link>            
+      <div className={styles.backToHome}>      
     </div>
       <AppBar position="static" color="default">
         <Tabs

@@ -12,7 +12,7 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import { ButtonGroup, FormControl, FormControlLabel, FormLabel, RadioGroup, Radio} from '@material-ui/core/';
 
-import DatePickers from './DatePickers';
+import DatePickers from '../globals/DatePickers';
 
 const useStyles = makeStyles({
   list: {

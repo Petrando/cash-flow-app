@@ -13,7 +13,7 @@ import {PhotoCamera, Edit, Delete, AddAPhoto, Refresh, TableChart, ExpandLess, E
 import {API} from '../../config';
 import {getCategories} from '../../api/categoryApi';
 import {getTransactionsByWallet, getFirstPageTransaction_and_category, updateTransaction, deleteTransaction} from '../../api/transactionApi';
-import Date from '../date';
+import Date from '../globals/date';
 import LoadingBackdrop, {LoadingDiv} from '../../components/globals/LoadingBackdrop';
 import SortFilter from '../filterComponents/TransactionSortFilter';
 //import FilterSortDrawer from './FilterSortDrawer';

@@ -14,6 +14,7 @@ import {
        } from '@material-ui/core';
 import SelectControl from '../globals/SelectControl';
 import Date from '../globals/date';
+import { DatePickersB } from '../globals/DatePickers';
 import { LoadingDiv } from '../globals/LoadingBackdrop';
 import useStyles from './styles';
 
@@ -133,10 +134,6 @@ export default function EditTransactionDialog({submitEdit, cancelEdit, categorie
         return adjusted;  
     }
   
-    /*
-    <DatePickersB id={"new-date"} label={"New date"} myDate={newDate} 
-                             changeDate={(e)=>{ setNewDate(e.target.value);setEditDirty(true);}} />
-    */
     return (
         <Dialog 
             fullWidth={true} 
@@ -219,7 +216,15 @@ export default function EditTransactionDialog({submitEdit, cancelEdit, categorie
                         newDate!=='' &&
                         <FormLabel component="legend">New date: {newDate}</FormLabel>
                     }                
-                    <p>DatePickersB was here...</p>
+                    <DatePickersB 
+                        id={"new-date"} 
+                        label={"New date"} 
+                        myDate={newDate} 
+                        changeDate={(e)=>{ 
+                                            setNewDate(e.target.value);
+                                            setEditDirty(true);
+                                    }} 
+                    />
                     </FormControl>                           
                 </div>
             </>

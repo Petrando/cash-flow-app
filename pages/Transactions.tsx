@@ -12,13 +12,13 @@ import WalletTransactions from '../components/transaction-management/WalletTrans
 import WalletGraph from '../components/transaction-management/WalletGraph';
 import getCurrentMonthName from '../api/currentMonthName';
 import TabPanel, {a11yProps} from "../components/transaction-management/TransactionTab"
-import { initialFilter, filterReducer } from '../components/transaction-management/StoreNReducer';
+import { transactionFilter, transactionFilterReducer } from '../components/transaction-management/StoreNReducer';
 
 export default function Transactions() {
   const theme = useTheme();
   const [value, setValue] = useState(0);
 
-  const [filter, dispatchFilter] = useReducer(filterReducer, initialFilter);
+  const [filter, dispatchFilter] = useReducer(transactionFilterReducer, transactionFilter);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {    
     dispatchFilter({type:'RESET_CATEGORY_SUBCATEGORY'});    

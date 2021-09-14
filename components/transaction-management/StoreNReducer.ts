@@ -1,14 +1,14 @@
 import getCurrentMonthName from "../../api/currentMonthName";
 
-export const initialFilter = {category:'0', subCategory:'0', dateFilter:{month:getCurrentMonthName(), startDate:'', endDate:''}}
+export const transactionFilter = {category:'0', subCategory:'0', dateFilter:{month:getCurrentMonthName(), startDate:'', endDate:''}}
 
-export const filterReducer = (state, action) => {  
+export const transactionFilterReducer = (state, action) => {  
   switch (action.type){
     case 'INITIALIZE':
       const {category, subCategory} = action;    
       return {...state, category, subCategory}  
     case 'RESET_FILTER':            
-      return {...initialFilter, dateFilter:{month:getCurrentMonthName(), startDate:'', endDate:''}};
+      return {...transactionFilter, dateFilter:{month:getCurrentMonthName(), startDate:'', endDate:''}};
     case 'SET_CATEGORY':      
       return {...state, category:action.category, subCategory:'0'}
     case 'SET_SUBCATEGORY':      
@@ -27,3 +27,18 @@ export const filterReducer = (state, action) => {
       return state;
   }
 }
+
+export const transactionSort = {sortBy:'Amount', sortType:'asc'};
+
+export const transactionSortReducer = (state, action) => {    
+  switch (action.type) {
+    case 'TOGGLE_SORT':
+      const newSortBy = state.sortBy==='Date'?'Amount':'Date';
+      return {sortBy:newSortBy, sortType:'asc'}      
+    case 'TOGGLE_TYPE':
+      const newSortType = state.sortType==='asc'?'desc':'asc'; 
+      return {...state, sortType:newSortType}       
+    default:
+      return state;      
+  }
+};

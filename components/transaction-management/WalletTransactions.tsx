@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useReducer} from 'react';
 import { useRouter } from 'next/router'
-import Layout from '../components/layout'
+import Layout from '../layout'
 import utilStyles from '../styles/utils.module.css'
 import styles from '../styles/Home.module.css'
 import Link from 'next/link'
@@ -10,36 +10,26 @@ import {Card, CardActionArea, CardContent, CardMedia, CardActions, CircularProgr
 import {FormControl, FormLabel, InputLabel, Select, MenuItem} from "@material-ui/core";
 import {PhotoCamera, Edit, Delete, AddAPhoto, Refresh, TableChart, ExpandLess, ExpandMore, Add, Check, Clear}  from '@material-ui/icons/';
 
-import {API} from '../config';
-import {getCategories} from '../api/categoryApi';
-import {getTransactionsByWallet, getFirstPageTransaction_and_category, addNewTransaction, updateTransaction, deleteTransaction} from '../api/transactionApi';
-import Date from './date';
-import LoadingBackdrop, {LoadingDiv} from './LoadingBackdrop';
-import SortFilter from './filterComponents/TransactionSortFilter';
-import FilterSortDrawer from './FilterSortDrawer';
-import TablePaging from './TablePaging';
-import SelectControl from './SelectControl';
-import TransactionTable, {TransactionToDeleteTable} from './TransactionTable';
+import {API} from '../../config';
+import {getCategories} from '../../api/categoryApi';
+import {getTransactionsByWallet, getFirstPageTransaction_and_category, addNewTransaction, updateTransaction, deleteTransaction} from '../../api/transactionApi';
+import Date from '../date';
+import LoadingBackdrop, {LoadingDiv} from '../../components/globals/LoadingBackdrop';
+import SortFilter from '../filterComponents/TransactionSortFilter';
+//import FilterSortDrawer from './FilterSortDrawer';
+import TablePaging from '../TablePaging';
+import SelectControl from '../SelectControl';
+import TransactionTable, {TransactionToDeleteTable} from '../TransactionTable';
+import { transactionSort, transactionSortReducer } from './StoreNReducer';
 
 const useStyles = makeStyles((theme) => ({
-  backdrop: {
-    zIndex: theme.zIndex.drawer + 1,
-    color: '#fff',
-  },
-}));
-
-const useStyles_transaction = makeStyles((theme) => ({
-  row_div: {
+  rowDiv: {
     display:'flex', flexDirection:'row', justifyContent:'space-between', alignItems:'center',
     flexWrap:'wrap'
   },
   pageTitle: {
   	textAlign:'center'
-  },
-  formControl: {
-    margin: theme.spacing(1),
-    width:'50%'
-  },
+  },  
   selectContainer: {
   	display:'flex', flexDirection:'row', justifyContent:'center', alignItems:'center'
   },
@@ -49,26 +39,11 @@ const useStyles_transaction = makeStyles((theme) => ({
   },
 }));
 
-const initialSort = {sortBy:'Amount', sortType:'asc'};
-
-const sortReducer = (state, action) => {    
-  switch (action.type) {
-    case 'TOGGLE_SORT':
-      const newSortBy = state.sortBy==='Date'?'Amount':'Date';
-      return {sortBy:newSortBy, sortType:'asc'}      
-    case 'TOGGLE_TYPE':
-      const newSortType = state.sortType==='asc'?'desc':'asc'; 
-      return {...state, sortType:newSortType}       
-    default:
-      return state;      
-  }
-};
-
 const itemPerPage = 5;
 
 const WalletTransactions = ({filter, dispatchFilter}) => {
 	const router = useRouter()
-	const transactionClasses = useStyles_transaction();
+	const transactionClasses = useStyles();
 
 	const [categories, setCategories] = useState<any[]>([]);
 	const [transactions, setTransactions] = useState<any[]>([]);
@@ -80,25 +55,34 @@ const WalletTransactions = ({filter, dispatchFilter}) => {
 	const [idToEdit, setIdEdit] = useState<string>('');
 	const [idToDelete, setIdDelete] = useState<string>('');
 
-	const [walletBalance, setWalletBalance] = useState<number>(1000000);
-	const [walletId, setWalletId] = useState<string>('12345');
-	const [walletName, setWalletName] = useState<string>('Test wallet');
+	const [walletBalance, setWalletBalance] = useState<number>(0);
+	const [walletId, setWalletId] = useState<string>('');
+	const [walletName, setWalletName] = useState<string>('');
 
 	const [connectionError, setConnectionError] = useState<boolean>(false);
-	const [paginationData, setPaginationData] = useState<object>({transactionCount:0, maxPage:0, currentPage:0});  
+	const [paginationData, setPaginationData] = useState<{
+															transactionCount:number, 
+															currentPage:number, 
+															maxPage:number
+														}>
+														({
+														  	transactionCount:0, 
+															currentPage:0,
+															maxPage:0, 															
+														});  
 
 	const {transactionCount, currentPage, maxPage} = paginationData;
 
-  const [sort, dispatchSort] = useReducer(sortReducer, initialSort);      
+  const [sort, dispatchSort] = useReducer(transactionSortReducer, transactionSort);      
 
 	useEffect(()=>{
 		const {_id, name, balance} = router.query;
-    if(typeof _id !== 'undefined'){
-      setWalletId(_id);
-      setWalletName(name);
-      setWalletBalance(balance);      
-      getFirstPage();
-    }		
+    	if(typeof _id !== 'undefined'){
+      		setWalletId(_id.toString());
+      		setWalletName(name.toString());			
+      		setWalletBalance(parseInt(balance.toString()));      
+      		getFirstPage();
+    	}		
 	}, []);
 
   const getFirstPage = () => {    
@@ -194,7 +178,7 @@ const WalletTransactions = ({filter, dispatchFilter}) => {
 		return transactionData;
 	}
 
-	const submitAddAndRefresh = (balance, isExpense) => {
+	const submitAddAndRefresh = (balance:string, isExpense:boolean) => {
 		if(currentPage!==0){
 			setPaginationData({
 							currentPage:0, 
@@ -204,9 +188,9 @@ const WalletTransactions = ({filter, dispatchFilter}) => {
 		}else{
 			setPaginationData({...paginationData, transactionCount:transactionCount + 1});			
 		}
-		setWalletBalance(isExpense?parseInt(walletBalance) - parseInt(balance)
+		setWalletBalance(isExpense?walletBalance - parseInt(balance)
 								   :
-								   parseInt(walletBalance) + parseInt(balance));
+								   walletBalance + parseInt(balance));
 		setIsAdd(false);
 		setRefresh(true);
 	}	
@@ -239,7 +223,7 @@ const WalletTransactions = ({filter, dispatchFilter}) => {
       		}       		   			
       			{
       				walletName!=="" &&
-      				<div className={transactionClasses.row_div}>
+      				<div className={transactionClasses.rowDiv}>
 
       					<Typography variant="h4" className={transactionClasses.pageTitle}>
       						{walletName}  Rp. {walletBalance}
@@ -323,7 +307,7 @@ const WalletTransactions = ({filter, dispatchFilter}) => {
 }    			
     			
 function AddTransactionDialog({submitAdd, cancelAdd, categories, walletId, walletBalance}) {  
-  const transactionClasses = useStyles_transaction();
+  const transactionClasses = useStyles();
 
   const [isSubmittingData, setIsSubmitting] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
@@ -449,7 +433,7 @@ function AddTransactionDialog({submitAdd, cancelAdd, categories, walletId, walle
 }
 
 function EditTransactionDialog({submitEdit, cancelEdit, categories, walletId, walletBalance, editedTransaction}) {      
-  const transactionClasses = useStyles_transaction();
+  const transactionClasses = useStyles();
   
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [selectedSubCategory, setSelectedSubCategory] = useState<string>('');
@@ -514,7 +498,8 @@ function EditTransactionDialog({submitEdit, cancelEdit, categories, walletId, wa
 		  amount:balance,
 		  description,
 		  category:{categoryId:selectedCategory, subCategory:{subCategoryId:selectedSubCategory}},
-		  wallet: walletId
+		  wallet: walletId,
+		  createdAt: ''
 	  }   
 
     if(newDate!==''){
@@ -564,6 +549,10 @@ function EditTransactionDialog({submitEdit, cancelEdit, categories, walletId, wa
     return adjusted;  
   }
 
+  /*
+  <DatePickersB id={"new-date"} label={"New date"} myDate={newDate} 
+                           changeDate={(e)=>{ setNewDate(e.target.value);setEditDirty(true);}} />
+  */
   return (
     <Dialog fullWidth={true} maxWidth={'sm'}
       onClose={()=>!isSubmittingData && cancelEdit()} aria-labelledby="edit-dialog-title" open={true}>
@@ -630,8 +619,7 @@ function EditTransactionDialog({submitEdit, cancelEdit, categories, walletId, wa
                 <FormLabel component="legend">New date: {newDate}</FormLabel>
               }
               
-              <DatePickersB id={"new-date"} label={"New date"} myDate={newDate} 
-                           changeDate={(e)=>{ setNewDate(e.target.value);setEditDirty(true);}} />
+              <p>DatePickersB was here...</p>
             </FormControl>                           
           </div>
           </>
@@ -742,41 +730,6 @@ function DeleteTransactionDialog({submitDelete, editInstead, cancelDelete,
         </Button>
         <Button color="secondary" disabled={isSubmittingData}
           onClick={()=>!isSubmittingData && cancelDelete()}
-        >
-          Cancel
-        </Button>        
-      </DialogActions>
-    </Dialog>
-  );
-}
-
-function DialogTemplate({submitAdd, cancelAdd}) {      
-  const [isSubmittingData, setIsSubmitting] = useState<boolean>(false);
-  useEffect(()=>{        
-  }, []);
-
-  const submitData = (e) => {
-    e.preventDefault();     
-    
-  }
-
-  return (
-    <Dialog fullWidth={true} maxWidth={'sm'}
-      onClose={()=>!isSubmittingData && onClose()} aria-labelledby="simple-dialog-title" open={true}>
-      <DialogTitle id="simple-dialog-title">
-       New Transaction        
-      </DialogTitle>
-      <DialogContent>        
-        Walaaa...!
-        
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={submitAdd} color="primary"          
-        >
-          Submit
-        </Button>
-        <Button onClick={()=>!isSubmittingData && cancelAdd()} color="secondary"
-          disabled={isSubmittingData}
         >
           Cancel
         </Button>        

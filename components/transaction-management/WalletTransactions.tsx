@@ -21,23 +21,7 @@ import TablePaging from '../TablePaging';
 import SelectControl from '../SelectControl';
 import TransactionTable, {TransactionToDeleteTable} from '../TransactionTable';
 import { transactionSort, transactionSortReducer } from './StoreNReducer';
-
-const useStyles = makeStyles((theme) => ({
-  rowDiv: {
-    display:'flex', flexDirection:'row', justifyContent:'space-between', alignItems:'center',
-    flexWrap:'wrap'
-  },
-  pageTitle: {
-  	textAlign:'center'
-  },  
-  selectContainer: {
-  	display:'flex', flexDirection:'row', justifyContent:'center', alignItems:'center'
-  },
-  drawerControl: {  
-    marginTop:'15px',
-    padding:'5px 5px 5px 15px',
-  },
-}));
+import useStyles from './styles';
 
 const itemPerPage = 5;
 

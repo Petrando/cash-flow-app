@@ -51,7 +51,7 @@ export default function DeleteTransactionDialog({
                                 }else{
                                     submitDelete(updatedWalletBalance);
                                 }    		
-        });
+            });
     }
 
 return (

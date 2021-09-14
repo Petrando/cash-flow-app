@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import Head from 'next/head'
+import { Box, Button, Container, Grid } from "@material-ui/core";
 import Layout from '../components/layout'
 import utilStyles from '../styles/utils.module.css'
-import { Box, Button, Container, Grid } from "@material-ui/core";
+import { getWallets } from '../api/walletApi';
 import Wallet from '../components/wallets-management/Wallet';
 import AddWalletDialog from '../components/wallets-management/AddWallet';
 import EditWalletDialog from '../components/wallets-management/EditWallet';

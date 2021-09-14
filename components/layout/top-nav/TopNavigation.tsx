@@ -24,7 +24,6 @@ import BackToTop from "./BackToTop";
 import Link from "next/link";
 
 const navLinks = [
-  { title: `home`, path: `/` },
   { title: `Wallets`, path: `/wallet-list`, icon:<AccountBalanceWallet />  },
   { title: `Income-Expenses`, path: `/category-management`, icon:<ListAlt />}, 
 ]

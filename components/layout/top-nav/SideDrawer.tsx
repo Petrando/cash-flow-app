@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import { Badge, Drawer, IconButton, List, ListItem, ListItemText } from "@material-ui/core";
+import { Avatar, Drawer, IconButton, List, ListItem, ListItemText, ListItemAvatar } from "@material-ui/core";
+import { green } from '@material-ui/core/colors';
 import {Favorite}  from '@material-ui/icons';
 import { makeStyles } from "@material-ui/core/styles";
 import { Menu } from "@material-ui/icons";
@@ -14,6 +15,10 @@ const useStyles = makeStyles({
     textTransform: `uppercase`,
     color: `black`,
   },
+  avatar: {
+    color: '#fff',
+    backgroundColor: green[500],
+  }
 })
 
 const SideDrawer = ({navLinks}) => {
@@ -37,9 +42,17 @@ const SideDrawer = ({navLinks}) => {
       onClick={toggleDrawer(false)}
       onKeyDown={toggleDrawer(false)}
     >
-        {navLinks.map(({ title, path }) => (          
+        {navLinks.map(({ title, path, icon }) => (          
           <Link href={path} key={path}>
           <ListItem button className={classes.linkText}>
+            {
+              icon &&
+              <ListItemAvatar>
+                <Avatar className={classes.avatar}>
+                  {icon}
+                </Avatar>
+              </ListItemAvatar>
+            }
             <ListItemText primary={title} />
           </ListItem>          
           </Link>

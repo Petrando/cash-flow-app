@@ -15,11 +15,11 @@ import { walletMenuI } from '../../types';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      maxWidth: 345,
+      width: 345,
       height:220,
       display:'flex',
       flexDirection:'column',
-      justifyContent:'space-between',
+      justifyContent:'space-between'
     },
     avatar: {
       color: '#fff',
@@ -40,7 +40,7 @@ export default function HomeCard({title, about, avatar, linkTo}:walletMenuI):JSX
     <Card className={classes.root}>
       <CardHeader
         avatar={
-          <Avatar aria-label="recipe" className={classes.avatar}>
+          <Avatar className={classes.avatar}>
             {avatar}
           </Avatar>
         }        

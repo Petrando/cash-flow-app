@@ -1,6 +1,6 @@
 import {useState} from 'react'
 import Head from 'next/head'
-import Link from 'next/link'
+import Layout from '../components/layout'
 import {Container} from "@material-ui/core"
 import styles from '../styles/Home.module.css'
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
@@ -24,6 +24,7 @@ export default function Home():JSX.Element {
                                                       }
                                                     ])
   return (
+    <Layout>
     <div className={styles.container}>
       <Head>
         <title>Cash Flow App</title>
@@ -47,17 +48,7 @@ export default function Home():JSX.Element {
         </div>
       </Container>
       </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
     </div>
+    </Layout>
   )
 }

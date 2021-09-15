@@ -14,7 +14,9 @@ const Layout = ({ children }:{ children:React.ReactNode}) => {
         />
       </Head>
       <TopNavigation />
-      {children}
+      <div style={{maxWidth:"100vw", minHeight:"100vh"}}>
+        {children}
+      </div>
       <Footer />
     </>
   );

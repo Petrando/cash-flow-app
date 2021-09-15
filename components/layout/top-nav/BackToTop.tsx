@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Zoom, useScrollTrigger } from "@material-ui/core";
 
-const BackToTop = ({ children }) => {
+const BackToTop = ({ children }:{children:React.ReactElement}):JSX.Element => {
   const trigger = useScrollTrigger();
 
   const handleClick = event => {

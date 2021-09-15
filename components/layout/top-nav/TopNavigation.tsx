@@ -20,10 +20,10 @@ import {ListAlt, AccountBalanceWallet}  from '@material-ui/icons';
 import SideDrawer from "./SideDrawer";
 import HideOnScroll from "./HideOnScroll";
 import BackToTop from "./BackToTop";
-
 import Link from "next/link";
+import { navLinkI } from "../../../types";
 
-const navLinks = [
+const navLinks:navLinkI[] = [
   { title: `Wallets`, path: `/wallet-list`, icon:<AccountBalanceWallet />  },
   { title: `Income-Expenses`, path: `/category-management`, icon:<ListAlt />}, 
 ]
@@ -54,7 +54,7 @@ const useStyles = makeStyles({
   }
 });
 
-const TopNavigation = () => {
+const TopNavigation = ():JSX.Element => {
   const classes = useStyles();
 
   return (
@@ -72,7 +72,7 @@ const TopNavigation = () => {
         		<List component="nav" aria-labelledby="main navigation"
         			className={classes.navDisplayFlex}
         		>
-    				  {navLinks.map(({ title, path, icon }) => (      					
+    				  {navLinks.map(({ title, path, icon }:navLinkI):JSX.Element => (      					
                         <span key={path} className={classes.linkText}>
                             <Link href={path}>
         					            <ListItem button className={classes.listItem}>

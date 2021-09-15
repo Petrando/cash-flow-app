@@ -22,3 +22,9 @@ export interface walletI {
     icon?:string;
     balance:number;
 }
+
+export interface navLinkI {
+    title:string;
+    path:string;
+    icon?:JSX.Element;
+}

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import {
             Button, Card, CardActionArea, CardMedia, CircularProgress, Dialog, DialogTitle, 
-            DialogContent, DialogActions, Grid, TextField, Typography
+            DialogContent, DialogActions, Grid, TextField
        } from '@material-ui/core';
 import { PhotoCamera } from '@material-ui/icons';       
 import imageCompression from 'browser-image-compression';

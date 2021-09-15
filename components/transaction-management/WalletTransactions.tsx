@@ -154,7 +154,7 @@ const WalletTransactions = ({filter, dispatchFilter}) => {
 		return transactionData;
 	}
 
-	const submitAddAndRefresh = (balance:string, isExpense:boolean) => {
+	const submitAddAndRefresh = (balance:number, isExpense:boolean) => {
 		if(currentPage!==0){
 			setPaginationData({
 								currentPage:0, 
@@ -164,9 +164,9 @@ const WalletTransactions = ({filter, dispatchFilter}) => {
 		}else{
 			setPaginationData({...paginationData, transactionCount:transactionCount + 1});			
 		}
-		setWalletBalance(isExpense?walletBalance - parseInt(balance)
+		setWalletBalance(isExpense?walletBalance - balance
 								   :
-								   walletBalance + parseInt(balance));
+								   walletBalance + balance);
 		setIsAdd(false);
 		setRefresh(true);
 	}	
@@ -214,7 +214,7 @@ const WalletTransactions = ({filter, dispatchFilter}) => {
       			{
       				isAddTransaction &&
       				<AddTransactionDialog submitAdd={submitAddAndRefresh} 
-      									  cancelAdd={()=>setIsAdd(false)} 
+      									  cancelAdd={()=>{setIsAdd(false)}} 
       									  categories={categories} 
       									  walletId={walletId} 
       									  walletBalance={walletBalance} 
@@ -223,7 +223,7 @@ const WalletTransactions = ({filter, dispatchFilter}) => {
       			{
       				idToEdit!=="" &&
       				<EditTransactionDialog submitEdit={submitEditAndRefresh}
-      									   cancelEdit={()=>setIdEdit('')}
+      									   cancelEdit={()=>{setIdEdit('')}}
       									   categories={categories}
       									   walletId={walletId}
       									   walletBalance={walletBalance}

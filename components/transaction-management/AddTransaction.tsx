@@ -3,9 +3,24 @@ import {addNewTransaction} from "../../api/transactionApi"
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@material-ui/core';
 import SelectControl from '../globals/SelectControl';
 import { LoadingDiv } from '../globals/LoadingBackdrop';
+import { categoryI } from '../../types';
 import useStyles from './styles';
 
-export default function AddTransactionDialog({submitAdd, cancelAdd, categories, walletId, walletBalance}) {  
+interface addTransactionI {
+    submitAdd:(arg0:number, arg1:boolean)=>void;
+    cancelAdd:()=>void;
+    categories:categoryI[];
+    walletId:string;
+    walletBalance:number;
+}
+
+export default function AddTransactionDialog({
+                                                submitAdd, 
+                                                cancelAdd, 
+                                                categories, 
+                                                walletId, 
+                                                walletBalance
+                                            }:addTransactionI):JSX.Element {  
     const transactionClasses = useStyles();
   
     const [isSubmittingData, setIsSubmitting] = useState<boolean>(false);
@@ -22,7 +37,7 @@ export default function AddTransactionDialog({submitAdd, cancelAdd, categories, 
         }  	
     }, []);
   
-    const changeCategory = (newCategory) => {
+    const changeCategory = (newCategory:string) => {
         setSelectedCategory(newCategory);
         setSelectedSubCategory(categories.filter(d=>d._id===newCategory)[0].subCategories[0]._id);
         const isExpense = newCategory===categories[1]._id;//because the second category is for Expense...
@@ -90,7 +105,7 @@ export default function AddTransactionDialog({submitAdd, cancelAdd, categories, 
                                             []
                                         }
                             value={selectedSubCategory}
-                            onChange={(newSub)=>setSelectedSubCategory(newSub)}
+                            onChange={(newSub:string)=>{setSelectedSubCategory(newSub)}}
                         />      	  
                     </div>
                     <TextField
@@ -100,7 +115,8 @@ export default function AddTransactionDialog({submitAdd, cancelAdd, categories, 
                                 transactionIsExpense?
                                 `Spending amount (max ${walletBalance})`
                                 :
-                                "Income amount"}
+                                "Income amount"
+                              }
                         type="number"          	
                         fullWidth
                         value={balance}
@@ -131,7 +147,7 @@ export default function AddTransactionDialog({submitAdd, cancelAdd, categories, 
                 {
                     isSubmittingData && <LoadingDiv />
                 }
-        </DialogContent>
+            </DialogContent>
             <DialogActions>
                 <Button 
                     onClick={submitTransaction} 

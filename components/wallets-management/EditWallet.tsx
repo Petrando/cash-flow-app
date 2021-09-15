@@ -92,7 +92,7 @@ function EditWalletDialog({ open, cancelEdit, finishAndRefresh, walletToEdit }:e
         >
             <DialogTitle id="simple-dialog-title">
             {
-                !isSubmittingData?'Add New Wallet':'Submitting...'
+                !isSubmittingData?'Edit Wallet':'Submitting...'
             }
             </DialogTitle>
             <DialogContent>

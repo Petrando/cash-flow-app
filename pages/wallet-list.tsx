@@ -9,13 +9,14 @@ import AddWalletDialog from '../components/wallets-management/AddWallet';
 import EditWalletDialog from '../components/wallets-management/EditWallet';
 import DeleteWalletDialog from '../components/wallets-management/DeleteWallet';
 import LoadingBackdrop from '../components/globals/LoadingBackdrop';
+import { walletI } from '../types'; 
 
 export default function WalletList() {
 
-  const [wallets, setWallets] = useState([]);
-  const [refreshMe, setRefresh] = useState(true);
-  const [addingWallet, setAddingWallet] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [wallets, setWallets] = useState<walletI[]>([]);
+  const [refreshMe, setRefresh] = useState<boolean>(true);
+  const [addingWallet, setAddingWallet] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [idEdited, setIdEdit] = useState<string>('');
   const [idToDelete, setIdToDelete] = useState<string>('');
 
@@ -41,7 +42,6 @@ export default function WalletList() {
   }, [refreshMe]);
 
   const deleteAndRefresh = () => {
-    //setWallets(wallets.filter(d => d._id!==idToDelete));
     setIdToDelete("");
     setRefresh(true);
   }

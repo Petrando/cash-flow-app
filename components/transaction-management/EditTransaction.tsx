@@ -16,9 +16,26 @@ import SelectControl from '../globals/SelectControl';
 import Date from '../globals/date';
 import { DatePickersB } from '../globals/DatePickers';
 import { LoadingDiv } from '../globals/LoadingBackdrop';
+import { categoryI, transactionI } from '../../types';
 import useStyles from './styles';
 
-export default function EditTransactionDialog({submitEdit, cancelEdit, categories, walletId, walletBalance, editedTransaction}) {      
+interface editTansactionI {
+    submitEdit:(args0:number)=>void;
+    cancelEdit:()=>void;
+    categories:categoryI[];
+    walletId:string;
+    walletBalance:number;
+    editedTransaction:transactionI;
+}
+
+export default function EditTransactionDialog({
+                                                submitEdit, 
+                                                cancelEdit, 
+                                                categories, 
+                                                walletId, 
+                                                walletBalance, 
+                                                editedTransaction
+                                            }:editTansactionI):JSX.Element {      
     const transactionClasses = useStyles();
     
     const [selectedCategory, setSelectedCategory] = useState<string>('');
@@ -45,7 +62,7 @@ export default function EditTransactionDialog({submitEdit, cancelEdit, categorie
                 setLimitBalance(editedTransaction.amount - walletBalance)
             }
         }else{
-            setLimitBalance((parseInt(editedTransaction.amount) + parseInt(walletBalance)))
+            setLimitBalance((editedTransaction.amount + walletBalance))
         }
     }, []);
   
@@ -70,16 +87,16 @@ export default function EditTransactionDialog({submitEdit, cancelEdit, categorie
         doSubmit(adjusted);
     } 
   
-    const doSubmit = (adjusted) => {  	
+    const doSubmit = (adjusted:boolean) => {  	
         if(!editDirty){
             cancelEdit();
         }
       
         const balanceChange = balance - editedTransaction.amount;
   
-        const updatedWalletBalance = transactionIsExpense?  parseInt(walletBalance) - balanceChange
+        const updatedWalletBalance = transactionIsExpense?  walletBalance - balanceChange
                                                             :
-                                                            parseInt(walletBalance) + balanceChange;
+                                                            walletBalance + balanceChange;
   
         const updatedTransaction = {
             amount:balance,
@@ -112,7 +129,7 @@ export default function EditTransactionDialog({submitEdit, cancelEdit, categorie
           });  
     }
   
-    const balanceAdjusting = () => {
+    const balanceAdjusting = ():boolean => {
         let adjustedBalance = balance;  	
         if(transactionIsExpense){
             if(adjustedBalance > limitBalance){

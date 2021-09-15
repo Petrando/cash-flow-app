@@ -73,9 +73,7 @@ const WalletTransactions = ({filter, dispatchFilter}) => {
         		}       
         		if(data.error){         
         		}else{
-          			const {category, transaction, count} = data;            
-					console.log(category);
-					console.log(transaction);
+          			const {category, transaction, count} = data; 
           			setCategories(category);
           			if(typeof category !== 'undefined' && category.length>  0){
             			setTransactions(setTransactionsCategoryName(transaction, category));

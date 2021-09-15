@@ -13,7 +13,7 @@ import getCurrentMonthName from '../api/currentMonthName';
 import TabPanel, {a11yProps} from "../components/transaction-management/TransactionTab"
 import { transactionFilter, transactionFilterReducer } from '../components/transaction-management/StoreNReducer';
 
-export default function Transactions() {
+export default function Transactions():JSX.Element {
   const theme = useTheme();
   const [value, setValue] = useState(0);
 

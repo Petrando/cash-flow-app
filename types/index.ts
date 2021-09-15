@@ -16,6 +16,23 @@ export interface categoryI {
     subCategories:subCategoryI[];
 }
 
+export interface transactionI {
+    _id?:string;
+    amount:number;
+    description?:string;
+    createdAt:string;
+    updatedAt:string;
+    wallet:string;
+    category:{
+        categoryId:string;
+        name:string;
+        subCategory:{
+            subCategoryId:string;
+            name:string;
+        }
+    };
+}
+
 export interface walletI {
     _id?:string;
     name:string;

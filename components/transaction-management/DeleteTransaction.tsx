@@ -3,6 +3,16 @@ import { Button, Dialog, DialogTitle, DialogContent, DialogActions, Typography }
 import { TransactionToDeleteTable } from './TransactionTable';
 import { LoadingDiv } from '../globals/LoadingBackdrop';
 import { deleteTransaction } from '../../api/transactionApi';
+import { transactionI } from '../../types';
+
+interface deleteTransactionI {
+    submitDelete:(arg0:number)=>void;
+    editInstead:()=>void;
+    cancelDelete:()=>void;
+    transactionToDelete:transactionI;
+    walletId:string;
+    walletBalance:number;
+}
 
 export default function DeleteTransactionDialog({
     submitDelete, 
@@ -17,7 +27,7 @@ export default function DeleteTransactionDialog({
             subCategory
         }
     },
-    walletId, walletBalance}) 
+    walletId, walletBalance}:deleteTransactionI) 
 {      
     const [isSubmittingData, setIsSubmitting] = useState<boolean>(false);
     const [allowDelete, setAllowDelete] = useState<boolean>(true);

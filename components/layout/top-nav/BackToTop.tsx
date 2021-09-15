@@ -1,10 +1,11 @@
-import * as React from "react";
+import React, {MouseEvent} from "react";
 import { Zoom, useScrollTrigger } from "@material-ui/core";
 
 const BackToTop = ({ children }:{children:React.ReactElement}):JSX.Element => {
   const trigger = useScrollTrigger();
 
-  const handleClick = event => {
+  //:MouseEvent<HTMLDivElement>
+  const handleClick = (event) => {
     const anchor = (event.target.ownerDocument || document).querySelector(
       "#back-to-top-anchor"
     );

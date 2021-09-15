@@ -1,28 +1,18 @@
 import React, {useState, useEffect, useReducer} from 'react';
 import { useRouter } from 'next/router'
-import Layout from '../layout'
-import utilStyles from '../styles/utils.module.css'
-import styles from '../styles/Home.module.css'
-import Link from 'next/link'
-import { GetStaticProps } from 'next'
-import { Backdrop, Box, Button, CssBaseline, Container, Dialog, DialogTitle, DialogContent, DialogActions, Grid, IconButton, TextField } from "@material-ui/core";
-import {Card, CardActionArea, CardContent, CardMedia, CardActions, CircularProgress, Divider, InputBase, Paper, Typography, makeStyles} from "@material-ui/core";
-import {FormControl, FormLabel, InputLabel, Select, MenuItem} from "@material-ui/core";
-import {PhotoCamera, Edit, Delete, AddAPhoto, Refresh, TableChart, ExpandLess, ExpandMore, Add, Check, Clear}  from '@material-ui/icons/';
-
-import {API} from '../../config';
-import {getCategories} from '../../api/categoryApi';
-import {getTransactionsByWallet, getFirstPageTransaction_and_category, updateTransaction, deleteTransaction} from '../../api/transactionApi';
-import Date from '../globals/date';
+import { Button } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
+import { Add }  from '@material-ui/icons/';
+import {getTransactionsByWallet, getFirstPageTransaction_and_category} from '../../api/transactionApi';
 import LoadingBackdrop from '../../components/globals/LoadingBackdrop';
 import SortFilter from '../filterComponents/TransactionSortFilter';
-//import FilterSortDrawer from './FilterSortDrawer';
 import TablePaging from '../TablePaging';
 import TransactionTable from './TransactionTable';
 import { transactionSort, transactionSortReducer } from './StoreNReducer';
 import AddTransactionDialog from './AddTransaction';
 import EditTransactionDialog from './EditTransaction';
 import DeleteTransactionDialog from './DeleteTransaction';
+import { categoryI, transactionI } from '../../types';
 import useStyles from './styles';
 
 const itemPerPage = 5;
@@ -31,8 +21,8 @@ const WalletTransactions = ({filter, dispatchFilter}) => {
 	const router = useRouter()
 	const transactionClasses = useStyles();
 
-	const [categories, setCategories] = useState<any[]>([]);
-	const [transactions, setTransactions] = useState<any[]>([]);
+	const [categories, setCategories] = useState<categoryI[]>([]);
+	const [transactions, setTransactions] = useState<transactionI[]>([]);
 	const [firstLoaded, setFirstLoaded] = useState<boolean>(false);
 
 	const [refreshMe, setRefresh] = useState<boolean>(false);
@@ -84,6 +74,8 @@ const WalletTransactions = ({filter, dispatchFilter}) => {
         		if(data.error){         
         		}else{
           			const {category, transaction, count} = data;            
+					console.log(category);
+					console.log(transaction);
           			setCategories(category);
           			if(typeof category !== 'undefined' && category.length>  0){
             			setTransactions(setTransactionsCategoryName(transaction, category));
@@ -143,12 +135,12 @@ const WalletTransactions = ({filter, dispatchFilter}) => {
 		}
 	}
 
-	const setTransactionsCategoryName = (transactionData, categoryData = categories) => {
+	const setTransactionsCategoryName = (transactionData:transactionI[], categoryData = categories) => {
 		if(typeof transactionData === 'undefined' || categoryData.length === 0){
 			return [];
 		}		
 
-		transactionData.forEach((t, i)=>{
+		transactionData.forEach((t:transactionI)=>{
 			const {categoryId, subCategory} = t.category;
 			const {subCategoryId} = subCategory;
 
@@ -181,13 +173,13 @@ const WalletTransactions = ({filter, dispatchFilter}) => {
 		setRefresh(true);
 	}	
 
-	const submitEditAndRefresh = (updatedWalletBalance) => {
+	const submitEditAndRefresh = (updatedWalletBalance:number) => {
 		setWalletBalance(updatedWalletBalance);
 		setRefresh(true);
 		setIdEdit('');
 	}
 
-	const submitDeleteAndRefresh = (updatedWalletBalance) => {				
+	const submitDeleteAndRefresh = (updatedWalletBalance:number) => {				
 		setPaginationData({
 			currentPage:0,
 			transactionCount:transactionCount-1,
@@ -198,7 +190,7 @@ const WalletTransactions = ({filter, dispatchFilter}) => {
 		setRefresh(true);
 	}	
 
-	const handlePageChange = (newPage) => {
+	const handlePageChange = (newPage:number) => {
 		setPaginationData({...paginationData, currentPage:newPage});		
 	}
 
@@ -248,9 +240,10 @@ const WalletTransactions = ({filter, dispatchFilter}) => {
       										 	setIdEdit(newEdit);
       										 	setIdDelete('')
       										 }}
-      										 cancelDelete={()=>setIdDelete('')}
+      										 cancelDelete={()=>{setIdDelete('')}}
       										 transactionToDelete={transactions.filter(d=>d._id===idToDelete)[0]}      										       										 
-      										 walletId={walletId} walletBalance={walletBalance}
+      										 walletId={walletId} 
+											 walletBalance={walletBalance}
       				/>
       			}  
             {

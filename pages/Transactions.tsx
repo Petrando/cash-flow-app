@@ -6,7 +6,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Layout from '../components/layout'
-import styles from '../styles/Home.module.css'
 import WalletTransactions from '../components/transaction-management/WalletTransactions';
 import WalletGraph from '../components/transaction-management/WalletGraph';
 import getCurrentMonthName from '../api/currentMonthName';
@@ -15,25 +14,25 @@ import { transactionFilter, transactionFilterReducer } from '../components/trans
 
 export default function Transactions():JSX.Element {
   const theme = useTheme();
-  const [value, setValue] = useState(0);
+  const [tabIdx, setTabIndex] = useState(0);
 
   const [filter, dispatchFilter] = useReducer(transactionFilterReducer, transactionFilter);
 
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {    
+  const handleChange = (event: React.ChangeEvent<{}>, newIdx: number) => {    
     dispatchFilter({type:'RESET_CATEGORY_SUBCATEGORY'});    
-    if(newValue===1){
+    if(newIdx===1){
       dispatchFilter({type:'SET_MONTH', month:getCurrentMonthName()});
     }
-    setValue(newValue);
+    setTabIndex(newIdx);
   };
 
   const handleChangeIndex = (index: number) => {
-    setValue(index);
+    setTabIndex(index);
   };
 
-  const resetIndex_setCategory = (selectedCategory: string, selectedSubCategory: string) => {        
+  const setCategoryNResetTab = (selectedCategory: string, selectedSubCategory: string) => {        
     dispatchFilter({type:'SET_CATEGORY_SUBCATEGORY', category:selectedCategory, subCategory:selectedSubCategory});
-    setValue(0);    
+    setTabIndex(0);    
   }
 
   return (     
@@ -43,11 +42,9 @@ export default function Transactions():JSX.Element {
           Transactions Table Details & Charts
         </title>
       </Head>
-      <div className={styles.backToHome}>      
-    </div>
       <AppBar position="static" color="default">
         <Tabs
-          value={value}
+          value={tabIdx}
           onChange={handleChange}
           indicatorColor="primary"
           textColor="primary"
@@ -61,18 +58,18 @@ export default function Transactions():JSX.Element {
       </AppBar>
       <SwipeableViews
         axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-        index={value}
+        index={tabIdx}
         onChangeIndex={handleChangeIndex}
       >
-        <TabPanel value={value} index={0} dir={theme.direction}>         
+        <TabPanel value={tabIdx} index={0} dir={theme.direction}>         
           <WalletTransactions 
             filter={filter}
             dispatchFilter={dispatchFilter}
           />
         </TabPanel>
-        <TabPanel value={value} index={1} dir={theme.direction}>
+        <TabPanel value={tabIdx} index={1} dir={theme.direction}>
           <WalletGraph 
-            changeSelectedCategory={resetIndex_setCategory}
+            changeSelectedCategory={setCategoryNResetTab}
             filter={filter}
             dispatchFilter={dispatchFilter}
           />

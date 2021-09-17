@@ -1,15 +1,11 @@
 import { useState } from "react";
 import {Paper, TextField, IconButton, Divider} from '@material-ui/core';
 import { Check, Clear } from "@material-ui/icons";
-import useStyles from "./styles";
-
-interface newSubCategoryI {
-    submitAdd:(arg0:string)=>void;
-    cancelAdd:()=>void;
-}
+import { useCategoryStyles } from "../../../styles/material-ui.styles";
+import { newSubCategoryI } from "../../../types";
 
 const NewSubCategory = ({submitAdd, cancelAdd}:newSubCategoryI):JSX.Element => {
-    const classes = useStyles();
+    const classes = useCategoryStyles();
     
     const [newSubCategory, setNewSubLabel] = useState<string>('');
     

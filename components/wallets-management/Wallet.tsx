@@ -1,26 +1,15 @@
 
 import Link from 'next/link';
 import { Grid, ButtonGroup, Button, IconButton, Card, CardActionArea, CardContent, CardActions, 
-         Typography, makeStyles } from '@material-ui/core';
+         Typography } from '@material-ui/core';
 import { TableChart, Edit, Delete } from '@material-ui/icons';
 import ImageLoad from '../globals/ImageLoad';
 import { API } from "../../config";
-import { walletI } from '../../types';
-
-const useStyles=makeStyles({  
-    walletButton: {
-      fontSize:'10px'
-    }
-})
-
-interface walletDisplayI {
-    walletData:walletI;
-    setEdit:()=>void;
-    setDelete:()=>void;
-}
+import { walletDisplayI } from '../../types';
+import {useWalletStyles} from '../../styles/material-ui.styles';
 
 const Wallet = ({walletData, setEdit, setDelete}:walletDisplayI):JSX.Element => {
-    const classes = useStyles();
+    const classes = useWalletStyles();
     const {_id, name, icon, balance} = walletData;
 
     return (

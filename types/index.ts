@@ -1,19 +1,42 @@
-export interface walletMenuI {
-    title:string;
-    about:string;
-    linkTo:string;
-    avatar:JSX.Element;
-}
+import {Dispatch} from 'react';
 
 export interface subCategoryI {
     _id?:string;
     name:string;
 }
 
+export interface subCategoryComponentI {
+    subData:subCategoryI;
+    startEdit:()=>void;
+    submitEdit:(arg0:string, arg1:string)=>void;
+    cancelEdit:()=>void;
+    idSubEdited:string;
+    startDelete:(arg0:string)=>void;
+}
+
 export interface categoryI {
     _id?:string;
     name:string;
     subCategories:subCategoryI[];
+}
+
+export interface newSubCategoryI {
+    submitAdd:(arg0:string)=>void;
+    cancelAdd:()=>void;
+}
+
+export interface editSubCategoryI {
+    subData:subCategoryI;
+    submitEdit:(arg0:string, arg1:string)=>void;
+    cancelEdit:()=>void;
+}
+
+export interface deleteSubCategoryI {
+    cancelDelete:()=>void;
+    deleteSub:()=>void;
+    categoryId:string;
+    categoryName:string;
+    subToDelete:subCategoryI;
 }
 
 export interface transactionI {
@@ -33,6 +56,12 @@ export interface transactionI {
     };
 }
 
+export interface navLinkI {
+    title:string;
+    path:string;
+    icon?:JSX.Element;
+}
+
 export interface walletI {
     _id?:string;
     name:string;
@@ -40,8 +69,105 @@ export interface walletI {
     balance:number;
 }
 
-export interface navLinkI {
+export interface walletCardI {
     title:string;
-    path:string;
-    icon?:JSX.Element;
+    about:string;
+    linkTo:string;
+    avatar:JSX.Element;
+}
+
+export interface walletDisplayI {
+    walletData:walletI;
+    setEdit:()=>void;
+    setDelete:()=>void;
+}
+
+export interface addWalletI {
+    open:boolean;
+    cancelAdd:()=>void;
+    finishAndRefresh:()=>void;
+}
+
+export interface editWalletI {
+    open:boolean;
+    cancelEdit:()=>void;
+    finishAndRefresh:()=>void;
+    walletToEdit:walletI;
+}
+
+export interface deleteWalletI {
+    open:boolean;
+    cancelDelete:()=>void;
+    deleteAndRefresh:()=>void;
+    walletToDelete:walletI;
+}
+
+export interface addTransactionI {
+    submitAdd:(arg0:number, arg1:boolean)=>void;
+    cancelAdd:()=>void;
+    categories:categoryI[];
+    walletId:string;
+    walletBalance:number;
+}
+
+export interface editTransactionI {
+    submitEdit:(args0:number)=>void;
+    cancelEdit:()=>void;
+    categories:categoryI[];
+    walletId:string;
+    walletBalance:number;
+    editedTransaction:transactionI;
+}
+
+export interface deleteTransactionI {
+    submitDelete:(arg0:number)=>void;
+    editInstead:()=>void;
+    cancelDelete:()=>void;
+    transactionToDelete:transactionI;
+    walletId:string;
+    walletBalance:number;
+}
+
+interface dateFilterI {
+    month:string;
+    startDate:string;
+    endDate:string;
+}
+
+export interface transactionFilterI {
+    category:string;
+    subCategory:string;
+    dateFilter:dateFilterI
+}
+
+export interface transactionFilterActionI {
+    type:string;
+    category?:string;
+    subCategory?:string;
+    month?:string;
+    startDate?:string;
+    endDate?:string;
+} 
+
+export interface transactionSortI {
+    sortBy:string;
+    sortType:'asc' | 'desc';
+}
+
+export interface transactionSortActionI {
+    type:string;
+}
+
+export interface transactionTableI {
+    tableData:transactionI[];
+    setIdEdit:(arg0:string)=>void;
+    setIdDelete:(arg0:string)=>void;
+    sort:transactionSortI;
+    dispatchSort:Dispatch<transactionSortActionI>;
+}
+
+export interface transactionTableHeaderI {
+    sort:transactionSortI;
+    dispatchSort:Dispatch<transactionSortActionI>;
+    mySort:string;
 }

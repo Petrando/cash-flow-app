@@ -1,24 +1,19 @@
-import {useState} from 'react';
-import { Container, Button, Paper, makeStyles } from '@material-ui/core';
+import { useState } from 'react';
+import { Container, Button, Paper } from '@material-ui/core';
 import { ExpandLess, ExpandMore, Add}  from '@material-ui/icons/';
-import {addSubCategory, editSubCategory, deleteSubCategory} from "../../api/categoryApi";
+import { addSubCategory, editSubCategory, deleteSubCategory } from "../../api/categoryApi";
 import SubCategory from './sub-category';
 import NewSubCategory from './sub-category/NewSubCategory';
 import DeleteSubCategoryDialog from './sub-category/DeleteSubCategory';
 import { categoryI } from '../../types';
-
-const useStyles = makeStyles((theme) => ({  
-    addSubCategory:{
-        padding:"5px"
-    }
-  }));
+import { useCategoryStyles } from "../../styles/material-ui.styles";
 
 const Category = ({categoryData:{_id, name, subCategories}, refresh}:
                   {
                     categoryData:categoryI, 
                     refresh:()=>void
                   }) => {
-const classes = useStyles();
+const classes = useCategoryStyles();
 
 const [isOpen, setIsOpen] = useState<boolean>(true);
 const [isAddingNewSub, setAddingNewSub] = useState<boolean>(false);

@@ -1,17 +1,11 @@
 import { useState, useEffect } from "react";
 import { TextField, IconButton, Divider} from '@material-ui/core';
 import { Check, Clear, Refresh } from "@material-ui/icons";
-import { subCategoryI } from "../../../types";
-import useStyles from "./styles";
-
-interface editSubCategoryI {
-    subData:subCategoryI;
-    submitEdit:(arg0:string, arg1:string)=>void;
-    cancelEdit:()=>void;
-}
+import { useCategoryStyles } from "../../../styles/material-ui.styles";
+import { editSubCategoryI } from "../../../types";
 
 const EditSubCategory = ({subData:{_id, name}, submitEdit, cancelEdit}:editSubCategoryI):JSX.Element => {
-    const classes = useStyles();
+    const classes = useCategoryStyles();
     
     const [newName, setNewName] = useState<string>('');
     const [editDirty, setEditDirty] = useState<boolean>(false);

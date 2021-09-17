@@ -6,12 +6,12 @@ import { Typography } from "@material-ui/core";
 import {getCategories} from '../api/categoryApi'
 import InitializeCategory from '../components/category-management/InitializeCategory';
 import LoadingBackdrop from '../components/globals/LoadingBackdrop';
-import { categoryI } from '../types';
 import Category from '../components/category-management';
-
-
+import { categoryI } from '../types';
+import { useCategoryStyles } from '../styles/material-ui.styles';
 
 const CategoryManagement = () => {	
+	const classes = useCategoryStyles();
 
 	const [categories, setCategoryData] = useState<categoryI[]>([]);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -52,7 +52,7 @@ const CategoryManagement = () => {
       			} 
 				{
 					!isLoading &&
-					<Typography variant="h4">
+					<Typography variant="h5" className={classes.pageTitle} >
 						{
 							categories.length > 0?
 							'Category Management':

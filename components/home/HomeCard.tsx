@@ -1,6 +1,5 @@
 import React from 'react';
 import Link from 'next/link';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -8,33 +7,12 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
-import { green } from '@material-ui/core/colors';
 import ForwardIcon from '@material-ui/icons/Forward';
-import { walletMenuI } from '../../types';
+import { walletCardI } from '../../types';
+import { useHomeCardStyles } from "../../styles/material-ui.styles"
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      width: 345,
-      height:220,
-      display:'flex',
-      flexDirection:'column',
-      justifyContent:'space-between'
-    },
-    avatar: {
-      color: '#fff',
-      backgroundColor: green[500],
-    },
-    cardActions: {
-      display:'flex',
-      justifyContent:'flex-end',
-      alignItems:'center'
-    }
-  }),
-);
-
-export default function HomeCard({title, about, avatar, linkTo}:walletMenuI):JSX.Element {
-  const classes = useStyles();
+export default function HomeCard({title, about, avatar, linkTo}:walletCardI):JSX.Element {
+  const classes = useHomeCardStyles();
 
   return (
     <Card className={classes.root}>

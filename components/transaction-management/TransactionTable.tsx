@@ -1,5 +1,4 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -9,18 +8,19 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { IconButton} from '@material-ui/core';
-
 import { Edit, Delete}  from '@material-ui/icons/';
 import Date from '../globals/date'
+import { useTransactionTableStyles } from '../../styles/material-ui.styles';
+import { transactionTableI, transactionTableHeaderI } from '../../types';
 
-const useStyles = makeStyles({
-  table: {
-    minWidth: 650,
-  }
-});
-
-export default function TransactionTable({tableData, setIdEdit, setIdDelete, sort, dispatchSort}) {
-  const classes = useStyles();  
+export default function TransactionTable({
+                                          tableData, 
+                                          setIdEdit, 
+                                          setIdDelete, 
+                                          sort, 
+                                          dispatchSort
+                                        }:transactionTableI):JSX.Element {
+  const classes = useTransactionTableStyles();  
 
   return (
     <TableContainer component={Paper}>     
@@ -79,7 +79,11 @@ export default function TransactionTable({tableData, setIdEdit, setIdDelete, sor
   );
 }
 
-const TableHeaderWithSort = ({sort:{sortBy, sortType}, dispatchSort, mySort}) => {
+const TableHeaderWithSort = ({
+                              sort:{sortBy, sortType}, 
+                              dispatchSort, 
+                              mySort
+                            }:transactionTableHeaderI):JSX.Element => {
   return (
     <>
       {
@@ -97,8 +101,15 @@ const TableHeaderWithSort = ({sort:{sortBy, sortType}, dispatchSort, mySort}) =>
   )
 }
 
-export const TransactionToDeleteTable = ({walletBalance, amount, transactionIsExpense})=>{
-  const classes = useStyles();
+export const TransactionToDeleteTable = ({
+                                          walletBalance, 
+                                          amount, 
+                                          transactionIsExpense
+                                        }:{
+                                          walletBalance:number,
+                                          amount:number,
+                                          transactionIsExpense:boolean
+                                        }):JSX.Element=>{
 
   return (
     <TableContainer component={Paper}>     
@@ -130,8 +141,8 @@ export const TransactionToDeleteTable = ({walletBalance, amount, transactionIsEx
             <TableCell scope="row" align="right">
               {
                 transactionIsExpense?
-                parseInt(walletBalance) + parseInt(amount):
-                parseInt(walletBalance) - parseInt(amount)
+                walletBalance + amount:
+                walletBalance - amount
               }
             </TableCell>
           </TableRow>

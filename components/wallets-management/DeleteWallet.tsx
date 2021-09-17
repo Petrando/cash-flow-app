@@ -1,16 +1,14 @@
 import {useState} from 'react';
 import { Button, CircularProgress, Dialog, DialogTitle, DialogContent, DialogActions, Grid, Typography } from '@material-ui/core';
-import {deleteWallet} from "../../api/walletApi";
-import {walletI} from "../../types";
+import { deleteWallet } from "../../api/walletApi";
+import { deleteWalletI } from "../../types";
 
-interface deleteWalletI {
-    open:boolean;
-    cancelDelete:()=>void;
-    deleteAndRefresh:()=>void;
-    walletToDelete:walletI;
-}
-
-function DeleteWalletDialog({ cancelDelete, open, deleteAndRefresh, walletToDelete:{_id, name, balance} }:deleteWalletI):JSX.Element {      
+function DeleteWalletDialog({ 
+                                cancelDelete, 
+                                open, 
+                                deleteAndRefresh, 
+                                walletToDelete:{_id, name, balance}
+                            }:deleteWalletI):JSX.Element {      
     const [isSubmittingData, setIsSubmitting] = useState<boolean>(false);
     
     const submitData = (e) => {

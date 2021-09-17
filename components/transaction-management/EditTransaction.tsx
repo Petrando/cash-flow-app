@@ -16,17 +16,8 @@ import SelectControl from '../globals/SelectControl';
 import Date from '../globals/date';
 import { DatePickersB } from '../globals/DatePickers';
 import { LoadingDiv } from '../globals/LoadingBackdrop';
-import { categoryI, transactionI } from '../../types';
-import useStyles from './styles';
-
-interface editTansactionI {
-    submitEdit:(args0:number)=>void;
-    cancelEdit:()=>void;
-    categories:categoryI[];
-    walletId:string;
-    walletBalance:number;
-    editedTransaction:transactionI;
-}
+import { categoryI, transactionI, editTransactionI } from '../../types';
+import { useTransactionStyles } from "../../styles/material-ui.styles";
 
 export default function EditTransactionDialog({
                                                 submitEdit, 
@@ -35,8 +26,8 @@ export default function EditTransactionDialog({
                                                 walletId, 
                                                 walletBalance, 
                                                 editedTransaction
-                                            }:editTansactionI):JSX.Element {      
-    const transactionClasses = useStyles();
+                                            }:editTransactionI):JSX.Element {      
+    const transactionClasses = useTransactionStyles();
     
     const [selectedCategory, setSelectedCategory] = useState<string>('');
     const [selectedSubCategory, setSelectedSubCategory] = useState<string>('');

@@ -1,20 +1,11 @@
 import { Paper, Typography, IconButton, Divider} from '@material-ui/core';
 import { Edit, Delete }  from '@material-ui/icons/';
 import EditSubCategory from './EditSubCategory';
-import {subCategoryI} from "../../../types";
-import useStyles from "./styles"
-
-interface subCategoryComponentI {
-    subData:subCategoryI;
-    startEdit:()=>void;
-    submitEdit:(arg0:string, arg1:string)=>void;
-    cancelEdit:()=>void;
-    idSubEdited:string;
-    startDelete:(arg0:string)=>void;
-}
+import { subCategoryComponentI } from "../../../types";
+import { useCategoryStyles } from "../../../styles/material-ui.styles";
     
 const SubCategory = ({subData:{_id, name}, startEdit, submitEdit, cancelEdit, idSubEdited, startDelete}:subCategoryComponentI):JSX.Element => {
-    const classes = useStyles();
+    const classes = useCategoryStyles();
     const iAmEdited = _id === idSubEdited;			
     
     return (

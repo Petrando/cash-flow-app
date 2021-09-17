@@ -6,12 +6,7 @@ import {
 import { PhotoCamera } from '@material-ui/icons';       
 import imageCompression from 'browser-image-compression';
 import { createWallet } from "../../api/walletApi";
-
-interface addWalletI {
-    open:boolean;
-    cancelAdd:()=>void;
-    finishAndRefresh:()=>void;
-}
+import { addWalletI} from "../../types";
 
 function AddWalletDialog({ open, cancelAdd, finishAndRefresh }:addWalletI):JSX.Element {    
     const [walletName, setWalletName] = useState<string>('');

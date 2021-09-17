@@ -6,14 +6,7 @@ import {
 import { PhotoCamera } from '@material-ui/icons';       
 import imageCompression from 'browser-image-compression';
 import { updateWallet } from "../../api/walletApi";
-import {walletI} from "../../types";
-
-interface editWalletI {
-    open:boolean;
-    cancelEdit:()=>void;
-    finishAndRefresh:()=>void;
-    walletToEdit:walletI;
-}
+import {editWalletI} from "../../types";
 
 function EditWalletDialog({ open, cancelEdit, finishAndRefresh, walletToEdit }:editWalletI):JSX.Element {  
     const [editDirty, setEditDirty] = useState<boolean>(false);
@@ -50,37 +43,37 @@ function EditWalletDialog({ open, cancelEdit, finishAndRefresh, walletToEdit }:e
         e.preventDefault();
         
         if(!editDirty){
-          cancelEdit();
+            cancelEdit();
         }
     
         if(walletError!==""){
-          return;
+            return;
         }
     
         const formData = new FormData();
         formData.set("name", walletName);
         formData.set("balance", balance.toString());
         if(newImg!==null){
-          formData.set("icon", newImg);
+            formData.set("icon", newImg);
         }    
     
         setIsSubmitting(true);
         updateWallet(formData, walletToEdit._id)
-          .then(data => {
-            if(typeof data==='undefined'){
-              setSubmitError("No return type?");
-              setIsSubmitting(false);
-              return;          
-            }
-            if(data.error){          
-              setSubmitError(data.error);
-              setIsSubmitting(false);
-            } else {          
-              setIsSubmitting(false);
-              finishAndRefresh();
-            }
-          })   
-      }
+            .then(data => {
+                if(typeof data==='undefined'){
+                    setSubmitError("No return type?");
+                    setIsSubmitting(false);
+                    return;          
+                }
+                if(data.error){          
+                    setSubmitError(data.error);
+                    setIsSubmitting(false);
+                } else {          
+                    setIsSubmitting(false);
+                    finishAndRefresh();
+                }
+            })   
+    }
   
     return (
         <Dialog 

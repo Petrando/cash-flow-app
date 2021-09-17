@@ -1,8 +1,22 @@
 import getCurrentMonthName from "../../api/currentMonthName";
+import { transactionFilterI, transactionFilterActionI, transactionSortI, transactionSortActionI } from "../../types";
 
-export const transactionFilter = {category:'0', subCategory:'0', dateFilter:{month:getCurrentMonthName(), startDate:'', endDate:''}}
+export const transactionFilter:transactionFilterI = {
+                                                        category:'0', 
+                                                        subCategory:'0', 
+                                                        dateFilter:{
+                                                                        month:getCurrentMonthName(), 
+                                                                        startDate:'', 
+                                                                        endDate:''
+                                                                    }
+                                                    }
 
-export const transactionFilterReducer = (state, action) => {  
+                                                   
+
+export const transactionFilterReducer = (
+                                            state:transactionFilterI, 
+                                            action:transactionFilterActionI
+                                        ):transactionFilterI => {  
     switch (action.type){
         case 'INITIALIZE':
             const {category, subCategory} = action;    
@@ -28,9 +42,12 @@ export const transactionFilterReducer = (state, action) => {
     }
 }
 
-export const transactionSort = {sortBy:'Amount', sortType:'asc'};
+export const transactionSort:transactionSortI = {sortBy:'Amount', sortType:'asc'};
 
-export const transactionSortReducer = (state, action) => {    
+export const transactionSortReducer = (
+                                        state:transactionSortI, 
+                                        action:transactionSortActionI
+                                      ):transactionSortI => {    
     switch (action.type) {
         case 'TOGGLE_SORT':
             const newSortBy = state.sortBy==='Date'?'Amount':'Date';

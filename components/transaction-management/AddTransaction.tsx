@@ -3,16 +3,8 @@ import {addNewTransaction} from "../../api/transactionApi"
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@material-ui/core';
 import SelectControl from '../globals/SelectControl';
 import { LoadingDiv } from '../globals/LoadingBackdrop';
-import { categoryI } from '../../types';
-import useStyles from './styles';
-
-interface addTransactionI {
-    submitAdd:(arg0:number, arg1:boolean)=>void;
-    cancelAdd:()=>void;
-    categories:categoryI[];
-    walletId:string;
-    walletBalance:number;
-}
+import { addTransactionI } from '../../types';
+import { useTransactionStyles } from "../../styles/material-ui.styles";
 
 export default function AddTransactionDialog({
                                                 submitAdd, 
@@ -21,7 +13,7 @@ export default function AddTransactionDialog({
                                                 walletId, 
                                                 walletBalance
                                             }:addTransactionI):JSX.Element {  
-    const transactionClasses = useStyles();
+    const transactionClasses = useTransactionStyles();
   
     const [isSubmittingData, setIsSubmitting] = useState<boolean>(false);
     const [selectedCategory, setSelectedCategory] = useState<string>('');

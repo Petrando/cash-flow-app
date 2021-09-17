@@ -12,7 +12,7 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import { ButtonGroup, FormControl, FormControlLabel, FormLabel, RadioGroup, Radio} from '@material-ui/core/';
 
-import DatePickers from '../globals/DatePickers';
+import DatePickers from '../DatePickers';
 
 const useStyles = makeStyles({
   list: {
@@ -144,7 +144,7 @@ export default function FilterDateRange({transactionFilter, dispatchDateRange}) 
       <>
         <Button onClick={toggleDrawer('right', true)}>Date Range</Button>
         <Drawer anchor={'right'} open={state['right']} onClose={toggleDrawer('right', false)}>
-          {state.right && list('right')}
+          {state.right && list()}
         </Drawer>
       </>      
     </div>

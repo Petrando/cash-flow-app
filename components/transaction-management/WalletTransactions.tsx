@@ -5,7 +5,7 @@ import { Typography } from "@material-ui/core";
 import { Add }  from '@material-ui/icons/';
 import {getTransactionsByWallet, getFirstPageTransaction_and_category} from '../../api/transactionApi';
 import LoadingBackdrop from '../../components/globals/LoadingBackdrop';
-import SortFilter from '../filterComponents/TransactionSortFilter';
+import SortFilter from '../globals/filterComponents/TransactionSortFilter';
 import TablePaging from '../TablePaging';
 import TransactionTable from './TransactionTable';
 import { transactionSort, transactionSortReducer } from './StoreNReducer';
@@ -13,13 +13,13 @@ import AddTransactionDialog from './AddTransaction';
 import EditTransactionDialog from './EditTransaction';
 import DeleteTransactionDialog from './DeleteTransaction';
 import { categoryI, transactionI } from '../../types';
-import useStyles from './styles';
+import { useTransactionStyles } from "../../styles/material-ui.styles";
 
 const itemPerPage = 5;
 
-const WalletTransactions = ({filter, dispatchFilter}) => {
-	const router = useRouter()
-	const transactionClasses = useStyles();
+const WalletTransactions = ({filter, dispatchFilter}):JSX.Element => {
+	const router = useRouter();
+	const classes = useTransactionStyles();
 
 	const [categories, setCategories] = useState<categoryI[]>([]);
 	const [transactions, setTransactions] = useState<transactionI[]>([]);
@@ -199,9 +199,9 @@ const WalletTransactions = ({filter, dispatchFilter}) => {
       		}       		   			
       			{
       				walletName!=="" &&
-      				<div className={transactionClasses.rowDiv}>
+      				<div className={classes.rowDiv}>
 
-      					<Typography variant="h4" className={transactionClasses.pageTitle}>
+      					<Typography variant="h4" className={classes.pageTitle}>
       						{walletName}  Rp. {walletBalance}
       					</Typography>
       					<Button variant="contained" color="primary" size="small" startIcon={<Add />}

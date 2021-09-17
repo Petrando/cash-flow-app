@@ -3,16 +3,7 @@ import { Button, Dialog, DialogTitle, DialogContent, DialogActions, Typography }
 import { TransactionToDeleteTable } from './TransactionTable';
 import { LoadingDiv } from '../globals/LoadingBackdrop';
 import { deleteTransaction } from '../../api/transactionApi';
-import { transactionI } from '../../types';
-
-interface deleteTransactionI {
-    submitDelete:(arg0:number)=>void;
-    editInstead:()=>void;
-    cancelDelete:()=>void;
-    transactionToDelete:transactionI;
-    walletId:string;
-    walletBalance:number;
-}
+import { deleteTransactionI } from '../../types';
 
 export default function DeleteTransactionDialog({
     submitDelete, 
@@ -33,7 +24,7 @@ export default function DeleteTransactionDialog({
     const [allowDelete, setAllowDelete] = useState<boolean>(true);
 
     useEffect(()=>{  	
-        if(name==='Income' && (parseInt(walletBalance) < parseInt(amount))){  		
+        if(name==='Income' && (walletBalance < amount)){  		
             setAllowDelete(false);
         }
     }, []);
@@ -42,9 +33,9 @@ export default function DeleteTransactionDialog({
         e.preventDefault();     
 
         const updatedWalletBalance = name === 'Expense'?
-                                        parseInt(walletBalance) + parseInt(amount)
+                                        walletBalance + amount
                                         :
-                                        parseInt(walletBalance) - parseInt(amount)
+                                        walletBalance - amount
 
         setIsSubmitting(true);
         deleteTransaction(walletId, _id, updatedWalletBalance)
@@ -64,26 +55,26 @@ export default function DeleteTransactionDialog({
             });
     }
 
-return (
-    <Dialog 
-        fullWidth={true} 
-        maxWidth={'sm'}
-        onClose={()=>!isSubmittingData && cancelDelete()} 
-        aria-labelledby="delete-dialog-title" 
-        open={true}
-    >
-        <DialogTitle id="delete-dialog-title">
-        {
-            isSubmittingData?
-            'Submitting....'
-            :
-            allowDelete?'Delete this transaction?':'Cannot delete transaction (wallet must not negative)'
-        }
-        </DialogTitle>
-        <DialogContent>  
-        {
-            !isSubmittingData &&
-            <>
+    return (
+        <Dialog 
+            fullWidth={true} 
+            maxWidth={'sm'}
+            onClose={()=>!isSubmittingData && cancelDelete()} 
+            aria-labelledby="delete-dialog-title" 
+            open={true}
+        >
+            <DialogTitle id="delete-dialog-title">
+            {
+                isSubmittingData?
+                'Submitting....'
+                :
+                allowDelete?'Delete this transaction?':'Cannot delete transaction (wallet must not negative)'
+            }
+            </DialogTitle>
+            <DialogContent>  
+            {
+                !isSubmittingData &&
+                <>
                 <Typography variant="subtitle1" gutterBottom>
                     {name} - {subCategory.name}          	
                 </Typography>
@@ -92,29 +83,29 @@ return (
                     amount={amount}
                     transactionIsExpense={name==='Expense'}
                 />
-            </> 
-        }
-        {
-            isSubmittingData &&
-            <LoadingDiv />
-        }     	   
-        </DialogContent>
-        <DialogActions>      	
-            <Button 
-                color="primary" 
-                disabled={isSubmittingData}
-                onClick={allowDelete?submitDeleteData:editInstead}
-            >
-                {allowDelete?'Delete':'Edit instead?'}
-            </Button>
-            <Button 
-                color="secondary" 
-                disabled={isSubmittingData}
-                onClick={()=>{!isSubmittingData && cancelDelete()}}
-            >
-                Cancel
-            </Button>        
-        </DialogActions>
-    </Dialog>
+                </> 
+            }
+            {
+                isSubmittingData &&
+                <LoadingDiv />
+            }     	   
+            </DialogContent>
+                <DialogActions>      	
+                    <Button 
+                        color="primary" 
+                        disabled={isSubmittingData}
+                        onClick={allowDelete?submitDeleteData:editInstead}
+                    >
+                    {allowDelete?'Delete':'Edit instead?'}
+                    </Button>
+                    <Button 
+                        color="secondary" 
+                        disabled={isSubmittingData}
+                        onClick={()=>{!isSubmittingData && cancelDelete()}}
+                    >
+                        Cancel
+                    </Button>        
+                </DialogActions>
+            </Dialog>
     );
 }

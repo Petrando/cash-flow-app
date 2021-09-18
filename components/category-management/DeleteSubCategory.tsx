@@ -1,16 +1,14 @@
-import { useState, useEffect } from 'react';
-import { Button, Dialog, DialogTitle, DialogActions, DialogContent } from '@material-ui/core';
-import { LoadingDiv } from "../../globals/LoadingBackdrop";
-import { getTransactionCount } from "../../../api/categoryApi";
-import { deleteSubCategoryI } from "../../../types";
+import { useEffect, useState } from 'react';
+import { Button, IconButton, TextField, Divider, Dialog, DialogTitle,
+        DialogContent, DialogActions, Container, Paper, Typography, makeStyles } from '@material-ui/core';
+import { Check, Clear, Edit, Delete, Refresh, ExpandLess, ExpandMore, Add}  from '@material-ui/icons/';
+import { addSubCategory, editSubCategory, deleteSubCategory, getTransactionCount } from "../../api/categoryApi";
+import NewSubCategory from "./NewSubCategory";
+import { LoadingDiv } from "../../components/globals/LoadingBackdrop"
+import { categoryI } from '../../types';
+import { useCategoryStyles } from "../../styles/material-ui.styles";
 
-function DeleteSubCategoryDialog({
-                                    cancelDelete, 
-                                    deleteSub, 
-                                    categoryId, 
-                                    categoryName, 
-                                    subToDelete:{_id, name} 
-                                }:deleteSubCategoryI):JSX.Element {      
+function DeleteSubCategoryDialog({cancelDelete, deleteSub, categoryId, categoryName, subToDelete:{_id, name} }) {      
     const [isSubmittingData, setIsSubmitting] = useState<boolean>(false);
     const [isCountingTransaction, setIsCountingTransaction] = useState<boolean>(true);
     const [transactionCount, setTransactionCount] = useState<number>(0);
@@ -32,23 +30,17 @@ function DeleteSubCategoryDialog({
                 setIsCountingTransaction(false);
             })
     }, []);
-    
+  //key={Date.now()}
+    const submitData = (e) => {
+      e.preventDefault();     
+      
+    }
+  
     return (
-      <Dialog 
-        fullWidth={true} 
-        maxWidth={'sm'}
-        onClose={()=>{}} 
-        aria-labelledby="simple-dialog-title" 
-        open={true}
-      >
+      <Dialog fullWidth={true} maxWidth={'sm'}
+        onClose={()=>{}} aria-labelledby="simple-dialog-title" open={true}>
         <DialogTitle id="simple-dialog-title">
-            {
-                isCountingTransaction?
-                'Counting transactions....':
-                transactionCount===0?
-                'Delete this sub category?':
-                'There are transaction(s)'
-            }        
+          {isCountingTransaction?'Counting transactions....':transactionCount===0?'Delete this sub category?':'There are transaction(s)'}        
         </DialogTitle>
         <DialogContent>
             {
@@ -72,24 +64,20 @@ function DeleteSubCategoryDialog({
         <DialogActions>
             {
                 transactionCount === 0 &&
-                <Button 
-                    onClick={deleteSub} 
-                    color="primary"  
-                    disabled={isCountingTransaction}        
-                >
+                <Button onClick={deleteSub} color="primary"  
+                  disabled={isCountingTransaction}        
+              >
                     Delete
-                </Button>
+              </Button>
             }        
-            <Button 
-                onClick={()=>!isSubmittingData && cancelDelete()} 
-                color="secondary"
-                disabled={isSubmittingData || isCountingTransaction}
-            >
-                Cancel
-            </Button>        
+          <Button onClick={()=>!isSubmittingData && cancelDelete()} color="secondary"
+            disabled={isSubmittingData || isCountingTransaction}
+          >
+            Cancel
+          </Button>        
         </DialogActions>
       </Dialog>
     );
-}
-  
+  }
+
   export default DeleteSubCategoryDialog;

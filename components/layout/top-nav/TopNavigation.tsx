@@ -25,7 +25,7 @@ import { navLinkI } from "../../../types";
 
 const navLinks:navLinkI[] = [
   { title: `Wallets`, path: `/wallet-list`, icon:<AccountBalanceWallet />  },
-  { title: `Income-Expenses`, path: `/category-management`, icon:<ListAlt />}, 
+  { title: `Income-Expenses`, path: `/categories`, icon:<ListAlt />}, 
 ]
 
 const useStyles = makeStyles({

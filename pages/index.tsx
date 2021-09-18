@@ -6,10 +6,10 @@ import styles from '../styles/Home.module.css'
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import HomeCard from '../components/home/HomeCard'
-import {walletMenuI} from "../types";
+import {walletCardI} from "../types";
 
 export default function Home():JSX.Element {
-  const [menuList, setMenuList] = useState<walletMenuI[]>([
+  const [menuList, setMenuList] = useState<walletCardI[]>([
                                                       {
                                                         title:"Wallet List",
                                                         about:"All of your wallets and transactions",
@@ -20,7 +20,7 @@ export default function Home():JSX.Element {
                                                         title:"Categories",
                                                         about:"Manage categories of income and expenses",
                                                         avatar: <ListAltIcon />,
-                                                        linkTo:"category-management"
+                                                        linkTo:"categories"
                                                       }
                                                     ])
   return (

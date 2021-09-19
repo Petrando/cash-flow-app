@@ -6,9 +6,9 @@ export interface subCategoryI {
 }
 
 export interface subCategoryComponentI {
-    subData:subCategoryI;
+    subCategoryData:subCategoryI;
     startEdit:()=>void;
-    submitEdit:(arg0:string, arg1:string)=>void;
+    submitEdit:(arg0:string, arg1:editSubCategorySubmitI)=>void;
     cancelEdit:()=>void;
     idSubEdited:string;
     startDelete:(arg0:string)=>void;

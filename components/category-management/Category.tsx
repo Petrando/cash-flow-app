@@ -93,7 +93,7 @@ const Category = ({categoryData:{_id, name, subCategories}, refresh}) => {
 				}				
 				{
 					subCategories.length > 0 &&
-					subCategories.map((sub, i)=><SubCategory key={sub._id} sub={sub} 
+					subCategories.map((sub, i)=><SubCategory key={sub._id} subCategoryData={sub} 
 													startEdit={()=>setSubEdited(sub._id)}
 													cancelEdit={()=>setSubEdited('')}
 													submitEdit={submitEditAndRefresh}

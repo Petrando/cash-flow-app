@@ -20,8 +20,12 @@ export interface categoryI {
     subCategories:subCategoryI[];
 }
 
+interface newSubCategorySubmitI {
+    name:string;
+}
+
 export interface newSubCategoryI {
-    submitAdd:(arg0:string)=>void;
+    submitAdd:(arg0:newSubCategorySubmitI)=>void;
     cancelAdd:()=>void;
 }
 

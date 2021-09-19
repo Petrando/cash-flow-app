@@ -82,7 +82,7 @@ const Category = ({categoryData:{_id, name, subCategories}, refresh}) => {
 				<>
 				{
 					isAddingNewSub?
-					<NewSubCategory submitAddAndRefresh={submitAddAndRefresh} cancelAdd={()=>setAddingNewSub(false)} />:
+					<NewSubCategory submitAdd={submitAddAndRefresh} cancelAdd={()=>setAddingNewSub(false)} />:
 					<Paper className={classes.addSubCategory}>
 						<Button color="primary" variant="contained" size="small" startIcon={<Add />}
 							onClick={()=>setAddingNewSub(true)}

@@ -40,7 +40,7 @@ const SubCategory = ({sub:{_id, name}, startEdit, submitEdit, cancelEdit, idSubE
 	return (
 		<Paper component="form" className={classes.root}> 
 			{iAmEdited?
-				<EditSubCategory sub={{_id, name}} submitEdit={submitEdit} cancelEdit={cancelEdit} />
+				<EditSubCategory subCategoryData={{_id, name}} submitEdit={submitEdit} cancelEdit={cancelEdit} />
 				:
 				<>
 					<Typography variant={"body2"} className={classes.fullWidth_typography}>			

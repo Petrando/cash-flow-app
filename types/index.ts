@@ -29,9 +29,13 @@ export interface newSubCategoryI {
     cancelAdd:()=>void;
 }
 
+interface editSubCategorySubmitI {
+    newName:string;
+}
+
 export interface editSubCategoryI {
-    subData:subCategoryI;
-    submitEdit:(arg0:string, arg1:string)=>void;
+    subCategoryData:subCategoryI;
+    submitEdit:(arg0:string, arg1:editSubCategorySubmitI)=>void;
     cancelEdit:()=>void;
 }
 

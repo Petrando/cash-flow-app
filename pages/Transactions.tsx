@@ -9,6 +9,7 @@ import Layout from '../components/layout'
 import WalletTransactions from '../components/transaction-management/WalletTransactions';
 import WalletGraph from '../components/transaction-management/WalletGraph';
 import getCurrentMonthName from '../api/currentMonthName';
+import ShowAlert from '../components/globals/Alert';
 import TabPanel, {a11yProps} from "../components/transaction-management/TransactionTab"
 import { transactionFilter, transactionFilterReducer } from '../components/transaction-management/StoreNReducer';
 
@@ -42,6 +43,7 @@ export default function Transactions():JSX.Element {
           Transactions Table Details & Charts
         </title>
       </Head>
+      <ShowAlert severity="warning" label={"ATTENTION : this page is still under development"} />
       <AppBar position="static" color="default">
         <Tabs
           value={tabIdx}

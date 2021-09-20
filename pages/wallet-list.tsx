@@ -10,6 +10,7 @@ import AddWalletDialog from '../components/wallets-management/AddWallet';
 import EditWalletDialog from '../components/wallets-management/EditWallet';
 import DeleteWalletDialog from '../components/wallets-management/DeleteWallet';
 import LoadingBackdrop from '../components/globals/LoadingBackdrop';
+import ShowAlert from '../components/globals/Alert';
 import { walletI } from '../types'; 
 import { useWalletStyles } from '../styles/material-ui.styles';
 
@@ -60,7 +61,8 @@ export default function WalletList() {
       {
         isLoading &&
         <LoadingBackdrop isLoading={isLoading} />
-      }      
+      } 
+      <ShowAlert severity="warning" label={"ATTENTION : this page is still under development"} />     
       <Box component="div" m={1} className={classes.newWalletContainer}>
         <Button 
           className={classes.newWalletButton}

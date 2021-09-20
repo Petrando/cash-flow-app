@@ -13,7 +13,7 @@ import { useWalletStyles } from "../../styles/material-ui.styles";
 
 function EditWalletDialog({ open, cancelEdit, finishAndRefresh, walletToEdit }:editWalletI):JSX.Element {  
     const classes = useWalletStyles();
-    const [editDirty, setEditDirty] = useState<boolean>(false);
+    
 
     const [walletName, setWalletName] = useState<string>('');
     const [walletError, setWalletError] = useState<string>('');
@@ -24,6 +24,8 @@ function EditWalletDialog({ open, cancelEdit, finishAndRefresh, walletToEdit }:e
     });   
     const [isSubmittingData, setIsSubmitting] = useState<boolean>(false);
     const [submitError, setSubmitError] = useState<string>("");
+
+    const editDirty:boolean = walletName!==walletToEdit.name || balance!==walletToEdit.balance || newImg!==null;
   
     const {displayPic} = picData;
 
@@ -40,7 +42,6 @@ function EditWalletDialog({ open, cancelEdit, finishAndRefresh, walletToEdit }:e
           displayPic:null, compressedProductPic:null, compressedDisplayPic:null, editedProductPic:null
         });
         setSubmitError("");
-        setEditDirty(false);
     }
   
     const submitData = (e) => {
@@ -221,6 +222,13 @@ function EditWalletDialog({ open, cancelEdit, finishAndRefresh, walletToEdit }:e
                     disabled={isSubmittingData}
                 >
                     Submit
+                </Button>
+                <Button 
+                    onClick={initializeEditData} 
+                    color="primary"
+                    disabled={isSubmittingData || !editDirty}
+                >
+                    Reset
                 </Button>
                 <Button 
                     onClick={()=>!isSubmittingData && cancelEdit()} 

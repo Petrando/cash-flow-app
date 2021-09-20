@@ -55,7 +55,17 @@ export const useCategoryStyles = makeStyles((theme) => ({
   }
 }));
 
-export const useWalletStyles=makeStyles({  
+export const useWalletStyles = makeStyles({  
+    newWalletContainer: {
+      display:'flex', justifyContent:'flex-end', alignItems:'center',
+      marginTop:'10px'
+    },
+    newWalletButton: {
+      marginRight:'5px'
+    },
+    walletListHeader: {
+      textAlign:'center'
+    },
     walletButton: {
       fontSize:'10px'
     }

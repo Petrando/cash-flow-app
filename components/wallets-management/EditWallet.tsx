@@ -54,6 +54,7 @@ function EditWalletDialog({ open, cancelEdit, finishAndRefresh, walletToEdit }:e
         formData.set("name", walletName);
         formData.set("balance", balance.toString());
         if(newImg!==null){
+            console.log('icon changed');
             formData.set("icon", newImg);
         }    
     
@@ -145,6 +146,7 @@ function EditWalletDialog({ open, cancelEdit, finishAndRefresh, walletToEdit }:e
                                         return;
                                     }                                     
                                     const imageFile = evt.target.files[0];
+                                    setNewImg(imageFile);
                                     //setImgFile(imageFile);
                                     //setImgError("");
                                     console.log('originalFile instanceof Blob', imageFile instanceof Blob); // true

@@ -23,36 +23,36 @@ function AddWalletDialog({ open, cancelAdd, finishAndRefresh }:addWalletI):JSX.E
     const {displayPic} = picData;
   
     const submitData = (e) => {
-      e.preventDefault();
-      if(imgFile===null){      
-        setImgError("Wallet Icon is required.")
-      }
-      if(walletError!==""||imgError!==""||imgFile===null){
-        return;
-      }
+        e.preventDefault();
+        if(imgFile===null){      
+            setImgError("Wallet Icon is required.")
+        }
+        if(walletError!==""||imgError!==""||imgFile===null){
+            return;
+        }
   
-      const formData = new FormData();
-      formData.set("name", walletName);
-      formData.set("balance", balance.toString());
-      formData.set("icon", imgFile);
+        const formData = new FormData();
+        formData.set("name", walletName);
+        formData.set("balance", balance.toString());
+        formData.set("icon", imgFile);
   
-      setIsSubmitting(true);
-      createWallet(formData)
-        .then(data => {
-          if(typeof data==='undefined'){
-            setSubmitError("No return type?");
-            setIsSubmitting(false);
-            return;          
-          }
-          if(data.error){          
-            setSubmitError(data.error);
-            setIsSubmitting(false);
-          } else {
-            console.log(data);
-            setIsSubmitting(false);
-            finishAndRefresh();
-          }
-        })   
+        setIsSubmitting(true);
+        createWallet(formData)
+            .then(data => {
+                if(typeof data==='undefined'){
+                    setSubmitError("No return type?");
+                    setIsSubmitting(false);
+                    return;          
+                }
+                if(data.error){          
+                    setSubmitError(data.error.toString());
+                    setIsSubmitting(false);
+                } else {
+                    console.log(data);
+                    setIsSubmitting(false);
+                    finishAndRefresh();
+                }
+            })   
     }
   
     return (
@@ -60,10 +60,10 @@ function AddWalletDialog({ open, cancelAdd, finishAndRefresh }:addWalletI):JSX.E
             fullWidth={true} 
             maxWidth={'sm'}
             onClose={()=>{!isSubmittingData && cancelAdd()}} 
-            aria-labelledby="simple-dialog-title" 
+            aria-labelledby="add-wallet-dialog" 
             open={open}
         >
-            <DialogTitle id="simple-dialog-title">
+            <DialogTitle id="add-wallet-dialog">
             {
                 !isSubmittingData?'Add New Wallet':'Submitting...'
             }

@@ -20,7 +20,7 @@ export interface categoryI {
     subCategories:subCategoryI[];
 }
 
-interface newSubCategorySubmitI {
+export interface newSubCategorySubmitI {
     name:string;
 }
 
@@ -29,7 +29,7 @@ export interface newSubCategoryI {
     cancelAdd:()=>void;
 }
 
-interface editSubCategorySubmitI {
+export interface editSubCategorySubmitI {
     newName:string;
 }
 
@@ -88,6 +88,7 @@ export interface walletDisplayI {
     walletData:walletI;
     setEdit:()=>void;
     setDelete:()=>void;
+    isLoading?:boolean;
 }
 
 export interface addWalletI {

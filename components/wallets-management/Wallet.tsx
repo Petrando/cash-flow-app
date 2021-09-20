@@ -1,31 +1,60 @@
 
+import {useState, useEffect} from 'react';
 import Link from 'next/link';
-import { Grid, ButtonGroup, Button, IconButton, Card, CardActionArea, CardContent, CardActions, 
-         Typography } from '@material-ui/core';
-import { TableChart, Edit, Delete } from '@material-ui/icons';
+import Image from 'next/image';
+import { 
+          Grid, 
+          ButtonGroup, 
+          Button, 
+          IconButton, 
+          Card, 
+          CardHeader,
+          CardMedia,
+          CardActionArea, 
+          CardContent, 
+          CardActions, 
+          CircularProgress,
+          Typography 
+      } from '@material-ui/core';
+import { List, Edit, Delete } from '@material-ui/icons';
+import * as d3 from 'd3';
 import ImageLoad from '../globals/ImageLoad';
 import { API } from "../../config";
 import { walletDisplayI } from '../../types';
 import {useWalletStyles} from '../../styles/material-ui.styles';
 
-const Wallet = ({walletData, setEdit, setDelete}:walletDisplayI):JSX.Element => {
+const Wallet = ({isLoading, walletData, setEdit, setDelete}:walletDisplayI):JSX.Element => {
     const classes = useWalletStyles();
+    const [iconSrc, setIconSrc] = useState<string>("");
     const {_id, name, icon, balance} = walletData;
+    console.log(icon["data"]);
+    const myIconSrc = {data:icon["data"], ["content-Type"]:icon["contentType"]}
+
+    useEffect(()=>{
+      setIconSrc(isLoading?"":`${API}/wallet/photo/${_id}`);
+    }, [icon]);
+
+    useEffect(()=>{
+      console.log(iconSrc)
+    }, [iconSrc]);
 
     return (
       <Grid item md={4} sm={6} xs={12} key={_id}>
         <Card>
           <CardActionArea>
-            <ImageLoad key={Date.now()}
-              source={`${API}/wallet/photo/${_id}`} imgStyle={{width:'auto', height:'80px'}} />
-            <CardContent>
-              <Typography variant="subtitle1" gutterBottom>
-                {name}
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                {balance}
-              </Typography>
-            </CardContent>
+            <CardHeader 
+              title={name}
+              subheader={`Rp. ${d3.format(",")(balance)}`}
+            />
+            {
+              iconSrc===""?
+              <CircularProgress />:
+              <CardMedia 
+                component="img"
+                height="194"
+                src={`${API}/wallet/photo/${_id}`}
+              />
+            }            
           </CardActionArea>
           <CardActions >                                          
             <Link href={{ pathname: `/transactions`, query: { _id, name, balance } }} >
@@ -33,7 +62,7 @@ const Wallet = ({walletData, setEdit, setDelete}:walletDisplayI):JSX.Element => 
             <Button 
                 color="primary" 
                 variant="contained"
-                startIcon={<TableChart />}
+                startIcon={<List />}
                 className={classes.walletButton} 
             >        
               Transactions

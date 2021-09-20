@@ -27,8 +27,10 @@ export const createWallet =  (walletData) => {
 }
 
 export const updateWallet = (updatedWallet, walletId) => {
+  console.log('updatedWallet data, is there new icon ?');
+  console.log(updatedWallet.get("icon"));
   return fetch(`${API}wallet/update/${walletId}`, {
-    method: 'PUT',
+    method: 'POST',
     headers: {
       Accept: 'application/json'      
     },

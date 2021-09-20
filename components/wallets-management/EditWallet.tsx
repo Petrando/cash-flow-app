@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import {
             Button, Card, CardActionArea, CardMedia, CircularProgress, Dialog, DialogTitle, 
-            DialogContent, DialogActions, Grid, TextField
+            DialogContent, DialogActions, Grid, IconButton, TextField
        } from '@material-ui/core';
 import { PhotoCamera, DeleteForever } from '@material-ui/icons';       
 import imageCompression from 'browser-image-compression';
@@ -243,13 +243,12 @@ function EditWalletDialog({
                 >
                     Cancel
                 </Button> 
-                <Button
+                <IconButton
                     color="secondary"
-                    onClick={()=>{deleteInstead()}}
-                    startIcon={<DeleteForever />}
+                    onClick={()=>{deleteInstead()}}                    
                 >
-                    Delete
-                </Button>       
+                    <DeleteForever />
+                </IconButton>       
             </DialogActions>
         </Dialog>
     );

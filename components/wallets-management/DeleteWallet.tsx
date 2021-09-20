@@ -13,7 +13,7 @@ import {
         DialogContent, 
         DialogActions, 
         Grid, 
-        Typography 
+        IconButton 
       } from '@material-ui/core';
 import {Block, DeleteForever, Edit, List} from '@material-ui/icons';
 import * as d3 from 'd3';
@@ -70,7 +70,8 @@ function DeleteWalletDialog({
                                 <a>
                                     <Button 
                                         color="primary" 
-                                        variant="outlined"
+                                        variant="contained"
+                                        size="small"
                                         startIcon={<List />}                                        
                                     >        
                                         See Transactions
@@ -100,15 +101,13 @@ function DeleteWalletDialog({
                 >
                     Cancel
                 </Button> 
-                <Button 
+                <IconButton 
                     onClick={()=>!isSubmittingData && editInstead()}                  
-                    color="primary"
-                    variant="contained"
-                    disabled={isSubmittingData}
-                    startIcon={<Edit />}
+                    color="primary"                    
+                    disabled={isSubmittingData}                   
                 >
-                    Edit
-                </Button>        
+                    <Edit />
+                </IconButton>        
             </DialogActions>
         </Dialog>
     );

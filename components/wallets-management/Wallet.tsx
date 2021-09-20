@@ -39,7 +39,7 @@ const Wallet = ({isLoading, walletData, setEdit, setDelete}:walletDisplayI):JSX.
     }, [iconSrc]);
 
     return (
-      <Grid item md={4} sm={6} xs={12} key={_id}>
+      <Grid item lg={3} md={4} sm={6} xs={12} key={_id}>
         <Card>
           <CardActionArea>
             <CardHeader 

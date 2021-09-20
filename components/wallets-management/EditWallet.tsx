@@ -3,7 +3,7 @@ import {
             Button, Card, CardActionArea, CardMedia, CircularProgress, Dialog, DialogTitle, 
             DialogContent, DialogActions, Grid, TextField
        } from '@material-ui/core';
-import { PhotoCamera } from '@material-ui/icons';       
+import { PhotoCamera, DeleteForever } from '@material-ui/icons';       
 import imageCompression from 'browser-image-compression';
 import { API } from "../../config";
 import DialogSlide from '../globals/DialogSlide';
@@ -11,7 +11,13 @@ import { updateWallet } from "../../api/walletApi";
 import {editWalletI} from "../../types";
 import { useWalletStyles } from "../../styles/material-ui.styles";
 
-function EditWalletDialog({ open, cancelEdit, finishAndRefresh, walletToEdit }:editWalletI):JSX.Element {  
+function EditWalletDialog({ 
+                            open, 
+                            cancelEdit, 
+                            finishAndRefresh, 
+                            deleteInstead, 
+                            walletToEdit 
+                        }:editWalletI):JSX.Element {  
     const classes = useWalletStyles();
     
 
@@ -236,7 +242,14 @@ function EditWalletDialog({ open, cancelEdit, finishAndRefresh, walletToEdit }:e
                     disabled={isSubmittingData}
                 >
                     Cancel
-                </Button>        
+                </Button> 
+                <Button
+                    color="secondary"
+                    onClick={()=>{deleteInstead()}}
+                    startIcon={<DeleteForever />}
+                >
+                    Delete
+                </Button>       
             </DialogActions>
         </Dialog>
     );

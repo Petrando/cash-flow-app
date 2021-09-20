@@ -101,7 +101,8 @@ export interface editWalletI {
     open:boolean;
     cancelEdit:()=>void;
     finishAndRefresh:()=>void;
-    walletToEdit:walletI;
+    walletToEdit:walletI;    
+    deleteInstead:()=>void;
 }
 
 export interface deleteWalletI {
@@ -109,6 +110,7 @@ export interface deleteWalletI {
     cancelDelete:()=>void;
     deleteAndRefresh:()=>void;
     walletToDelete:walletI;
+    editInstead:()=>void;
 }
 
 export interface addTransactionI {

@@ -15,7 +15,7 @@ import {
         Grid, 
         Typography 
       } from '@material-ui/core';
-import {Block, DeleteForever, List} from '@material-ui/icons';
+import {Block, DeleteForever, Edit, List} from '@material-ui/icons';
 import * as d3 from 'd3';
 import { API } from "../../config";
 import { deleteWallet } from "../../api/walletApi";
@@ -25,6 +25,7 @@ function DeleteWalletDialog({
                                 cancelDelete, 
                                 open, 
                                 deleteAndRefresh, 
+                                editInstead,
                                 walletToDelete:{_id, name, balance}
                             }:deleteWalletI):JSX.Element {      
     const [isSubmittingData, setIsSubmitting] = useState<boolean>(false);
@@ -98,6 +99,15 @@ function DeleteWalletDialog({
                     startIcon={<Block />}
                 >
                     Cancel
+                </Button> 
+                <Button 
+                    onClick={()=>!isSubmittingData && editInstead()}                  
+                    color="primary"
+                    variant="contained"
+                    disabled={isSubmittingData}
+                    startIcon={<Edit />}
+                >
+                    Edit
                 </Button>        
             </DialogActions>
         </Dialog>

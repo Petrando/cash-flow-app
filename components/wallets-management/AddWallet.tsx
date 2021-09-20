@@ -5,10 +5,13 @@ import {
        } from '@material-ui/core';
 import { PhotoCamera } from '@material-ui/icons';       
 import imageCompression from 'browser-image-compression';
+import DialogSlide from '../globals/DialogSlide';
 import { createWallet } from "../../api/walletApi";
+import { useWalletStyles } from "../../styles/material-ui.styles";
 import { addWalletI} from "../../types";
 
 function AddWalletDialog({ open, cancelAdd, finishAndRefresh }:addWalletI):JSX.Element {    
+    const classes = useWalletStyles();
     const [walletName, setWalletName] = useState<string>('');
     const [walletError, setWalletError] = useState<string>('');
     const [balance, setBalance] = useState<number>(0);
@@ -23,7 +26,7 @@ function AddWalletDialog({ open, cancelAdd, finishAndRefresh }:addWalletI):JSX.E
     const {displayPic} = picData;
   
     const submitData = (e) => {
-        e.preventDefault();
+        e.preventDefault();       
         if(imgFile===null){      
             setImgError("Wallet Icon is required.")
         }
@@ -62,6 +65,7 @@ function AddWalletDialog({ open, cancelAdd, finishAndRefresh }:addWalletI):JSX.E
             onClose={()=>{!isSubmittingData && cancelAdd()}} 
             aria-labelledby="add-wallet-dialog" 
             open={open}
+            TransitionComponent={DialogSlide}
         >
             <DialogTitle id="add-wallet-dialog">
             {
@@ -109,18 +113,43 @@ function AddWalletDialog({ open, cancelAdd, finishAndRefresh }:addWalletI):JSX.E
                     disabled={isSubmittingData}
                 />
                 <Grid container>
-                    <Grid item xs={12} md={6}>
+                    {
+                        imgError!=="" &&
+                        <Grid item xs={12}>
+                        <Typography variant="body2" color="error" gutterBottom>
+                            {imgError}
+                        </Typography>
+                        </Grid>
+                    }
+                    <Grid item xs={12} className={classes.walletImageContainer}>
+                        {
+                            displayPic!==null &&
+                            <Card className={classes.walletImage}>
+                                <CardActionArea>
+                                    <CardMedia 
+                                        style={{width:'100%', height:'194px', objectFit:"fill"}}         
+                                        image={displayPic}
+                                        title="Wallet Icon"
+                                    />
+                                </CardActionArea>
+                            </Card>
+                        }
                         <Button 
                             variant="contained"
                             component="label"
                             color="primary"                                    
                             endIcon={<PhotoCamera />}
+                            id="photoButton"          
+                            onClick={()=>{setImgError("")}}                  
                         >
                             Wallet Icon                            
                             <input
                                 type="file"
                                 hidden
+                                name="photoInput"
                                 onChange={(evt)=>{  
+                                    evt.stopPropagation();
+                                    evt.preventDefault();
                                     if(typeof evt.target.files[0] === 'undefined'){
                                         return;
                                     }                                     
@@ -170,28 +199,8 @@ function AddWalletDialog({ open, cancelAdd, finishAndRefresh }:addWalletI):JSX.E
                                     }
                                 }}
                             />
-                        </Button >
-                    </Grid>
-                    <Grid item xs={12} md={6} >
-                    {
-                        displayPic!==null &&
-                        <Card>
-                            <CardActionArea>
-                                <CardMedia 
-                                    style={{width:'100%', height:'140px'}}         
-                                    image={displayPic}
-                                    title="Wallet Icon"
-                                />
-                            </CardActionArea>
-                        </Card>
-                    }
-                    {
-                        imgError!=="" &&
-                        <Typography variant="body2" color="error" gutterBottom>
-                            {imgError}
-                        </Typography>
-                    }
-                    </Grid>
+                        </Button >                        
+                    </Grid>                    
                 </Grid>
                 </>
             }

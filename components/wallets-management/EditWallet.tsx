@@ -5,10 +5,14 @@ import {
        } from '@material-ui/core';
 import { PhotoCamera } from '@material-ui/icons';       
 import imageCompression from 'browser-image-compression';
+import { API } from "../../config";
+import DialogSlide from '../globals/DialogSlide';
 import { updateWallet } from "../../api/walletApi";
 import {editWalletI} from "../../types";
+import { useWalletStyles } from "../../styles/material-ui.styles";
 
 function EditWalletDialog({ open, cancelEdit, finishAndRefresh, walletToEdit }:editWalletI):JSX.Element {  
+    const classes = useWalletStyles();
     const [editDirty, setEditDirty] = useState<boolean>(false);
 
     const [walletName, setWalletName] = useState<string>('');
@@ -83,6 +87,7 @@ function EditWalletDialog({ open, cancelEdit, finishAndRefresh, walletToEdit }:e
             onClose={()=>{!isSubmittingData && cancelEdit()}} 
             aria-labelledby="simple-dialog-title" 
             open={open}
+            TransitionComponent={DialogSlide}
         >
             <DialogTitle id="simple-dialog-title">
             {
@@ -130,7 +135,16 @@ function EditWalletDialog({ open, cancelEdit, finishAndRefresh, walletToEdit }:e
                     disabled={isSubmittingData}
                 />
                 <Grid container>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} className={classes.walletImageContainer}>
+                        <Card className={classes.walletImage}>
+                            <CardActionArea>
+                                <CardMedia 
+                                    style={{width:'100%', height:'194px'}}         
+                                    image={displayPic==null?`${API}/wallet/photo/${walletToEdit._id}`:displayPic}
+                                    title="Wallet Icon"
+                                />
+                            </CardActionArea>
+                        </Card>
                         <Button 
                             variant="contained"
                             component="label"
@@ -189,21 +203,7 @@ function EditWalletDialog({ open, cancelEdit, finishAndRefresh, walletToEdit }:e
                                 }}                                
                             />
                         </Button >
-                    </Grid>
-                    <Grid item xs={12} md={6} >
-                    {
-                        displayPic!==null &&
-                        <Card>
-                            <CardActionArea>
-                                <CardMedia 
-                                    style={{width:'100%', height:'140px'}}         
-                                    image={displayPic}
-                                    title="Wallet Icon"
-                                />
-                            </CardActionArea>
-                        </Card>
-                    }                    
-                    </Grid>
+                    </Grid>                    
                 </Grid>
                 </>
             }

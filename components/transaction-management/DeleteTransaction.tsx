@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions, Typography } from '@material-ui/core';
 import { TransactionToDeleteTable } from './TransactionTable';
 import { LoadingDiv } from '../globals/LoadingBackdrop';
+import DialogSlide from '../globals/DialogSlide';
 import { deleteTransaction } from '../../api/transactionApi';
 import { deleteTransactionI } from '../../types';
 
@@ -62,6 +63,7 @@ export default function DeleteTransactionDialog({
             onClose={()=>!isSubmittingData && cancelDelete()} 
             aria-labelledby="delete-dialog-title" 
             open={true}
+            TransitionComponent={DialogSlide}
         >
             <DialogTitle id="delete-dialog-title">
             {

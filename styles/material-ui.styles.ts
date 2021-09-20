@@ -68,6 +68,19 @@ export const useWalletStyles = makeStyles({
     },
     walletButton: {
       fontSize:'10px'
+    },
+    walletImageContainer: {
+      height:'194px',
+      display:'flex', justifyContent:'center', alignItems:'center',
+      position:'relative',
+      overflow:'hidden'
+    },
+    walletImage: {
+      position:'absolute',
+      left:'0px',
+      top:'0px',
+      width:'100%',
+      height:'194px'      
     }
 })
 

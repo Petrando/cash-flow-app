@@ -67,7 +67,7 @@ export default function TransactionSortFilter({
   );
 }
 
-interface subCategoryI {
+interface subCategoryMockupI {
   _id?:string;
   name:string;
   category?:string;
@@ -78,7 +78,7 @@ const CategoryAndSubFilter = (props:categoryAndSubI):JSX.Element => {
 
   const [categories, setCategories] = useState<any[]>([]);
   //const [activeCategory, setCategory] = useState<string>(props.transactionFilter.category);
-  const [subCategories, setSubCategories] = useState<subCategoryI[]>([]);
+  const [subCategories, setSubCategories] = useState<subCategoryMockupI[]>([]);
   //const [activeSubCategory, setSubCategory] = useState<string>(props.transactionFilter.subCategory);
 
   useEffect(()=>{    
@@ -90,7 +90,7 @@ const CategoryAndSubFilter = (props:categoryAndSubI):JSX.Element => {
   const initializeStates = () => {
     const initCategories = [{_id:'0', name:'All'}].concat(props.categories.map(d => {return {_id:d._id, name:d.name};}));
     const {category} = props.transactionFilter;
-    let initSubCategories:subCategoryI[] = [{_id:'0', name:'All', category:''}];
+    let initSubCategories:subCategoryMockupI[] = [{_id:'0', name:'All', category:''}];
     if(category!=="0"){      
       const selectedCategory = props.categories.filter(d=>d._id===category);
       if(selectedCategory.length > 0){
@@ -114,7 +114,7 @@ const CategoryAndSubFilter = (props:categoryAndSubI):JSX.Element => {
     const currentCategory = props.transactionFilter.category;
     const newCategory = e.target.value;
 
-    const firstSubCategory:subCategoryI = {_id:'0', name:'All'};
+    const firstSubCategory:subCategoryMockupI = {_id:'0', name:'All'};
 
     if(newCategory==='0'){
       initializeStates();
@@ -137,7 +137,7 @@ const CategoryAndSubFilter = (props:categoryAndSubI):JSX.Element => {
   const changeSubCategory = (e) => {
     const newSubCategory = e.target.value;
 
-    const firstSubCategory:subCategoryI = {_id:'0', name:'All'};
+    const firstSubCategory:subCategoryMockupI = {_id:'0', name:'All'};
     
     if(props.transactionFilter.category==='0' && newSubCategory!=='0'){
       const selectedSubCategory = subCategories.filter(d=>d._id===newSubCategory)[0];

@@ -16,13 +16,14 @@ const useStyles = makeStyles((theme: Theme) =>
 interface showAlertI {
     severity:string;
     label:string;
+    handleClose?:()=>void;
 }
 
-export default function ShowAlert({severity, label}:showAlertI):JSX.Element {
+export default function ShowAlert({severity, label, handleClose}:showAlertI):JSX.Element {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} onClick={()=>{handleClose()}}>
       <Alert severity={ 
                        severity==="error"?"error":
                        severity==="warning"?"warning":

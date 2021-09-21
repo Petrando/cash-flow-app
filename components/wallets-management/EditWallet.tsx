@@ -4,8 +4,8 @@ import {
             DialogContent, DialogActions, Grid, IconButton, TextField
        } from '@material-ui/core';
 import { PhotoCamera, DeleteForever } from '@material-ui/icons';       
-import imageCompression from 'browser-image-compression';
 import { API } from "../../config";
+import ShowAlert from '../globals/Alert';
 import DialogSlide from '../globals/DialogSlide';
 import { updateWallet } from "../../api/walletApi";
 import {editWalletI} from "../../types";
@@ -25,28 +25,31 @@ function EditWalletDialog({
     const [walletError, setWalletError] = useState<string>('');
     const [balance, setBalance] = useState<number>(0);
     const [newImg, setNewImg] = useState(null);
-    const [picData, setPicData] = useState({
-      displayPic:null, compressedProductPic:null, compressedDisplayPic:null, editedProductPic:null
-    });   
+    const [displayPic, setDisplayPic] = useState(null);   
+    const [imgError, setImgError] = useState<string>("");
     const [isSubmittingData, setIsSubmitting] = useState<boolean>(false);
     const [submitError, setSubmitError] = useState<string>("");
 
     const editDirty:boolean = walletName!==walletToEdit.name || balance!==walletToEdit.balance || newImg!==null;
-  
-    const {displayPic} = picData;
 
     useEffect(()=>{        
         initializeEditData();
-      }, []);
+    }, []);
+
+    useEffect(()=>{
+        if(imgError!==""){
+            setTimeout(()=>{
+                setImgError("");
+            }, 5000)
+        }
+    }, [imgError]);
     
     const initializeEditData = () => {       
         setWalletName(walletToEdit.name);
         setBalance(walletToEdit.balance);
         setWalletError('');
         setNewImg(null);
-        setPicData({
-          displayPic:null, compressedProductPic:null, compressedDisplayPic:null, editedProductPic:null
-        });
+        setDisplayPic(null);
         setSubmitError("");
     }
   
@@ -167,52 +170,33 @@ function EditWalletDialog({
                                         return;
                                     }                                     
                                     const imageFile = evt.target.files[0];
-                                    setNewImg(imageFile);
-                                    //setImgFile(imageFile);
-                                    //setImgError("");
-                                    console.log('originalFile instanceof Blob', imageFile instanceof Blob); // true
-                                    console.log(`originalFile size ${imageFile.size / 1024 / 1024} MB`);
-                                    /*let reader = new FileReader();
-  
-                                    reader.onload = function(e) {
-                                    setPicData({...picData, displayPic:e.target.result});
+                                    if(imageFile.size > 1000000){
+                                        setNewImg(null);
+                                        setDisplayPic(null);
+                                        setImgError("New mage must be smaller than 1MB.")
+                                        return;
+                                    }else {
+                                        setNewImg(imageFile);
+                                        setDisplayPic(URL.createObjectURL(imageFile));
+                                        setImgError("");                                    
                                     }
-  
-                                    reader.readAsDataURL(evt.target.files[0]);*/
-              
-                                    const options = { 
-                                        maxSizeMB: 0.5,          // (default: Number.POSITIVE_INFINITY)
-                                        maxWidthOrHeight: 200,   // compressedFile will scale down by ratio to a point that width or height is smaller than maxWidthOrHeight (default: undefined)
-                                        useWebWorker:true,      // optional, use multi-thread web worker, fallback to run in main-thread (default: true)
-                                        /*maxIteration: number,       // optional, max number of iteration to compress the image (default: 10)
-                                        exifOrientation: number,    // optional, see https://stackoverflow.com/a/32490603/10395024
-                                        onProgress: Function,       // optional, a function takes one progress argument (percentage from 0 to 100) 
-                                        fileType: string*/            // optional, fileType override
-                                    }
-                                    imageCompression(imageFile, options)
-                                        .then(function (compressedFile) {
-                                            console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
-                                            console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
-   
-                                            //setCompressedProductPic(compressedFile); // write your own logic
-                                            //setCompressedDisplayPic(URL.createObjectURL(compressedFile))
-                                            setPicData({...picData, 
-                                                displayPic:URL.createObjectURL(evt.target.files[0]),
-                                                compressedProductPic:URL.createObjectURL(compressedFile),
-                                                compressedDisplayPic:URL.createObjectURL(compressedFile)
-                                            })
-                                        })
-                                        .catch(function (error) {
-                                            console.log(error.message);
-                                        });
-                                        //setDisplayPic(URL.createObjectURL(evt.target.files[0]));
-                                        //setPicData({...picData, displayPic:URL.createObjectURL(evt.target.files[0])})
                                 }}                                
                             />
                         </Button >
                     </Grid>                    
                 </Grid>
                 </>
+            }
+            {
+                !isSubmittingData &&
+                imgError !=="" &&
+                <ShowAlert 
+                    severity={"warning"}
+                    label={imgError}
+                    handleClose={()=>{
+                        setImgError("");
+                    }}
+                />
             }
             {
                 isSubmittingData && 

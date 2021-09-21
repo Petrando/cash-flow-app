@@ -4,7 +4,6 @@ import {
             DialogContent, DialogActions, Grid, TextField, Typography
        } from '@material-ui/core';
 import { PhotoCamera } from '@material-ui/icons';       
-import imageCompression from 'browser-image-compression';
 import DialogSlide from '../globals/DialogSlide';
 import { createWallet } from "../../api/walletApi";
 import { useWalletStyles } from "../../styles/material-ui.styles";

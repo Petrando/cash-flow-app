@@ -5,7 +5,7 @@ import { Typography } from "@material-ui/core";
 import { Add }  from '@material-ui/icons/';
 import {getTransactionsByWallet, getFirstPageTransaction_and_category} from '../../api/transactionApi';
 import LoadingBackdrop from '../../components/globals/LoadingBackdrop';
-import SortFilter from '../globals/filterComponents/TransactionSortFilter';
+import TransactionSortFilter from '../globals/filterComponents/TransactionSortFilter';
 import TablePaging from '../globals/TablePaging';
 import TransactionTable from './TransactionTable';
 import { transactionSort, transactionSortReducer } from './StoreNReducer';
@@ -244,7 +244,7 @@ const WalletTransactions = ({filter, dispatchFilter, _id, name, balance}:walletT
       		}  
             {
               	categories.length > 0 &&              
-              	<SortFilter 
+              	<TransactionSortFilter 
                 	categories={categories}
                 	sort={sort} 
                 	dispatchSort={dispatchSort}

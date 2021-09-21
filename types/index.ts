@@ -177,6 +177,14 @@ export interface transactionSortActionI {
     type:string;
 }
 
+export interface transactionSortFilterComponentI{
+    categories:categoryI[];
+    sort:transactionSortI;
+    dispatchSort:Dispatch<transactionSortActionI>;
+    filter:transactionFilterI;
+    dispatchFilter:Dispatch<transactionFilterActionI>;
+}
+
 export interface transactionTableI {
     tableData:transactionI[];
     setIdEdit:(arg0:string)=>void;

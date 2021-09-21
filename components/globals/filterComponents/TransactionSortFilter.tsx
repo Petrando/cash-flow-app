@@ -1,39 +1,21 @@
 import React, {useState, useEffect} from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
-
+import { Button, FormControl, InputLabel, MenuItem, Select } from '@material-ui/core/';
 import TimeFilter from './TimeFilter';
-
-const useStyles = makeStyles((theme) => ({
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 140,
-  },
-  formGroupControl:{
-    display:'flex', flexDirection:'row',
-    minWidth:240,
-    maxWidth:300,
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
-}));
+import {transactionSortFilterComponentI} from "../../../types";
+import { useTransactionStyles } from '../../../styles/material-ui.styles';
 
 const sortBy=[
   'Date', 'Amount'
 ]
 
-export default function SortFilter({categories, sort, dispatchSort, filter, dispatchFilter}) {
-  const classes = useStyles();  
+export default function TransactionSortFilter({
+                                    categories, 
+                                    sort, 
+                                    dispatchSort, 
+                                    filter, 
+                                    dispatchFilter
+                                  }:transactionSortFilterComponentI):JSX.Element {
+  const classes = useTransactionStyles();  
 
   const handleChangeSort = (event) => {
     dispatchSort({type:'TOGGLE_SORT'});
@@ -41,7 +23,7 @@ export default function SortFilter({categories, sort, dispatchSort, filter, disp
 
   const checkFilterChanged = () =>{    
     const {category, subCategory, dateFilter} = filter;   
-    if(category==='0' && subCategory==='0' && dateFilter.hasOwnProperty('Month') && dateFilter.Month==='All'){
+    if(category==='0' && subCategory==='0' && dateFilter.hasOwnProperty('Month') && dateFilter.month==='All'){
       console.log('filter intact');
       return false;
     }
@@ -62,10 +44,20 @@ export default function SortFilter({categories, sort, dispatchSort, filter, disp
           <MenuItem value={"Date"}>Date</MenuItem>          
         </Select>
       </FormControl>      
-      <CategoryAndSubFilter categories={categories} transactionFilter={filter} dispatchFilter={dispatchFilter} />      
-      <TimeFilter transactionFilter={filter} dispatchFilter={dispatchFilter} />
+      <CategoryAndSubFilter 
+        categories={categories} 
+        transactionFilter={filter} 
+        dispatchFilter={dispatchFilter} 
+      />      
+      <TimeFilter 
+        transactionFilter={filter} 
+        dispatchFilter={dispatchFilter} 
+      />
       <FormControl className={classes.formControl}>
-        <Button variant="contained" size="small" color="secondary"          
+        <Button 
+          variant="contained" 
+          size="small" 
+          color="secondary"          
           onClick={()=>dispatchFilter({type:'RESET_FILTER'})}
         >
           Reset
@@ -76,7 +68,7 @@ export default function SortFilter({categories, sort, dispatchSort, filter, disp
 }
 
 const CategoryAndSubFilter = (props) => {
-  const classes = useStyles();
+  const classes = useTransactionStyles();
 
   const [categories, setCategories] = useState<any[]>([]);
   //const [activeCategory, setCategory] = useState<string>(props.transactionFilter.category);

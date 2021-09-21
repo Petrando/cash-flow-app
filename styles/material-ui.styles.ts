@@ -159,6 +159,10 @@ export const useTransactionStyles = makeStyles((theme: Theme) => ({
       marginTop:'15px',
       padding:'5px 5px 5px 15px',
   },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 140,
+  }
 }));
 
 export const useTransactionTableStyles = makeStyles({

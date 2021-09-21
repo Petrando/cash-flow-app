@@ -1,5 +1,13 @@
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
-import { green } from '@material-ui/core/colors';
+import { green, red } from '@material-ui/core/colors';
+
+export const useCommonStyles = makeStyles((theme: Theme) => ({
+  errorText: {
+    color: red[500],
+    textAlign: 'center'
+  }
+}));
+
 
 export const useHomeCardStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -27,7 +35,7 @@ export const useHomeCardStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export const useCategoryStyles = makeStyles((theme) => ({
+export const useCategoryStyles = makeStyles((theme: Theme) => ({
   root: {
       padding: '2px 4px',
       display: 'flex',
@@ -84,7 +92,7 @@ export const useWalletStyles = makeStyles({
     }
 })
 
-export const useTransactionStyles = makeStyles((theme) => ({
+export const useTransactionStyles = makeStyles((theme: Theme) => ({
   rowDiv: {
       display:'flex', flexDirection:'row', justifyContent:'space-between', alignItems:'center',
       flexWrap:'wrap'

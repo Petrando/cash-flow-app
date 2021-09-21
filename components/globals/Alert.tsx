@@ -24,7 +24,7 @@ export default function ShowAlert({severity, label}:showAlertI):JSX.Element {
   return (
     <div className={classes.root}>
       <Alert severity={ 
-                       severity==="eror"?"error":
+                       severity==="error"?"error":
                        severity==="warning"?"warning":
                        severity==="info"?"info":
                        "success"

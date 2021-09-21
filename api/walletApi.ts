@@ -1,8 +1,10 @@
 import {API} from '../config';
+import checkResponse from './checkResponse';
 
 export async function getWallets() {    
   return fetch(`${API}wallet`)
     .then(res => {
+      checkResponse(res);
       return res.json();
     })
     .catch(err => {
@@ -19,6 +21,7 @@ export const createWallet =  (walletData) => {
     body: walletData
   })
   .then(res => {
+    checkResponse(res);
     return res.json();
   })
   .catch(err => {
@@ -37,6 +40,7 @@ export const updateWallet = (updatedWallet, walletId) => {
     body: updatedWallet
   })
   .then(res => {
+    checkResponse(res);
     return res.json();
   })
   .catch(err => {
@@ -47,6 +51,7 @@ export const updateWallet = (updatedWallet, walletId) => {
 export const deleteWallet = (walletId) => {
   return fetch(`${API}wallet/delete/${walletId}`, {method: 'DELETE'})
   .then(res => {
+    checkResponse(res);
     return res.json();
   })
   .catch(err => {

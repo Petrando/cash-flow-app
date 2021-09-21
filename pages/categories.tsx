@@ -7,11 +7,13 @@ import {getCategories} from '../api/categoryApi'
 import InitializeCategory from '../components/category-management/InitializeCategory';
 import LoadingBackdrop from '../components/globals/LoadingBackdrop';
 import Category from '../components/category-management/Category';
+import ShowAlert from '../components/globals/Alert';
 import { categoryI } from '../types';
-import { useCategoryStyles } from '../styles/material-ui.styles';
+import { useCategoryStyles, useCommonStyles } from '../styles/material-ui.styles';
 
 const Categories = () => {	
 	const classes = useCategoryStyles();
+	const commonClasses = useCommonStyles();
 
 	const [categories, setCategoryData] = useState<categoryI[]>([]);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -23,11 +25,13 @@ const Categories = () => {
 			setIsLoading(true);
 			getCategories()
 				.then(data=>{
-					if(typeof data==='undefined'){                   
+					console.log(data);
+					if(typeof data==='undefined'){   
+						setError("No data, please check your connection");                
             			return;          
           			}
           			if(data.error){                    
-            			setError(data.error.toString())
+            			setError("Please check your connection")
           			} else {
             			setCategoryData(data);            			
           			}
@@ -51,6 +55,7 @@ const Categories = () => {
       			} 
 				{
 					!isLoading &&
+					error === "" &&
 					<Typography variant="h5" className={classes.pageTitle} >
 						{
 							categories.length > 0?
@@ -61,6 +66,7 @@ const Categories = () => {
 				}				      			      				     							      			
       			{
       				!isLoading &&
+					error === "" &&  
 					<>
 					{
 						categories.length > 0?
@@ -72,6 +78,11 @@ const Categories = () => {
 					}
 					</>      				
       			}
+				{
+					!isLoading &&
+					error !== "" &&  
+					<ShowAlert severity={"error"} label={`ERROR : ${error}`} />
+				}  
       		</Container>
       	</Layout>
 	)

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { green } from '@material-ui/core/colors';
-import { Home,KeyboardArrowUp  } from "@material-ui/icons";
+import { Home,KeyboardArrowUp, ListAlt, AccountBalanceWallet  } from "@material-ui/icons";
 import { 
           AppBar, 
           Avatar, 
@@ -15,8 +15,6 @@ import {
           Toolbar  
         } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
-import {ListAlt, AccountBalanceWallet}  from '@material-ui/icons';
-
 import SideDrawer from "./SideDrawer";
 import HideOnScroll from "./HideOnScroll";
 import BackToTop from "./BackToTop";

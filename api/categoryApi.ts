@@ -1,12 +1,14 @@
 import {API} from '../config';
+import checkResponse from './checkResponse'
 
 export function getCategories() {    
   return fetch(`${API}category`)
     .then(res => {
+      checkResponse(res);
       return res.json();
     })
     .catch(err => {
-      console.log(err);
+      return {error:err};
     });
 }
 
@@ -21,6 +23,7 @@ export function initCategories(data){
     body: JSON.stringify(data)
   })
   .then(res => {
+    checkResponse(res);
     return res.json();
   })
   .catch(err => {
@@ -38,6 +41,7 @@ export function addSubCategory(categoryId, data){
       body: JSON.stringify(data)
     })
     .then(res => {
+      checkResponse(res);
       return res.json();
     })
     .catch(err => {
@@ -55,6 +59,7 @@ export function editSubCategory(categoryId, subCategoryId, data){
       body: JSON.stringify(data)
     })
     .then(res => {
+      checkResponse(res);
       return res.json();
     })
     .catch(err => {
@@ -67,6 +72,7 @@ export function deleteSubCategory(categoryId, subCategoryId){
       method: 'DELETE'
     })
     .then(res => {
+      checkResponse(res);
       return res.json();
     })
     .catch(err => {
@@ -77,6 +83,7 @@ export function deleteSubCategory(categoryId, subCategoryId){
 export function getTransactionCount(categoryId, subCategoryId){
   return fetch(`${API}category/getTransactionsOfSubCategory/${categoryId}/${subCategoryId}`)
     .then(res => {
+      checkResponse(res);
       return res.json();
     })
     .catch(err => {

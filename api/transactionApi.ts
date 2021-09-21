@@ -1,8 +1,10 @@
 import {API} from '../config';
+import checkResponse from './checkResponse'
 
 export function getAllTransactions() {    
   return fetch(`${API}transaction`)
     .then(res => {
+      checkResponse(res);
       return res.json();
     })
     .catch(err => {
@@ -20,6 +22,7 @@ export function getFirstPageTransaction_and_category(walletId, sortData, filterD
     body: JSON.stringify({sortData, filterData})
   })
     .then(res => {
+      checkResponse(res);
       return res.json();
     })
     .catch(err => {
@@ -37,6 +40,7 @@ export function getTransactionsByWallet(walletId, currentPage, sortData, filterD
     body: JSON.stringify({sortData, filterData})
   })
     .then(res => {
+      checkResponse(res);
       return res.json();
     })
     .catch(err => {
@@ -55,6 +59,7 @@ export function addNewTransaction(walletId, data){
     body: JSON.stringify(data)
   })
   .then(res => {
+    checkResponse(res);
     return res.json();
   })
   .catch(err => {
@@ -72,6 +77,7 @@ export function updateTransaction(walletId, transactionId, updatedWalletBalance,
     body: JSON.stringify({updatedWalletBalance:updatedWalletBalance, updatedTransaction})
   })
   .then(res => {
+    checkResponse(res);
     return res.json();
   })
   .catch(err => {
@@ -90,6 +96,7 @@ export function deleteTransaction(walletId, transactionId, updatedWalletBalance)
     body: JSON.stringify({updatedWalletBalance})
   })
   .then(res => {
+    checkResponse(res);
     return res.json();
   })
   .catch(err => {
@@ -107,6 +114,7 @@ export function getWalletGraphData(walletId, filterData){
     body: JSON.stringify({filterData})
   })
     .then(res => {
+      checkResponse(res);
       return res.json();
     })
     .catch(err => {

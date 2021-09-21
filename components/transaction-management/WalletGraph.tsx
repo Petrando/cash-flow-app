@@ -22,7 +22,7 @@ const WalletGraph = ({changeSelectedCategory, filter, dispatchFilter}):JSX.Eleme
       }, [])
 
       useEffect(()=>{             
-            const {_id, name, balance} = router.query;             
+            const {_id } = router.query;             
             if(typeof _id !== 'undefined' && componentLoaded){                
                   setIsLoading(true);
                   getWalletGraphData(_id, filter)

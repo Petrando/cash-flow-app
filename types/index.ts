@@ -113,6 +113,14 @@ export interface deleteWalletI {
     editInstead:()=>void;
 }
 
+export interface walletTransactionI {
+    filter:transactionFilterI;
+    dispatchFilter:Dispatch<transactionFilterActionI>;
+    _id:string;
+    name:string;
+    balance:number;
+}
+
 export interface addTransactionI {
     submitAdd:(arg0:number, arg1:boolean)=>void;
     cancelAdd:()=>void;

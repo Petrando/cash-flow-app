@@ -140,9 +140,14 @@ export const useWalletStyles = makeStyles({
 })
 
 export const useTransactionStyles = makeStyles((theme: Theme) => ({
-  rowDiv: {
-      display:'flex', flexDirection:'row', justifyContent:'space-between', alignItems:'center',
-      flexWrap:'wrap'
+  topPageTitle:{
+    margin:"15px auto",
+    textAlign:"center"
+  },
+  topButtonContainer: {
+      display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center',
+      flexWrap:'wrap',
+      margin:"10px auto"
   },
   pageTitle: {
       textAlign:'center'

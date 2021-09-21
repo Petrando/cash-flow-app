@@ -10,9 +10,7 @@ export const transactionFilter:transactionFilterI = {
                                                                         endDate:''
                                                                     }
                                                     }
-
                                                    
-
 export const transactionFilterReducer = (
                                             state:transactionFilterI, 
                                             action:transactionFilterActionI

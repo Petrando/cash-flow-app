@@ -6,18 +6,19 @@ import { Add }  from '@material-ui/icons/';
 import {getTransactionsByWallet, getFirstPageTransaction_and_category} from '../../api/transactionApi';
 import LoadingBackdrop from '../../components/globals/LoadingBackdrop';
 import SortFilter from '../globals/filterComponents/TransactionSortFilter';
-import TablePaging from '../TablePaging';
+import TablePaging from '../globals/TablePaging';
 import TransactionTable from './TransactionTable';
 import { transactionSort, transactionSortReducer } from './StoreNReducer';
 import AddTransactionDialog from './AddTransaction';
 import EditTransactionDialog from './EditTransaction';
 import DeleteTransactionDialog from './DeleteTransaction';
+import { walletTransactionI } from '../../types';
 import { categoryI, transactionI } from '../../types';
 import { useTransactionStyles } from "../../styles/material-ui.styles";
 
 const itemPerPage = 5;
 
-const WalletTransactions = ({filter, dispatchFilter}):JSX.Element => {
+const WalletTransactions = ({filter, dispatchFilter, _id, name, balance}:walletTransactionI):JSX.Element => {
 	const router = useRouter();
 	const classes = useTransactionStyles();
 
@@ -47,22 +48,20 @@ const WalletTransactions = ({filter, dispatchFilter}):JSX.Element => {
 															maxPage:0, 															
 														});  
 
-	const {transactionCount, currentPage, maxPage} = paginationData;
+	const {transactionCount, currentPage} = paginationData;
 
   	const [sort, dispatchSort] = useReducer(transactionSortReducer, transactionSort);      
 
 	useEffect(()=>{
-		const {_id, name, balance} = router.query;
     	if(typeof _id !== 'undefined'){
-      		setWalletId(_id.toString());
-      		setWalletName(name.toString());			
-      		setWalletBalance(parseInt(balance.toString()));      
+      		setWalletId(_id);
+      		setWalletName(name);			
+      		setWalletBalance(balance);      
       		getFirstPage();
     	}		
 	}, []);
 
-  	const getFirstPage = () => {    
-    	const {_id, name, balance} = router.query;   
+  	const getFirstPage = () => {  
     	setIsLoading(true);
     	getFirstPageTransaction_and_category(_id, sort, filter)
       		.then(data => {
@@ -197,53 +196,52 @@ const WalletTransactions = ({filter, dispatchFilter}):JSX.Element => {
       		{
         		isLoading && <LoadingBackdrop isLoading={isLoading} />
       		}       		   			
-      			{
-      				walletName!=="" &&
-      				<div className={classes.rowDiv}>
-
-      					<Typography variant="h4" className={classes.pageTitle}>
-      						{walletName}  Rp. {walletBalance}
-      					</Typography>
-      					<Button variant="contained" color="primary" size="small" startIcon={<Add />}
-      						onClick={()=>setIsAdd(true)}
-      					>
-      						New Transaction
-      					</Button>      				
-      				</div>
-      			}      			
-      			{
-      				isAddTransaction &&
-      				<AddTransactionDialog submitAdd={submitAddAndRefresh} 
-      									  cancelAdd={()=>{setIsAdd(false)}} 
-      									  categories={categories} 
-      									  walletId={walletId} 
-      									  walletBalance={walletBalance} 
-      				/>
-      			}      
-      			{
-      				idToEdit!=="" &&
-      				<EditTransactionDialog submitEdit={submitEditAndRefresh}
-      									   cancelEdit={()=>{setIdEdit('')}}
-      									   categories={categories}
-      									   walletId={walletId}
-      									   walletBalance={walletBalance}
-      									   editedTransaction={transactions.filter(d=>d._id===idToEdit)[0]}
-					    />      									   
-      			} 			
-      			{
-      				idToDelete!=='' &&
-      				<DeleteTransactionDialog submitDelete={submitDeleteAndRefresh}
-      										 editInstead={()=>{
+      		{
+      			walletName!=="" &&
+      			<div className={classes.topButtonContainer}>      				
+      				<Button variant="contained" color="primary" size="small" startIcon={<Add />}
+      					onClick={()=>setIsAdd(true)}
+      				>
+      					New Transaction
+      				</Button>      				
+      			</div>
+      		}      			
+      		{
+      			isAddTransaction &&
+      			<AddTransactionDialog 
+				  				submitAdd={submitAddAndRefresh} 
+      							cancelAdd={()=>{setIsAdd(false)}} 
+      							categories={categories} 
+      							walletId={walletId} 
+      							walletBalance={walletBalance} 
+      			/>
+      		}      
+      		{
+      			idToEdit!=="" &&
+      			<EditTransactionDialog 
+				  				submitEdit={submitEditAndRefresh}
+      							cancelEdit={()=>{setIdEdit('')}}
+      							categories={categories}
+      							walletId={walletId}
+      							walletBalance={walletBalance}
+      							editedTransaction={transactions.filter(d=>d._id===idToEdit)[0]}
+				/>      									   
+      		} 			
+      		{
+      			idToDelete!=='' &&
+      			<DeleteTransactionDialog 
+				  				submitDelete={submitDeleteAndRefresh}
+      							editInstead={()=>{
       										 	const newEdit = idToDelete;
       										 	setIdEdit(newEdit);
       										 	setIdDelete('')
       										 }}
-      										 cancelDelete={()=>{setIdDelete('')}}
-      										 transactionToDelete={transactions.filter(d=>d._id===idToDelete)[0]}      										       										 
-      										 walletId={walletId} 
-											 walletBalance={walletBalance}
-      				/>
-      			}  
+      							cancelDelete={()=>{setIdDelete('')}}
+      							transactionToDelete={transactions.filter(d=>d._id===idToDelete)[0]}      										       										 
+      							walletId={walletId} 
+								walletBalance={walletBalance}
+      			/>
+      		}  
             {
               	categories.length > 0 &&              
               	<SortFilter 

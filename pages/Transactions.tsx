@@ -1,10 +1,10 @@
 import React, {useReducer, useState} from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router'
 import SwipeableViews from 'react-swipeable-views';
 import { useTheme } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import {AppBar, Paper, Tabs, Tab, Typography} from '@material-ui/core/';
+import * as d3 from "d3";
 import Layout from '../components/layout'
 import WalletTransactions from '../components/transaction-management/WalletTransactions';
 import WalletGraph from '../components/transaction-management/WalletGraph';
@@ -12,8 +12,11 @@ import getCurrentMonthName from '../api/currentMonthName';
 import ShowAlert from '../components/globals/Alert';
 import TabPanel, {a11yProps} from "../components/transaction-management/TransactionTab"
 import { transactionFilter, transactionFilterReducer } from '../components/transaction-management/StoreNReducer';
+import {useTransactionStyles} from "../styles/material-ui.styles";
 
 export default function Transactions():JSX.Element {
+  const router = useRouter();
+  const classes = useTransactionStyles();
   const theme = useTheme();
   const [tabIdx, setTabIndex] = useState(0);
 
@@ -36,14 +39,24 @@ export default function Transactions():JSX.Element {
     setTabIndex(0);    
   }
 
+  const {_id, name, balance} = router.query;
+
   return (     
     <Layout>      
       <Head>
         <title>
-          Transactions Table Details & Charts
+          Wallet Transaction Details
         </title>
       </Head>
       <ShowAlert severity="warning" label={"ATTENTION : this page is still under development"} />
+      <Paper className={classes.topPageTitle}>
+        <Typography variant="h4" gutterBottom component="h4">
+          {name}
+        </Typography>
+        <Typography variant="h5" gutterBottom component="h5">
+          {`Rp. ${d3.format(",")(balance)}`}
+        </Typography>
+      </Paper>
       <AppBar position="static" color="default">
         <Tabs
           value={tabIdx}
@@ -67,6 +80,9 @@ export default function Transactions():JSX.Element {
           <WalletTransactions 
             filter={filter}
             dispatchFilter={dispatchFilter}
+            _id={_id.toString()}
+            name={name.toString()}
+            balance={parseInt(balance.toString())}
           />
         </TabPanel>
         <TabPanel value={tabIdx} index={1} dir={theme.direction}>

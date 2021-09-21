@@ -81,7 +81,7 @@ function EditWalletDialog({
                     return;          
                 }
                 if(data.error){          
-                    setSubmitError(data.error);
+                    setSubmitError("Please check your connection.");
                     setIsSubmitting(false);
                 } else {          
                     setIsSubmitting(false);
@@ -102,6 +102,13 @@ function EditWalletDialog({
             <DialogTitle id="simple-dialog-title">
             {
                 !isSubmittingData?'Edit Wallet':'Submitting...'
+            }
+            {
+                !isSubmittingData && submitError!=="" &&
+                <ShowAlert
+                    severity={"error"}
+                    label={submitError}
+                />
             }
             </DialogTitle>
             <DialogContent>
@@ -229,7 +236,8 @@ function EditWalletDialog({
                 </Button> 
                 <IconButton
                     color="secondary"
-                    onClick={()=>{deleteInstead()}}                    
+                    onClick={()=>{deleteInstead()}}  
+                    disabled={isSubmittingData}                  
                 >
                     <DeleteForever />
                 </IconButton>       

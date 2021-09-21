@@ -5,6 +5,7 @@ import {
        } from '@material-ui/core';
 import { PhotoCamera } from '@material-ui/icons';       
 import DialogSlide from '../globals/DialogSlide';
+import ShowAlert from '../globals/Alert';
 import { createWallet } from "../../api/walletApi";
 import { useWalletStyles } from "../../styles/material-ui.styles";
 import { addWalletI} from "../../types";
@@ -43,10 +44,9 @@ function AddWalletDialog({ open, cancelAdd, finishAndRefresh }:addWalletI):JSX.E
                     return;          
                 }
                 if(data.error){          
-                    setSubmitError(data.error.toString());
+                    setSubmitError("Please check your connection");
                     setIsSubmitting(false);
-                } else {
-                    console.log(data);
+                } else {                    
                     setIsSubmitting(false);
                     finishAndRefresh();
                 }
@@ -65,6 +65,13 @@ function AddWalletDialog({ open, cancelAdd, finishAndRefresh }:addWalletI):JSX.E
             <DialogTitle id="add-wallet-dialog">
             {
                 !isSubmittingData?'Add New Wallet':'Submitting...'
+            }
+            {
+                !isSubmittingData && submitError!=="" &&
+                <ShowAlert
+                    severity={"error"}
+                    label={submitError}
+                />
             }
             </DialogTitle>
             <DialogContent>

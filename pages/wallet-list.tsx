@@ -31,11 +31,12 @@ export default function WalletList() {
       setIsLoading(true);   
       getWallets()
         .then(data => {
-          if(typeof data==='undefined'){                   
+          if(typeof data==='undefined'){     
+            setError("No data, please check your connection");               
             return;          
           }
           if(data.error){                    
-            setError(data.error.toString())
+            setError("Please check your connection")
           } else {
             console.log(data);
             setWallets(data);
@@ -72,6 +73,7 @@ export default function WalletList() {
           startIcon={<Add />}
           endIcon={<AccountBalanceWallet />}
           onClick={()=>setAddingWallet(true)}
+          disabled={error!==""}
         >
           New Wallet
         </Button>
@@ -80,6 +82,7 @@ export default function WalletList() {
       <Container>                
         {
           !isLoading &&
+          error === "" &&
           (
             wallets.length > 0 ?
             <Grid container spacing={1}>
@@ -133,6 +136,11 @@ export default function WalletList() {
           }}
         />
       }
+      {
+				!isLoading &&
+				error !== "" &&  
+				<ShowAlert severity={"error"} label={`ERROR : ${error}`} />
+			}
     </Layout>       
   )
 }

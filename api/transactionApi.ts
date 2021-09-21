@@ -9,6 +9,7 @@ export function getAllTransactions() {
     })
     .catch(err => {
       console.log(err);
+      return {error:err};
     })  
 }
 
@@ -27,6 +28,7 @@ export function getFirstPageTransaction_and_category(walletId, sortData, filterD
     })
     .catch(err => {
       console.log(err);
+      return {error:err};
     })  
 }
 
@@ -45,6 +47,7 @@ export function getTransactionsByWallet(walletId, currentPage, sortData, filterD
     })
     .catch(err => {
       console.log(err);
+      return {error:err};
     })  
 }
 
@@ -64,6 +67,7 @@ export function addNewTransaction(walletId, data){
   })
   .catch(err => {
     console.log(err);
+    return {error:err};
   })
 }
 
@@ -82,6 +86,7 @@ export function updateTransaction(walletId, transactionId, updatedWalletBalance,
   })
   .catch(err => {
     console.log(err);
+    return {error:err};
   }) 
 }
 
@@ -101,6 +106,7 @@ export function deleteTransaction(walletId, transactionId, updatedWalletBalance)
   })
   .catch(err => {
     console.log(err);
+    return {error:err};
   }) 
 }
 
@@ -119,5 +125,6 @@ export function getWalletGraphData(walletId, filterData){
     })
     .catch(err => {
       console.log(err);
+      return {error:err};
     }) 
 }

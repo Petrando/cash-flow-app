@@ -9,6 +9,7 @@ export async function getWallets() {
     })
     .catch(err => {
       console.log(err);
+      return {error:err};
     })
 }
 
@@ -26,12 +27,11 @@ export const createWallet =  (walletData) => {
   })
   .catch(err => {
     console.log(err);
+    return {error:err};
   })
 }
 
-export const updateWallet = (updatedWallet, walletId) => {
-  console.log('updatedWallet data, is there new icon ?');
-  console.log(updatedWallet.get("icon"));
+export const updateWallet = (updatedWallet, walletId) => {  
   return fetch(`${API}wallet/update/${walletId}`, {
     method: 'POST',
     headers: {
@@ -45,6 +45,7 @@ export const updateWallet = (updatedWallet, walletId) => {
   })
   .catch(err => {
     console.log(err);
+    return {error:err};
   })
 }
 
@@ -56,5 +57,6 @@ export const deleteWallet = (walletId) => {
   })
   .catch(err => {
     console.log(err);
+    return {error:err};
   })
 }

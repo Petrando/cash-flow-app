@@ -28,6 +28,7 @@ export function initCategories(data){
   })
   .catch(err => {
     console.log(err);
+    return {error:err};
   })
 }
 
@@ -46,6 +47,7 @@ export function addSubCategory(categoryId, data){
     })
     .catch(err => {
       console.log(err);
+      return {error:err};
     })
 }
 
@@ -64,6 +66,7 @@ export function editSubCategory(categoryId, subCategoryId, data){
     })
     .catch(err => {
       console.log(err);
+      return {error:err};
     })
 }
 
@@ -77,6 +80,7 @@ export function deleteSubCategory(categoryId, subCategoryId){
     })
     .catch(err => {
       console.log(err);
+      return {error:err};
     })
 }
 
@@ -88,5 +92,6 @@ export function getTransactionCount(categoryId, subCategoryId){
     })
     .catch(err => {
       console.log(err);
+      return {error:err};
     })
 }

@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import SwipeableViews from 'react-swipeable-views';
 import { useTheme } from '@material-ui/core/styles';
 import {AppBar, Paper, Tabs, Tab, Typography} from '@material-ui/core/';
-import * as d3 from "d3";
+import { rupiahFormatter } from '../util-functions';
 import Layout from '../components/layout'
 import WalletTransactions from '../components/transaction-management/WalletTransactions';
 import WalletGraph from '../components/transaction-management/WalletGraph';
@@ -54,7 +54,7 @@ export default function Transactions():JSX.Element {
           {name}
         </Typography>
         <Typography variant="h5" gutterBottom component="h5">
-          {`Rp. ${d3.format(",")(balance)}`}
+          {rupiahFormatter(parseInt(balance.toString()))}
         </Typography>
       </Paper>
       <AppBar position="static" color="default">

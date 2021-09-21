@@ -15,13 +15,13 @@ import {
         IconButton 
       } from '@material-ui/core';
 import {Block, DeleteForever, Edit, List} from '@material-ui/icons';
-import * as d3 from 'd3';
 import ShowAlert from '../globals/Alert';
 import { LoadingDiv } from '../globals/LoadingBackdrop';
 import DialogSlide from '../globals/DialogSlide';
 import { API } from "../../config";
 import { deleteWallet } from "../../api/walletApi";
 import { deleteWalletI } from "../../types";
+import { rupiahFormatter } from "../../util-functions"
 
 function DeleteWalletDialog({ 
                                 cancelDelete, 
@@ -60,7 +60,7 @@ function DeleteWalletDialog({
                     <CardActionArea>
                         <CardHeader 
                             title={name}
-                            subheader={`Rp. ${d3.format(",")(balance)}`}
+                            subheader={rupiahFormatter(balance)}
                         />
                         <CardMedia 
                             component="img"

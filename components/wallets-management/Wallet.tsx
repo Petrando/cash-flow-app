@@ -10,14 +10,12 @@ import {
           Card, 
           CardHeader,
           CardMedia,
-          CardActionArea, 
-          CardContent, 
+          CardActionArea,           
           CardActions, 
-          CircularProgress,
-          Typography 
+          CircularProgress,          
       } from '@material-ui/core';
 import { List, Edit, Delete } from '@material-ui/icons';
-import * as d3 from 'd3';
+import { rupiahFormatter } from '../../util-functions';
 import ImageLoad from '../globals/ImageLoad';
 import { API } from "../../config";
 import { walletDisplayI } from '../../types';
@@ -44,7 +42,7 @@ const Wallet = ({isLoading, walletData, setEdit, setDelete}:walletDisplayI):JSX.
           <CardActionArea>
             <CardHeader 
               title={name}
-              subheader={`Rp. ${d3.format(",")(balance)}`}
+              subheader={rupiahFormatter(balance)}
             />
             {
               iconSrc===""?

@@ -10,6 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import { IconButton} from '@material-ui/core';
 import { Edit, Delete}  from '@material-ui/icons/';
 import Date from '../globals/date'
+import { rupiahFormatter } from '../../util-functions';
 import { useTransactionTableStyles } from '../../styles/material-ui.styles';
 import { transactionTableI, transactionTableHeaderI } from '../../types';
 
@@ -42,7 +43,9 @@ export default function TransactionTable({
           {tableData.map((row) => (
             <TableRow key={row._id}>
               <TableCell component="th" scope="row">
-                {row.amount}
+                {
+                  rupiahFormatter(row.amount)
+                }
               </TableCell>
               <TableCell align="right">
                 {

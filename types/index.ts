@@ -185,6 +185,12 @@ export interface transactionSortFilterComponentI{
     dispatchFilter:Dispatch<transactionFilterActionI>;
 }
 
+export interface categoryAndSubI {
+    categories:categoryI[];
+    transactionFilter:transactionFilterI;
+    dispatchFilter:Dispatch<transactionFilterActionI>;
+}
+
 export interface transactionTableI {
     tableData:transactionI[];
     setIdEdit:(arg0:string)=>void;

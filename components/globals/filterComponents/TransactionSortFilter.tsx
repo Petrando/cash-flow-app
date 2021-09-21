@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { Button, FormControl, InputLabel, MenuItem, Select } from '@material-ui/core/';
 import TimeFilter from './TimeFilter';
-import {transactionSortFilterComponentI} from "../../../types";
+import {transactionSortFilterComponentI, categoryAndSubI} from "../../../types";
 import { useTransactionStyles } from '../../../styles/material-ui.styles';
 
 const sortBy=[
@@ -67,12 +67,18 @@ export default function TransactionSortFilter({
   );
 }
 
-const CategoryAndSubFilter = (props) => {
+interface subCategoryI {
+  _id?:string;
+  name:string;
+  category?:string;
+}
+
+const CategoryAndSubFilter = (props:categoryAndSubI):JSX.Element => {
   const classes = useTransactionStyles();
 
   const [categories, setCategories] = useState<any[]>([]);
   //const [activeCategory, setCategory] = useState<string>(props.transactionFilter.category);
-  const [subCategories, setSubCategories] = useState<any[]>([]);
+  const [subCategories, setSubCategories] = useState<subCategoryI[]>([]);
   //const [activeSubCategory, setSubCategory] = useState<string>(props.transactionFilter.subCategory);
 
   useEffect(()=>{    
@@ -84,7 +90,7 @@ const CategoryAndSubFilter = (props) => {
   const initializeStates = () => {
     const initCategories = [{_id:'0', name:'All'}].concat(props.categories.map(d => {return {_id:d._id, name:d.name};}));
     const {category} = props.transactionFilter;
-    let initSubCategories = [{_id:'0', name:'All', category:''}];
+    let initSubCategories:subCategoryI[] = [{_id:'0', name:'All', category:''}];
     if(category!=="0"){      
       const selectedCategory = props.categories.filter(d=>d._id===category);
       if(selectedCategory.length > 0){
@@ -107,17 +113,20 @@ const CategoryAndSubFilter = (props) => {
   const changeCategory = (e) => {
     const currentCategory = props.transactionFilter.category;
     const newCategory = e.target.value;
+
+    const firstSubCategory:subCategoryI = {_id:'0', name:'All'};
+
     if(newCategory==='0'){
       initializeStates();
     }
     else if(newCategory===props.categories[0]._id && currentCategory!==newCategory)//Income
     {
-      setSubCategories([{_id:'0', name:'All'}].concat(props.categories[0].subCategories));
+      setSubCategories([firstSubCategory].concat(props.categories[0].subCategories));
 
     }
     else if(newCategory===props.categories[1]._id && currentCategory!==newCategory)//Expense
     {
-      setSubCategories([{_id:'0', name:'All'}].concat(props.categories[1].subCategories));      
+      setSubCategories([firstSubCategory].concat(props.categories[1].subCategories));      
     }
 
     //setCategory(newCategory);
@@ -127,6 +136,8 @@ const CategoryAndSubFilter = (props) => {
 
   const changeSubCategory = (e) => {
     const newSubCategory = e.target.value;
+
+    const firstSubCategory:subCategoryI = {_id:'0', name:'All'};
     
     if(props.transactionFilter.category==='0' && newSubCategory!=='0'){
       const selectedSubCategory = subCategories.filter(d=>d._id===newSubCategory)[0];
@@ -134,7 +145,7 @@ const CategoryAndSubFilter = (props) => {
       const newCategory = selectedSubCategory.category;
 
       const newActiveCategory = props.categories[newCategory==='Income'?0:1];
-      setSubCategories([{_id:'0', name:'All'}].concat(newActiveCategory.subCategories));
+      setSubCategories([firstSubCategory].concat(newActiveCategory.subCategories));
       //setCategory(newActiveCategory._id);        
       props.dispatchFilter({type:'SET_CATEGORY_SUBCATEGORY', category:newActiveCategory._id, subCategory:e.target.value});
     }else{

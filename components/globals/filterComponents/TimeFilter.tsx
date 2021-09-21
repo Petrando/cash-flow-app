@@ -1,36 +1,11 @@
-import React, {useState, useEffect} from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import Typography from '@material-ui/core/Typography';
-
+import {FormControl, InputLabel, MenuItem, Select, Typography} from '@material-ui/core';
 import FilterDateRange from './FilterDateRange';
+import { transactionTimeFilterI } from '../../../types';
+import { useTransactionStyles } from '../../../styles/material-ui.styles';
 
-const useStyles = makeStyles((theme) => ({
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 140,
-  },  
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
-}));
-
-const TimeFilter = (props) => {
-  const classes = useStyles();  
+const TimeFilter = (props:transactionTimeFilterI):JSX.Element => {
+  const classes = useTransactionStyles();  
   const months = ["All", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", "Date range"];
-
-  const [age, setAge] = useState('');  
-
-  useEffect(()=>{        
-    //props.dispatchFilter({type:'RESET_FILTER'});
-  }, []);
-
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
 
   const monthItem = (d, i) => (
     <MenuItem key={i} value={d}>{d}</MenuItem>

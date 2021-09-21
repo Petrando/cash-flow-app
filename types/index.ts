@@ -185,8 +185,13 @@ export interface transactionSortFilterComponentI{
     dispatchFilter:Dispatch<transactionFilterActionI>;
 }
 
-export interface categoryAndSubI {
+export interface categoryAndSubFilterI {
     categories:categoryI[];
+    transactionFilter:transactionFilterI;
+    dispatchFilter:Dispatch<transactionFilterActionI>;
+}
+
+export interface transactionTimeFilterI {
     transactionFilter:transactionFilterI;
     dispatchFilter:Dispatch<transactionFilterActionI>;
 }

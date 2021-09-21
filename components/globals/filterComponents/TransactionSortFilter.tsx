@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { Button, FormControl, InputLabel, MenuItem, Select } from '@material-ui/core/';
 import TimeFilter from './TimeFilter';
-import {transactionSortFilterComponentI, categoryAndSubI} from "../../../types";
+import {transactionSortFilterComponentI, categoryAndSubFilterI} from "../../../types";
 import { useTransactionStyles } from '../../../styles/material-ui.styles';
 
 const sortBy=[
@@ -73,7 +73,7 @@ interface subCategoryMockupI {
   category?:string;
 }
 
-const CategoryAndSubFilter = (props:categoryAndSubI):JSX.Element => {
+const CategoryAndSubFilter = (props:categoryAndSubFilterI):JSX.Element => {
   const classes = useTransactionStyles();
 
   const [categories, setCategories] = useState<any[]>([]);

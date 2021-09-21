@@ -216,6 +216,7 @@ function EditWalletDialog({
                 <Button 
                     onClick={submitData} 
                     color="primary"
+                    variant="contained"
                     disabled={isSubmittingData}
                 >
                     Submit
@@ -223,6 +224,7 @@ function EditWalletDialog({
                 <Button 
                     onClick={initializeEditData} 
                     color="primary"
+                    variant="contained"
                     disabled={isSubmittingData || !editDirty}
                 >
                     Reset
@@ -230,6 +232,7 @@ function EditWalletDialog({
                 <Button 
                     onClick={()=>!isSubmittingData && cancelEdit()} 
                     color="secondary"
+                    variant="contained"
                     disabled={isSubmittingData}
                 >
                     Cancel

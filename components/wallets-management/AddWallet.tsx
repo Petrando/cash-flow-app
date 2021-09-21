@@ -187,6 +187,7 @@ function AddWalletDialog({ open, cancelAdd, finishAndRefresh }:addWalletI):JSX.E
                 <Button 
                     onClick={submitData} 
                     color="primary"
+                    variant="contained"
                     disabled={isSubmittingData}
                 >
                     Submit
@@ -194,6 +195,7 @@ function AddWalletDialog({ open, cancelAdd, finishAndRefresh }:addWalletI):JSX.E
                 <Button 
                     onClick={()=>!isSubmittingData && cancelAdd()} 
                     color="secondary"
+                    variant="contained"
                     disabled={isSubmittingData}
                 >
                     Cancel

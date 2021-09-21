@@ -1,5 +1,5 @@
 import * as React from "react";
-import { green } from '@material-ui/core/colors';
+import { useRouter } from 'next/router';
 import { Home,KeyboardArrowUp, ListAlt, AccountBalanceWallet  } from "@material-ui/icons";
 import { 
           AppBar, 
@@ -14,46 +14,21 @@ import {
           ListItemAvatar, 
           Toolbar  
         } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core";
 import SideDrawer from "./SideDrawer";
 import HideOnScroll from "./HideOnScroll";
 import BackToTop from "./BackToTop";
 import Link from "next/link";
 import { navLinkI } from "../../../types";
+import { useTopNavStyles } from "../../../styles/material-ui.styles";
 
 const navLinks:navLinkI[] = [
   { title: `Wallets`, path: `/wallet-list`, icon:<AccountBalanceWallet />  },
   { title: `Income-Expenses`, path: `/categories`, icon:<ListAlt />}, 
 ]
 
-const useStyles = makeStyles({
-  navbarDisplayFlex: {
-    display: `flex`,
-    justifyContent: `space-between`
-  },
-  navDisplayFlex: {
-    display: `flex`,
-    alignItems: `space-between`
-  },  
-  linkText: {
-    textDecoration: `none`,
-    textTransform: `uppercase`,
-    color: `white`
-  },
-  listItem: { 
-    color: `white`,
-    display: `flex`,
-    alignItems: `center`,
-    justifyContent: `center`
-  },
-  avatar: {
-    color: '#fff',
-    backgroundColor: green[500],
-  }
-});
-
 const TopNavigation = ():JSX.Element => {
-  const classes = useStyles();
+  const classes = useTopNavStyles();
+  const router = useRouter();
 
   return (
   	<>
@@ -82,7 +57,10 @@ const TopNavigation = ():JSX.Element => {
                                     </Avatar>
                                   </ListItemAvatar>
                                 }
-                                <ListItemText primary={title} />          						
+                                <ListItemText 
+                                  primary={title} 
+                                  className={`${router.pathname===path && classes.activeLink}`}
+                                />          						
         					            </ListItem>   
                             </Link>   					
                         </span>
@@ -90,7 +68,7 @@ const TopNavigation = ():JSX.Element => {
   				</List>          
   			</Hidden>
   			<Hidden mdUp>
-  				<SideDrawer navLinks={navLinks} />
+  				<SideDrawer navLinks={navLinks} currentPath={router.pathname} />
   			</Hidden>
   		</Container>
       </Toolbar>

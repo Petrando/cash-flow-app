@@ -1,28 +1,12 @@
 import React, { useState, MouseEvent, KeyboardEvent } from "react";
 import Link from "next/link";
 import { Avatar, Drawer, IconButton, List, ListItem, ListItemText, ListItemAvatar, MenuItem } from "@material-ui/core";
-import { green } from '@material-ui/core/colors';
-import { makeStyles } from "@material-ui/core/styles";
 import { Menu } from "@material-ui/icons";
 import { navLinkI } from "../../../types";
+import {useSideDrawerNavStyles} from "../../../styles/material-ui.styles"
 
-const useStyles = makeStyles({
-  list: {
-    width: 250,
-  },
-  linkText: {
-    textDecoration: `none`,
-    textTransform: `uppercase`,
-    color: `black`,
-  },
-  avatar: {
-    color: '#fff',
-    backgroundColor: green[500],
-  }
-})
-
-const SideDrawer = ({navLinks}:{navLinks:navLinkI[]}):JSX.Element => {
-  const classes = useStyles();
+const SideDrawer = ({navLinks, currentPath}:{navLinks:navLinkI[], currentPath:string}):JSX.Element => {
+  const classes = useSideDrawerNavStyles();
   const [state, setState] = useState<boolean>(false); 
 
   const toggleDrawer = ( open:boolean) => (event: MouseEvent<HTMLElement> | KeyboardEvent<HTMLElement>) => {    
@@ -47,7 +31,10 @@ const SideDrawer = ({navLinks}:{navLinks:navLinkI[]}):JSX.Element => {
             </Avatar>
           </ListItemAvatar>
         }
-        <ListItemText primary={item.title} />
+        <ListItemText 
+          primary={item.title} 
+          className={`${currentPath===item.path && classes.activeLink}`}
+        />
       </ListItem>          
     </Link>               
   );

@@ -8,6 +8,53 @@ export const useCommonStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
+export const useTopNavStyles = makeStyles({
+  navbarDisplayFlex: {
+    display: `flex`,
+    justifyContent: `space-between`
+  },
+  navDisplayFlex: {
+    display: `flex`,
+    alignItems: `space-between`
+  },  
+  linkText: {
+    textDecoration: `none`,
+    textTransform: `uppercase`,
+    color: `white`
+  },
+  activeLink: {
+    borderBottom:`4px solid #DC2626`
+  },
+  listItem: { 
+    color: `white`,
+    display: `flex`,
+    alignItems: `center`,
+    justifyContent: `center`
+  },
+  avatar: {
+    color: '#fff',
+    backgroundColor: green[500],
+  }
+});
+
+export const useSideDrawerNavStyles = makeStyles({
+  list: {
+    width: 250,
+  },
+  linkText: {
+    textDecoration: `none`,
+    textTransform: `uppercase`,
+    color: `black`
+  },
+  activeLink: {
+    textDecoration:'underline',
+    fontWeight:'bolder'
+  },
+  avatar: {
+    color: '#fff',
+    backgroundColor: green[500],
+  }
+})
 
 export const useHomeCardStyles = makeStyles((theme: Theme) =>
   createStyles({

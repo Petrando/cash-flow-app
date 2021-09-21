@@ -17,14 +17,10 @@ function AddWalletDialog({ open, cancelAdd, finishAndRefresh }:addWalletI):JSX.E
     const [balance, setBalance] = useState<number>(0);
     const [imgFile, setImgFile] = useState(null);  
     const [imgError, setImgError] = useState<string>('');
-    const [picData, setPicData] = useState({
-      displayPic:null, compressedDisplayPic:null
-    });   
+    const [displayPic, setDisplayPic] = useState(null);   
     const [isSubmittingData, setIsSubmitting] = useState<boolean>(false);
     const [submitError, setSubmitError] = useState<string>("");
-  
-    const {displayPic} = picData;
-  
+      
     const submitData = (e) => {
         e.preventDefault();       
         if(imgFile===null){      
@@ -147,54 +143,24 @@ function AddWalletDialog({ open, cancelAdd, finishAndRefresh }:addWalletI):JSX.E
                                 type="file"
                                 hidden
                                 name="photoInput"
-                                onChange={(evt)=>{  
-                                    evt.stopPropagation();
-                                    evt.preventDefault();
+                                onChange={(evt)=>{                                      
                                     if(typeof evt.target.files[0] === 'undefined'){
                                         return;
                                     }                                     
                                     const imageFile = evt.target.files[0];
-                                    setImgFile(imageFile);
-                                    setImgError("");
-                                    console.log('originalFile instanceof Blob', imageFile instanceof Blob); // true
-                                    console.log(`originalFile size ${imageFile.size / 1024 / 1024} MB`);
-                                    /*let reader = new FileReader();
-  
-                                    reader.onload = function(e) {
-                                    setPicData({...picData, displayPic:e.target.result});
-                                    }
-  
-                                    reader.readAsDataURL(evt.target.files[0]);*/
-              
-                                    const options = { 
-                                        maxSizeMB: 0.5,          // (default: Number.POSITIVE_INFINITY)
-                                        maxWidthOrHeight: 200,   // compressedFile will scale down by ratio to a point that width or height is smaller than maxWidthOrHeight (default: undefined)
-                                        useWebWorker:true,      // optional, use multi-thread web worker, fallback to run in main-thread (default: true)
-                                        /*maxIteration: number,       // optional, max number of iteration to compress the image (default: 10)
-                                        exifOrientation: number,    // optional, see https://stackoverflow.com/a/32490603/10395024
-                                        onProgress: Function,       // optional, a function takes one progress argument (percentage from 0 to 100) 
-                                        fileType: string*/            // optional, fileType override
-                                    }
-                                    imageCompression(imageFile, options)
-                                        .then(function (compressedFile) {
-                                            console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
-                                            console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
-   
-                                            //setCompressedProductPic(compressedFile); // write your own logic
-                                            //setCompressedDisplayPic(URL.createObjectURL(compressedFile))
-                                            setPicData({...picData, 
-                                                displayPic:URL.createObjectURL(evt.target.files[0]),                                                
-                                                compressedDisplayPic:URL.createObjectURL(compressedFile)
-                                            })
-                                        })
-                                        .catch(function (error) {
-                                            console.log(error.message);
-                                        });
-                                        //setDisplayPic(URL.createObjectURL(evt.target.files[0]));
-                                        //setPicData({...picData, displayPic:URL.createObjectURL(evt.target.files[0])})
+                                    if(imageFile.size > 1000000){
+                                        setImgFile(null);
+                                        setDisplayPic(null);
+                                        setImgError("Image must be smaller than 1MB, please choose another.")
+                                        return;
+                                    }else {
+                                        setImgFile(imageFile);
+                                        setDisplayPic(URL.createObjectURL(imageFile));
+                                        setImgError("");                                    
+                                    }                                    
                                 }}
                                 onBlur={()=>{
-                                        if(imgFile===null){
+                                    if(imgFile===null){
                                         setImgError("Wallet Icon is required.")
                                     }
                                 }}

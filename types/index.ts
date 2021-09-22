@@ -191,6 +191,17 @@ export interface categoryAndSubFilterI {
     dispatchFilter:Dispatch<transactionFilterActionI>;
 }
 
+export interface categoryFilterI {
+    _id:string;
+    name:string;
+}
+
+export interface subCategoryFilterI {
+    _id?:string;
+    name:string;
+    category?:string;
+}
+
 export interface transactionTimeFilterI {
     transactionFilter:transactionFilterI;
     dispatchFilter:Dispatch<transactionFilterActionI>;

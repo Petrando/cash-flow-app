@@ -3,16 +3,18 @@ import { useRouter } from 'next/router'
 import { Grid } from '@material-ui/core/';
 import {getWalletGraphData} from '../../api/transactionApi';
 import drawPies from '../../components/charts/drawPies';
-import LoadingBackdrop from '../../components/globals/LoadingBackdrop';
+import LoadingBackdrop, {LoadingDiv} from '../../components/globals/LoadingBackdrop';
 import TimeFilter from '../globals/filterComponents/TimeFilter';
+import {useCommonStyles} from "../../styles/material-ui.styles";
 
 let componentLoaded = false;
 
 const WalletGraph = ({changeSelectedCategory, filter, dispatchFilter}):JSX.Element => {
+      const classes = useCommonStyles();
       const router = useRouter();
 
       const [myGraphData, setMyGraphData] = useState([]);
-      const [isLoading, setIsLoading] = useState<boolean>(false);
+      const [isLoading, setIsLoading] = useState<boolean>(true);
       
       useEffect(()=>{
         componentLoaded = true;
@@ -53,13 +55,20 @@ const WalletGraph = ({changeSelectedCategory, filter, dispatchFilter}):JSX.Eleme
             dispatchFilter={dispatchFilter} 
           />         
           <Grid container>
-            <Grid item xs={6} id="income">
+            <Grid item xs={6} id="income" className={classes.flexRowCenter}>
+              
             </Grid>
-            <Grid item xs={6} id="expense">
+            <Grid item xs={6} id="expense" className={classes.flexRowCenter}>
+              
             </Grid>
           </Grid>
         </>
       )
 }
 
+/*
+{
+                isLoading && <LoadingDiv />
+              }
+*/              
 export default WalletGraph;

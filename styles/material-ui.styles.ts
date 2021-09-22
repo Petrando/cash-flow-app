@@ -5,6 +5,9 @@ export const useCommonStyles = makeStyles((theme: Theme) => ({
   errorText: {
     color: red[500],
     textAlign: 'center'
+  },
+  flexRowCenter: {
+    display:'flex', justifyContent:'center', alignItems:'center'
   }
 }));
 
@@ -165,6 +168,10 @@ export const useTransactionStyles = makeStyles((theme: Theme) => ({
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
+  },
+  transactionsPage: {
+    width:'100%',
+    minHeight:'80vh'
   }
 }));
 

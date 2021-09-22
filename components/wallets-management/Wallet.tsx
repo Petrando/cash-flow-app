@@ -50,7 +50,7 @@ const Wallet = ({isLoading, walletData, setEdit, setDelete}:walletDisplayI):JSX.
               <CardMedia 
                 component="img"
                 height="194"
-                src={`${API}/wallet/photo/${_id}`}
+                src={`${API}/wallet/photo/${_id}?random=${Math.floor(Math.random() * 100)}`}
               />
             }            
           </CardActionArea>

@@ -191,7 +191,7 @@ const WalletTransactions = ({filter, dispatchFilter, _id, name, walletBalance, s
 	}
 
 	return(
-		<>
+		<div className={classes.transactionsPage}>
       		{
         		isLoading && <LoadingBackdrop isLoading={isLoading} />
       		}       		   			
@@ -275,7 +275,7 @@ const WalletTransactions = ({filter, dispatchFilter, _id, name, walletBalance, s
                 	/>
               	</>
             }             
-      	</>
+      	</div>
 	)
 }    			
 

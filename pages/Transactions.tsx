@@ -1,4 +1,4 @@
-import React, {useReducer, useState} from 'react';
+import React, {useEffect, useReducer, useState} from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router'
 import SwipeableViews from 'react-swipeable-views';
@@ -18,7 +18,12 @@ export default function Transactions():JSX.Element {
   const router = useRouter();
   const classes = useTransactionStyles();
   const theme = useTheme();
-  const [tabIdx, setTabIndex] = useState(0);
+  const [tabIdx, setTabIndex] = useState<number>(0);
+  const [walletBalance, setBalance] = useState<number>(0);
+  
+  useEffect(()=>{
+    setBalance(parseInt(router.query.balance.toString()));
+  }, []);
 
   const [filter, dispatchFilter] = useReducer(transactionFilterReducer, transactionFilter);
 
@@ -38,8 +43,8 @@ export default function Transactions():JSX.Element {
     dispatchFilter({type:'SET_CATEGORY_SUBCATEGORY', category:selectedCategory, subCategory:selectedSubCategory});
     setTabIndex(0);    
   }
-
-  const {_id, name, balance} = router.query;
+  
+  const {_id, name } = router.query;
 
   return (     
     <Layout>      
@@ -54,7 +59,7 @@ export default function Transactions():JSX.Element {
           {name}
         </Typography>
         <Typography variant="h5" gutterBottom component="h5">
-          {rupiahFormatter(parseInt(balance.toString()))}
+          {rupiahFormatter(walletBalance)}
         </Typography>
       </Paper>
       <AppBar position="static" color="default">
@@ -82,7 +87,10 @@ export default function Transactions():JSX.Element {
             dispatchFilter={dispatchFilter}
             _id={_id.toString()}
             name={name.toString()}
-            balance={parseInt(balance.toString())}
+            walletBalance={walletBalance}
+            setWalletBalance={(newBalance:number)=>{
+                                                      setBalance(newBalance);
+                                                    }}
           />
         </TabPanel>
         <TabPanel value={tabIdx} index={1} dir={theme.direction}>

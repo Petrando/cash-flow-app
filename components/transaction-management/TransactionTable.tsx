@@ -124,7 +124,7 @@ export const TransactionToDeleteTable = ({
               Wallet Balance
             </TableCell>
             <TableCell scope="row" align="right">
-              {walletBalance}
+              {rupiahFormatter(walletBalance)}
             </TableCell>            
           </TableRow>
 
@@ -133,7 +133,7 @@ export const TransactionToDeleteTable = ({
               Amount to delete
             </TableCell>
             <TableCell scope="row" align="right">
-              {amount}
+              {rupiahFormatter(amount)}
             </TableCell>
           </TableRow>
 
@@ -144,8 +144,8 @@ export const TransactionToDeleteTable = ({
             <TableCell scope="row" align="right">
               {
                 transactionIsExpense?
-                walletBalance + amount:
-                walletBalance - amount
+                rupiahFormatter(walletBalance + amount):
+                rupiahFormatter(walletBalance - amount)
               }
             </TableCell>
           </TableRow>

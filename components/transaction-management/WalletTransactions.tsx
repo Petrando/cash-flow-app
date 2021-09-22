@@ -18,7 +18,7 @@ import { useTransactionStyles } from "../../styles/material-ui.styles";
 
 const itemPerPage = 5;
 
-const WalletTransactions = ({filter, dispatchFilter, _id, name, balance}:walletTransactionI):JSX.Element => {
+const WalletTransactions = ({filter, dispatchFilter, _id, name, walletBalance, setWalletBalance}:walletTransactionI):JSX.Element => {
 	const router = useRouter();
 	const classes = useTransactionStyles();
 
@@ -31,8 +31,7 @@ const WalletTransactions = ({filter, dispatchFilter, _id, name, balance}:walletT
 	const [isAddTransaction, setIsAdd] = useState<boolean>(false);
 	const [idToEdit, setIdEdit] = useState<string>('');
 	const [idToDelete, setIdDelete] = useState<string>('');
-
-	const [walletBalance, setWalletBalance] = useState<number>(0);
+	
 	const [walletId, setWalletId] = useState<string>('');
 	const [walletName, setWalletName] = useState<string>('');
 
@@ -56,7 +55,7 @@ const WalletTransactions = ({filter, dispatchFilter, _id, name, balance}:walletT
     	if(typeof _id !== 'undefined'){
       		setWalletId(_id);
       		setWalletName(name);			
-      		setWalletBalance(balance);      
+      		//setWalletBalance(balance);      
       		getFirstPage();
     	}		
 	}, []);

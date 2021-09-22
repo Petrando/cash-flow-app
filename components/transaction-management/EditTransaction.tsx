@@ -16,7 +16,8 @@ import SelectControl from '../globals/SelectControl';
 import Date from '../globals/date';
 import { DatePickersB } from '../globals/DatePickers';
 import { LoadingDiv } from '../globals/LoadingBackdrop';
-import { categoryI, transactionI, editTransactionI } from '../../types';
+import { rupiahFormatter } from '../../util-functions';
+import { editTransactionI } from '../../types';
 import { useTransactionStyles } from "../../styles/material-ui.styles";
 
 export default function EditTransactionDialog({
@@ -72,13 +73,7 @@ export default function EditTransactionDialog({
     }
   
     const submitData = (e) => {
-        e.preventDefault(); 
-        const adjusted = balanceAdjusting();
-      
-        doSubmit(adjusted);
-    } 
-  
-    const doSubmit = (adjusted:boolean) => {  	
+        e.preventDefault();       
         if(!editDirty){
             cancelEdit();
         }
@@ -117,8 +112,8 @@ export default function EditTransactionDialog({
                 }else{
                     submitEdit(updatedWalletBalance)
                 }
-          });  
-    }
+        }); 
+    } 
   
     const balanceAdjusting = ():boolean => {
         let adjustedBalance = balance;  	
@@ -185,9 +180,9 @@ export default function EditTransactionDialog({
                     margin="dense"          	
                     label={
                             transactionIsExpense?
-                            `Spending amount (max ${limitBalance})`
+                            `Spending amount (max ${rupiahFormatter(limitBalance)})`
                             :
-                            `Income amount (minimum ${limitBalance})`
+                            `Income amount (minimum ${rupiahFormatter(limitBalance)})`
                           }
                     type="number"          	
                     fullWidth

@@ -118,7 +118,8 @@ export interface walletTransactionI {
     dispatchFilter:Dispatch<transactionFilterActionI>;
     _id:string;
     name:string;
-    balance:number;
+    walletBalance:number;
+    setWalletBalance:(arg0:number)=>void;
 }
 
 export interface addTransactionI {

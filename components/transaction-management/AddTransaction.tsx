@@ -3,6 +3,7 @@ import {addNewTransaction} from "../../api/transactionApi"
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@material-ui/core';
 import SelectControl from '../globals/SelectControl';
 import { LoadingDiv } from '../globals/LoadingBackdrop';
+import { rupiahFormatter } from '../../util-functions';
 import { addTransactionI } from '../../types';
 import { useTransactionStyles } from "../../styles/material-ui.styles";
 
@@ -105,7 +106,7 @@ export default function AddTransactionDialog({
                         margin="dense"          	
                         label={
                                 transactionIsExpense?
-                                `Spending amount (max ${walletBalance})`
+                                `Spending amount (max ${rupiahFormatter(walletBalance)})`
                                 :
                                 "Income amount"
                               }

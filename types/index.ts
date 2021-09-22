@@ -220,3 +220,9 @@ export interface transactionTableHeaderI {
     dispatchSort:Dispatch<transactionSortActionI>;
     mySort:string;
 }
+
+export interface tablePagingI {
+    handlePageChange:(arg0:number)=>void;
+    page:number;
+    count:number;
+}

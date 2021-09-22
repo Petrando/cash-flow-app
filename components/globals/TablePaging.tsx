@@ -1,16 +1,9 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import TablePagination from '@material-ui/core/TablePagination';
+import { tablePagingI } from '../../types';
 
-export default function TablePaging({handlePageChange, page, count}) {
-  //const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
-  useEffect(()=>{
-
-  }, [count]);
-  /*const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };*/
+export default function TablePaging({handlePageChange, page, count}:tablePagingI):JSX.Element {  
+  const rowsPerPage = 5;
 
   const handleChangeRowsPerPage = (event) => {
     //setRowsPerPage(parseInt(event.target.value, 10));
@@ -29,6 +22,3 @@ export default function TablePaging({handlePageChange, page, count}) {
     />
   );
 }
-
-//rowsPerPage={rowsPerPage}
-//onChangeRowsPerPage={handleChangeRowsPerPage}

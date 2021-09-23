@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import {useD3} from "../../hooks/useD3";
+import {useD3} from "../../../hooks/useD3";
 import * as d3 from 'd3';
-import { graphDataI } from '../../types';
+import { graphDataI } from '../../../types';
 
 const Piechart = ({width, graphData}:{width:number, graphData:graphDataI}):JSX.Element => {
   const ref = useD3(

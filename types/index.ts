@@ -122,6 +122,12 @@ export interface walletTransactionI {
     setWalletBalance:(arg0:number)=>void;
 }
 
+export interface walletGraphI {
+  filter:transactionFilterI;
+  dispatchFilter:Dispatch<transactionFilterActionI>;
+  changeSelectedCategory:(arg0:string, arg1:string)=>void;
+}
+
 export interface addTransactionI {
     submitAdd:(arg0:number, arg1:boolean)=>void;
     cancelAdd:()=>void;

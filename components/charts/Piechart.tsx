@@ -47,6 +47,7 @@ const Piechart = ({width, graphData}:{width:number, graphData:graphDataI}):JSX.E
             .attr("class", "arc")
             .attr("fill", d => color(d.data.name))
             .attr("d", arc)
+            .each((d)=> {d3.select(this)._current = d; })
             .on("mouseover", (e, d)=>{   
               if(graphData.total === 0){
                 return;
@@ -70,7 +71,7 @@ const Piechart = ({width, graphData}:{width:number, graphData:graphDataI}):JSX.E
               tooltip.transition().duration(250).style("opacity", 0);
             })
               .transition().duration(500)
-            .attrTween('d', d=>arcTween(d, arc))
+            .attrTween('d', d=>arcTween(d))
             
           arcPaths
             .on("mouseover", (e, d)=>{ 
@@ -96,11 +97,11 @@ const Piechart = ({width, graphData}:{width:number, graphData:graphDataI}):JSX.E
               tooltip.transition().duration(250).style("opacity", 0);
             })
               .transition().duration(500)
-            .attrTween('d',  d=>arcTween(d, arc))
+            .attrTween('d',  d=>arcTween(d))
 
           arcPaths.exit()
-              .transition().duration(500)
-            .attrTween('d',  d=>arcTween(d, arc))
+              .transition().duration(1000)
+            .attr("opacity", 0)
             .remove();
 
           const processTooltip = (d) => {                  
@@ -113,19 +114,19 @@ const Piechart = ({width, graphData}:{width:number, graphData:graphDataI}):JSX.E
               tooltip.select("text.categoryValue").text('Rp ' + d3.format(",d")(graphData.total));
           }
 
+          const arcTween = (d) => {
+            var i = d3.interpolate(d.startAngle, d.endAngle);
+            return (t) => {
+                            d.endAngle = i(t); 
+                            return arc(d)
+            }
+          }
+
           const tooltip = createTooltip(canvas, height);
 
         },
         [graphData, width]
   );
-
-  const arcTween = (d, arc) => {
-    var i = d3.interpolate(d.startAngle+0.1, d.endAngle);
-    return (t) => {
-                    d.endAngle = i(t); 
-                    return arc(d)
-    }
-  }
   
   function createTooltip(mySvgCanvas, height){
     var tooltip = mySvgCanvas.append("g")

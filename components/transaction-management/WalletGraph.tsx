@@ -2,8 +2,8 @@ import React, {useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router'
 import { Grid, Typography } from '@material-ui/core/';
 import {getWalletGraphData} from '../../api/transactionApi';
-import Piechart from '../charts/Piechart';
-import BarChart from '../charts/Barchart';
+import Piechart from '../globals/charts/Piechart';
+import BarChart from '../globals/charts/Barchart';
 import LoadingBackdrop, {LoadingDiv} from '../../components/globals/LoadingBackdrop';
 import TimeFilter from '../globals/filterComponents/TimeFilter';
 import {graphDataI} from "../../types";

@@ -1,4 +1,3 @@
-import {useState} from 'react'
 import Head from 'next/head'
 import Layout from '../components/layout'
 import {Container} from "@material-ui/core"
@@ -9,20 +8,20 @@ import HomeCard from '../components/home/HomeCard'
 import {walletCardI} from "../types";
 
 export default function Home():JSX.Element {
-  const [menuList, setMenuList] = useState<walletCardI[]>([
-                                                      {
-                                                        title:"Wallet List",
-                                                        about:"All of your wallets and transactions",
-                                                        avatar:<AccountBalanceWalletIcon />,
-                                                        linkTo:"wallet-list"
-                                                      },
-                                                      {
-                                                        title:"Categories",
-                                                        about:"Manage categories of income and expenses",
-                                                        avatar: <ListAltIcon />,
-                                                        linkTo:"categories"
-                                                      }
-                                                    ])
+  const menuList:walletCardI[] = [
+                                  {
+                                    title:"Wallet List",
+                                    about:"All of your wallets and transactions",
+                                    avatar:<AccountBalanceWalletIcon />,
+                                    linkTo:"wallet-list"
+                                  },
+                                  {
+                                    title:"Categories",
+                                    about:"Manage categories of income and expenses",
+                                    avatar: <ListAltIcon />,
+                                    linkTo:"categories"
+                                  }
+                                ]
   return (
     <Layout>
     <div className={styles.container}>

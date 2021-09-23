@@ -6,8 +6,17 @@ export const useCommonStyles = makeStyles((theme: Theme) => ({
     color: red[500],
     textAlign: 'center'
   },
+  centerText: {
+    textAlign:'center'
+  },
+  leftText: {
+    textAlign:'left'
+  },
   flexRowCenter: {
     display:'flex', justifyContent:'center', alignItems:'center'
+  },
+  flexColumnStart: {
+    display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'flexStart'
   }
 }));
 

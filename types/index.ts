@@ -227,3 +227,15 @@ export interface tablePagingI {
     page:number;
     count:number;
 }
+
+interface dataLayerI {
+  _id:string;
+  name:string;
+  value:string;
+}
+
+export interface graphDataI {
+  name:string;
+  total:number;
+  layers:dataLayerI[];
+}

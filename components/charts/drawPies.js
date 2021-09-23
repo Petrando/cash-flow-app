@@ -62,7 +62,7 @@ export default function drawPies(myGraphData, containerId, changeSelectedCategor
 
     arcPath        
         .transition()
-        .duration(250)
+        .duration(1000)
         .attrTween("d", arcTween)
 
     arcPath.exit().remove();

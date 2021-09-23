@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const LoadingBackdrop = ({isLoading}) => {
+const LoadingBackdrop = ({isLoading}:{isLoading:boolean}):JSX.Element => {
 	const classes = useStyles();
 	
 	return(
@@ -21,7 +21,7 @@ const LoadingBackdrop = ({isLoading}) => {
 	)	
 }
 
-export const LoadingDiv = () => {
+export const LoadingDiv = ():JSX.Element => {
 	const classes = useStyles();
 
 	return (

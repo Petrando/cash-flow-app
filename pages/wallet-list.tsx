@@ -37,7 +37,6 @@ export default function WalletList() {
           if(data.error){                    
             setError("Please check your connection")
           } else {
-            console.log(data);
             setWallets(data);
           }
           setIsLoading(false);

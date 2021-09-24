@@ -112,6 +112,7 @@ const GraphContainer = (
       <>
       {
         width > 0 &&
+        data.total > 0 &&
         <Piechart width={width} graphData={data} />
       }
       </>    

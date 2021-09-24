@@ -25,7 +25,6 @@ const Categories = () => {
 			setIsLoading(true);
 			getCategories()
 				.then(data=>{
-					console.log(data);
 					if(typeof data==='undefined'){   
 						setError("No data, please check your connection");                
             			return;          

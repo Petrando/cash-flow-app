@@ -88,7 +88,6 @@ export interface walletDisplayI {
     walletData:walletI;
     setEdit:()=>void;
     setDelete:()=>void;
-    isLoading?:boolean;
 }
 
 export interface addWalletI {
@@ -244,4 +243,17 @@ export interface graphDataI {
   name:string;
   total:number;
   layers:dataLayerI[];
+}
+
+export interface showAlertI {
+  severity:string;
+  label:string;
+  handleClose?:()=>void;
+}
+
+export interface transactionTabI {
+  children?: React.ReactNode;
+  dir?: string;
+  index: any;
+  value: any;
 }

@@ -1,23 +1,9 @@
 import React from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    container: {
-      display: 'flex',
-      flexWrap: 'wrap',
-    },
-    textField: {
-      marginLeft: theme.spacing(1),
-      marginRight: theme.spacing(1),
-      width: 200,
-    },
-  }),
-);
+import { useDatePickerStyles } from '../../styles/material-ui.styles';
 
 export default function DatePickers({id, label, myDate, changeDate}) {
-  const classes = useStyles();
+  const classes = useDatePickerStyles();
 
   const handleChange = (e) => {
     changeDate(label.toLowerCase(), e.target.value);    
@@ -42,7 +28,7 @@ export default function DatePickers({id, label, myDate, changeDate}) {
 
 //Different change handler from above....
 export function DatePickersB({id, label, myDate, changeDate}) {
-  const classes = useStyles();  
+  const classes = useDatePickerStyles();  
 
   return (
     <form className={classes.container} noValidate>

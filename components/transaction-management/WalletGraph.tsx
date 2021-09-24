@@ -6,12 +6,12 @@ import Piechart from '../globals/charts/Piechart';
 import BarChart from '../globals/charts/Barchart';
 import LoadingBackdrop, {LoadingDiv} from '../../components/globals/LoadingBackdrop';
 import TimeFilter from '../globals/filterComponents/TimeFilter';
-import {graphDataI} from "../../types";
+import {graphDataI, walletGraphI} from "../../types";
 import {useCommonStyles} from "../../styles/material-ui.styles";
 
 let componentLoaded = false;
 
-const WalletGraph = ({changeSelectedCategory, filter, dispatchFilter}):JSX.Element => {      
+const WalletGraph = ({changeSelectedCategory, filter, dispatchFilter}:walletGraphI):JSX.Element => {      
       const router = useRouter();
 
       const [myGraphData, setMyGraphData] = useState<graphDataI[]>([]);

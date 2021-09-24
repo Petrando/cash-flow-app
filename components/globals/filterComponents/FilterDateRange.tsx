@@ -1,36 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import Button from '@material-ui/core/Button';
-import Divider from '@material-ui/core/Divider';
-import { FormControl, FormLabel} from '@material-ui/core/';
-
+import { Button, Drawer, Divider, FormControl, FormLabel} from '@material-ui/core/';
 import DatePickers from '../DatePickers';
-
-const useStyles = makeStyles({
-  list: {
-    width: 250,
-  },
-  fullList: {
-    width: 'auto',
-  },
-  drawerControl: {  
-    marginTop:'15px',
-    padding:'5px 5px 5px 15px',
-  }, 
-  selectMonthControl: {
-    padding:'5px 5px 5px 15px'
-  },
-  buttonContainer: {
-    marginTop:'20px',
-    marginRight:'15px',
-    display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center'
-  }
-});
+import { useDateRangeStyles } from '../../../styles/material-ui.styles';
 
 export default function FilterDateRange({transactionFilter, dispatchDateRange}) {
-  const classes = useStyles();
+  const classes = useDateRangeStyles();
   const [state, setState] = useState({
     top: false,
     left: false,
@@ -39,7 +14,6 @@ export default function FilterDateRange({transactionFilter, dispatchDateRange}) 
   });
   const [dateFrom, setFrom] = useState<string>('');
   const [dateTo, setTo] = useState<string>('');
-
   const [editDirty, setEditDirty] = useState<boolean>(false);
 
   useEffect(()=>{
@@ -56,7 +30,6 @@ export default function FilterDateRange({transactionFilter, dispatchDateRange}) 
   }
 
   const changeDate = (dateState, newDate) => {
-    //dateState==='from'?setFrom(newDate):setTo(newDate);
     if(dateState==='from' && dateFrom!==newDate){
       if(dateTo!==''){
         const dateObjFrom = new Date(newDate);
@@ -146,15 +119,13 @@ export default function FilterDateRange({transactionFilter, dispatchDateRange}) 
 }
 
 const TimeSelection = ({dateFrom, dateTo, changeDate}) => {
-  const classes = useStyles();
+  const classes = useDateRangeStyles();
   
   return (
-    <>    
     <FormControl className={classes.drawerControl} component="fieldset">
       <FormLabel component="legend">Filter Date Range</FormLabel>
       <DatePickers id={"start-date"} label={"From"} myDate={dateFrom} changeDate={changeDate} />
       <DatePickers id={"end-date"} label={"To"} myDate={dateTo} changeDate={changeDate}  />
-    </FormControl> 
-    </>
+    </FormControl>     
   )
 }

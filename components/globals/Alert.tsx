@@ -1,26 +1,10 @@
 import React from 'react';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Alert from '@material-ui/lab/Alert';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      width: '100%',
-      '& > * + *': {
-        marginTop: theme.spacing(2),
-      },
-    },
-  }),
-);
-
-interface showAlertI {
-    severity:string;
-    label:string;
-    handleClose?:()=>void;
-}
+import {useCommonStyles} from "../../styles/material-ui.styles"
+import { showAlertI} from "../../types";
 
 export default function ShowAlert({severity, label, handleClose}:showAlertI):JSX.Element {
-  const classes = useStyles();
+  const classes = useCommonStyles();
 
   return (
     <div className={classes.root} onClick={()=>{handleClose()}}>

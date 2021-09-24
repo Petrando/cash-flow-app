@@ -35,12 +35,12 @@ const TimeFilter = (props:transactionTimeFilterI):JSX.Element => {
   return (
     <>
       <FormControl className={classes.formControl}>
-        <InputLabel shrink id="demo-simple-select-placeholder-label-label">
+        <InputLabel shrink id="select_month_label">
           Select Month
         </InputLabel>
         <Select
-          labelId="demo-simple-select-placeholder-label-label"
-          id="demo-simple-select-placeholder-label"
+          labelId="select_month_label"
+          id="select_month"
           value={props.transactionFilter.dateFilter.month}
           onChange={handleChangeMonth}
           displayEmpty

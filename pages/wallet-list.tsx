@@ -3,7 +3,6 @@ import Head from 'next/head'
 import { Box, Button, Container, Grid, Typography } from "@material-ui/core";
 import { AccountBalanceWallet, Add } from '@material-ui/icons';
 import Layout from '../components/layout'
-import utilStyles from '../styles/utils.module.css'
 import { getWallets } from '../api/walletApi';
 import Wallet from '../components/wallets-management/Wallet';
 import AddWalletDialog from '../components/wallets-management/AddWallet';
@@ -88,7 +87,6 @@ export default function WalletList() {
             <Grid container spacing={1}>
               {wallets.map((d, i) => <Wallet 
                                         key={d._id}
-                                        isLoading={isLoading}
                                         walletData={d}
                                         setEdit={()=>{setIdEdit(d._id)}}
                                         setDelete={()=>{setIdToDelete(d._id)}}

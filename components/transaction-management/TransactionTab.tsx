@@ -1,13 +1,7 @@
 import Box from '@material-ui/core/Box';
-
-interface tabPanelProps {
-    children?: React.ReactNode;
-    dir?: string;
-    index: any;
-    value: any;
-}
+import { transactionTabI } from '../../types';
   
-export default function TabPanel(props: tabPanelProps) {
+export default function TabPanel(props: transactionTabI) {
     const { children, value, index, ...other } = props;
   
     return (
@@ -27,7 +21,7 @@ export default function TabPanel(props: tabPanelProps) {
     );
   }
   
-export function a11yProps(index: any) {
+export function a11yProps(index) {
     return {
       id: `full-width-tab-${index}`,
       'aria-controls': `full-width-tabpanel-${index}`,

@@ -1,24 +1,36 @@
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { green, red } from '@material-ui/core/colors';
 
-export const useCommonStyles = makeStyles((theme: Theme) => ({
-  errorText: {
-    color: red[500],
-    textAlign: 'center'
-  },
-  centerText: {
-    textAlign:'center'
-  },
-  leftText: {
-    textAlign:'left'
-  },
-  flexRowCenter: {
-    display:'flex', justifyContent:'center', alignItems:'center'
-  },
-  flexColumnStart: {
-    display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'flexStart'
-  }
-}));
+export const useCommonStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      width: '100%',
+      '& > * + *': {
+        marginTop: theme.spacing(2),
+      },
+    },
+    errorText: {
+      color: red[500],
+      textAlign: 'center'
+    },
+    centerText: {
+      textAlign:'center'
+    },
+    leftText: {
+      textAlign:'left'
+    },
+    flexRowCenter: {
+      display:'flex', justifyContent:'center', alignItems:'center'
+    },
+    flexColumnStart: {
+      display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'flexStart'
+    },
+    formControl: {
+      margin: theme.spacing(1),
+      width:'100%'
+    }
+  }),
+);
 
 export const useTopNavStyles = makeStyles({
   navbarDisplayFlex: {
@@ -189,3 +201,46 @@ export const useTransactionTableStyles = makeStyles({
     minWidth: 650,
   }
 });
+
+export const useDateRangeStyles = makeStyles({
+  list: {
+    width: 250,
+  },
+  fullList: {
+    width: 'auto',
+  },
+  drawerControl: {  
+    marginTop:'15px',
+    padding:'5px 5px 5px 15px',
+  },
+  buttonContainer: {
+    marginTop:'20px',
+    marginRight:'15px',
+    display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center'
+  }
+});
+
+export const useDatePickerStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    container: {
+      display: 'flex',
+      flexWrap: 'wrap',
+    },
+    textField: {
+      marginLeft: theme.spacing(1),
+      marginRight: theme.spacing(1),
+      width: 200,
+    },
+  }),
+);
+
+export const useLoadingStyles = makeStyles((theme) => ({
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
+  loadingDivStyle: {
+    width:'100%', minHeight:'80vh',
+  	display:'flex', alignItems:'center', justifyContent:'center'
+  }
+}));

@@ -1,7 +1,5 @@
 
-import {useState, useEffect} from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { 
           Grid, 
           ButtonGroup, 
@@ -12,29 +10,16 @@ import {
           CardMedia,
           CardActionArea,           
           CardActions, 
-          CircularProgress,          
       } from '@material-ui/core';
 import { List, Edit, Delete } from '@material-ui/icons';
 import { rupiahFormatter } from '../../util-functions';
-import ImageLoad from '../globals/ImageLoad';
 import { API } from "../../config";
 import { walletDisplayI } from '../../types';
 import {useWalletStyles} from '../../styles/material-ui.styles';
 
-const Wallet = ({isLoading, walletData, setEdit, setDelete}:walletDisplayI):JSX.Element => {
-    const classes = useWalletStyles();
-    const [iconSrc, setIconSrc] = useState<string>("");
+const Wallet = ({ walletData, setEdit, setDelete}:walletDisplayI):JSX.Element => {
+    const classes = useWalletStyles();    
     const {_id, name, icon, balance} = walletData;
-    console.log(icon["data"]);
-    const myIconSrc = {data:icon["data"], ["content-Type"]:icon["contentType"]}
-
-    useEffect(()=>{
-      setIconSrc(isLoading?"":`${API}/wallet/photo/${_id}`);
-    }, [icon]);
-
-    useEffect(()=>{
-      console.log(iconSrc)
-    }, [iconSrc]);
 
     return (
       <Grid item lg={3} md={4} sm={6} xs={12} key={_id}>
@@ -44,15 +29,11 @@ const Wallet = ({isLoading, walletData, setEdit, setDelete}:walletDisplayI):JSX.
               title={name}
               subheader={rupiahFormatter(balance)}
             />
-            {
-              iconSrc===""?
-              <CircularProgress />:
-              <CardMedia 
-                component="img"
-                height="194"
-                src={`${API}/wallet/photo/${_id}?random=${Math.floor(Math.random() * 100)}`}
-              />
-            }            
+            <CardMedia 
+              component="img"
+              height="194"
+              src={`${API}/wallet/photo/${_id}?random=${Math.floor(Math.random() * 100)}`}
+            />            
           </CardActionArea>
           <CardActions >                                          
             <Link href={{ pathname: `/transactions`, query: { _id, name, balance } }} >

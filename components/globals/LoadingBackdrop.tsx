@@ -1,18 +1,9 @@
 import React from 'react';
-import { Backdrop, CircularProgress, makeStyles } from "@material-ui/core";
-
-const useStyles = makeStyles((theme) => ({
-  backdrop: {
-    zIndex: theme.zIndex.drawer + 1,
-    color: '#fff',
-  },
-  divStyle: {
-  	display:'flex', alignItems:'center', justifyContent:'center'
-  }
-}));
+import { Backdrop, CircularProgress } from "@material-ui/core";
+import { useLoadingStyles } from '../../styles/material-ui.styles';
 
 const LoadingBackdrop = ({isLoading}:{isLoading:boolean}):JSX.Element => {
-	const classes = useStyles();
+	const classes = useLoadingStyles();
 	
 	return(
 		<Backdrop className={classes.backdrop} open={isLoading} >
@@ -22,10 +13,10 @@ const LoadingBackdrop = ({isLoading}:{isLoading:boolean}):JSX.Element => {
 }
 
 export const LoadingDiv = ():JSX.Element => {
-	const classes = useStyles();
+	const classes = useLoadingStyles();
 
 	return (
-		<div className={classes.divStyle}>
+		<div className={classes.loadingDivStyle}>
 			<CircularProgress />
 		</div>
 	)

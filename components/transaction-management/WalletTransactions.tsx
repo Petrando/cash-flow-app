@@ -1,25 +1,30 @@
 import React, {useState, useEffect, useReducer} from 'react';
-import { useRouter } from 'next/router'
 import { Button } from "@material-ui/core";
 import { Typography } from "@material-ui/core";
 import { Add }  from '@material-ui/icons/';
 import {getTransactionsByWallet, getFirstPageTransaction_and_category} from '../../api/transactionApi';
-import LoadingBackdrop from '../../components/globals/LoadingBackdrop';
+import LoadingBackdrop from '../globals/LoadingBackdrop';
 import TransactionSortFilter from '../globals/filterComponents/TransactionSortFilter';
 import TablePaging from '../globals/TablePaging';
+import ShowAlert from '../globals/Alert';
 import TransactionTable from './TransactionTable';
 import { transactionSort, transactionSortReducer } from './StoreNReducer';
 import AddTransactionDialog from './AddTransaction';
 import EditTransactionDialog from './EditTransaction';
 import DeleteTransactionDialog from './DeleteTransaction';
-import { walletTransactionI } from '../../types';
-import { categoryI, transactionI } from '../../types';
+import { categoryI, transactionI, walletTransactionI } from '../../types';
 import { useTransactionStyles } from "../../styles/material-ui.styles";
 
 const itemPerPage = 5;
 
-const WalletTransactions = ({filter, dispatchFilter, _id, name, walletBalance, setWalletBalance}:walletTransactionI):JSX.Element => {
-	const router = useRouter();
+const WalletTransactions = ({
+                              filter, 
+                              dispatchFilter, 
+                              _id, 
+                              name, 
+                              walletBalance, 
+                              setWalletBalance
+                            }:walletTransactionI):JSX.Element => {
 	const classes = useTransactionStyles();
 
 	const [categories, setCategories] = useState<categoryI[]>([]);
@@ -65,11 +70,12 @@ const WalletTransactions = ({filter, dispatchFilter, _id, name, walletBalance, s
     	getFirstPageTransaction_and_category(_id, sort, filter)
       		.then(data => {
         		if(typeof data==='undefined'){
-          			//setConnectionError?
+          			setConnectionError(true);
           			setIsLoading(false);
           			return;
         		}       
-        		if(data.error){         
+        		if(data.error){ 
+              setConnectionError(true)        
         		}else{
           			const {category, transaction, count} = data; 
           			setCategories(category);
@@ -78,6 +84,7 @@ const WalletTransactions = ({filter, dispatchFilter, _id, name, walletBalance, s
           			}         
           			setPaginationData({currentPage:0, transactionCount:count, maxPage:Math.ceil(count/itemPerPage)})
           			setFirstLoaded(true);
+                setConnectionError(false);
         		}
         		setIsLoading(false);
       		});
@@ -95,18 +102,18 @@ const WalletTransactions = ({filter, dispatchFilter, _id, name, walletBalance, s
 		}		
 	}, [currentPage]);
 
-  	useEffect(()=>{   
-    	if(firstLoaded){
-      		setPaginationData({...paginationData, currentPage:0});
-      		getNewPageData(true);
-    	}    
-  	}, [sort]);
+  useEffect(()=>{   
+    if(firstLoaded){
+      	setPaginationData({...paginationData, currentPage:0});
+      	getNewPageData(true);
+    }    
+  }, [sort]);
 
-  	useEffect(()=>{   
-    	if(firstLoaded) {
-      		getFirstPage();
-    	}    
-  	}, [filter]);
+  useEffect(()=>{   
+    if(firstLoaded) {
+      	getFirstPage();
+    }    
+  }, [filter]);
 	
 	const getNewPageData = (resetPage = false) => {
 		setIsLoading(true);		
@@ -115,15 +122,18 @@ const WalletTransactions = ({filter, dispatchFilter, _id, name, walletBalance, s
 				.then(data=>{
 					if(typeof data === 'undefined'){
 						setIsLoading(false);
-            			setRefresh(false);
+            setRefresh(false);
+            setConnectionError(true);
 						return;
 					}					
-					if(data.error){												
+					if(data.error){							
+            setConnectionError(true);					
 					}else{						
 						setTransactions(setTransactionsCategoryName(data));						
+            setConnectionError(false);
 					}
 					setIsLoading(false);
-          			setRefresh(false);
+          setRefresh(false);
 				})
 		}else {			
 			setConnectionError(true);
@@ -197,6 +207,7 @@ const WalletTransactions = ({filter, dispatchFilter, _id, name, walletBalance, s
       		}       		   			
       		{
       			walletName!=="" &&
+            !connectionError &&
       			<div className={classes.topButtonContainer}>      				
       				<Button variant="contained" color="primary" size="small" startIcon={<Add />}
       					onClick={()=>setIsAdd(true)}
@@ -274,6 +285,10 @@ const WalletTransactions = ({filter, dispatchFilter, _id, name, walletBalance, s
                         dispatchSort={dispatchSort}
                 	/>
               	</>
+            }
+            {
+              connectionError && 
+              <ShowAlert severity="warning" label={"WARNING: check your connection"} />
             }             
       	</div>
 	)

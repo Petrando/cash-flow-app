@@ -240,7 +240,7 @@ export const useLoadingStyles = makeStyles((theme) => ({
     color: '#fff',
   },
   loadingDivStyle: {
-    width:'100%', minHeight:'80vh',
+    width:'100%',
   	display:'flex', alignItems:'center', justifyContent:'center'
   }
 }));

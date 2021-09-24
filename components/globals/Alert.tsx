@@ -7,7 +7,7 @@ export default function ShowAlert({severity, label, handleClose}:showAlertI):JSX
   const classes = useCommonStyles();
 
   return (
-    <div className={classes.root} onClick={()=>{handleClose()}}>
+    <div className={classes.root} onClick={()=>{handleClose && handleClose()}}>
       <Alert severity={ 
                        severity==="error"?"error":
                        severity==="warning"?"warning":

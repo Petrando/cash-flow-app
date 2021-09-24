@@ -40,14 +40,13 @@ const Piechart = ({width, graphData}:{width:number, graphData:graphDataI}):JSX.E
           svg.selectAll(".tooltip").remove();                             
 
           const arcPaths = canvas          
-              .selectAll("path")
+              .selectAll("path.arc")
               .data(arcs, d=>d.data.name)
 
           arcPaths.enter().append("path")
             .attr("class", "arc")
             .attr("fill", d => color(d.data.name))
             .attr("d", arc)
-            .each((d)=> {d3.select(this)._current = d; })
             .on("mouseover", (e, d)=>{   
               if(graphData.total === 0){
                 return;
@@ -56,7 +55,10 @@ const Piechart = ({width, graphData}:{width:number, graphData:graphDataI}):JSX.E
               canvas.selectAll("path.arc").filter(function(pathD){return pathD.data._id !== d.data._id}) 
                 .style("opacity", 0.5);
 
-              tooltip.transition().duration(250).style("opacity", 1);
+              const tooltip = svg.select(".tooltip");
+              tooltip
+                //.transition().duration(250)
+                .style("opacity", 1);
               processTooltip(d);
               
             })
@@ -68,12 +70,16 @@ const Piechart = ({width, graphData}:{width:number, graphData:graphDataI}):JSX.E
               canvas.selectAll("path.arc")
                 .style("opacity", 1);
 
-              tooltip.transition().duration(250).style("opacity", 0);
+              const tooltip = svg.select(".tooltip");
+              tooltip
+                //.transition().duration(250)
+                .style("opacity", 0);
             })
-              .transition().duration(500)
-            .attrTween('d', d=>arcTween(d))
+              //.transition().duration(500)
+            //.attrTween('d', d=>{arcTween(d, arc)})
             
           arcPaths
+            .attr("d", arc)
             .on("mouseover", (e, d)=>{ 
               if(graphData.total === 0){
                 return;
@@ -81,8 +87,11 @@ const Piechart = ({width, graphData}:{width:number, graphData:graphDataI}):JSX.E
 
               arcPaths.filter(function(pathD){return pathD.data._id !== d.data._id})                   
                 .style("opacity", 0.5);          
+              
+              tooltip
+                //.transition().duration(250)
+                .style("opacity", 1);
 
-              tooltip.transition().duration(250).style("opacity", 1);
               processTooltip(d);
             
             })
@@ -93,14 +102,16 @@ const Piechart = ({width, graphData}:{width:number, graphData:graphDataI}):JSX.E
 
               arcPaths.filter(function(pathD){return pathD.data._id !== d.data._id})                     
                 .style("opacity", 1);
-
-              tooltip.transition().duration(250).style("opacity", 0);
+              
+              tooltip
+                //.transition().duration(250)
+                .style("opacity", 0);
             })
-              .transition().duration(500)
-            .attrTween('d',  d=>arcTween(d))
+              //.transition().duration(500)
+            //.attrTween('d',  d=>{arcTween(d, arc)})
 
           arcPaths.exit()
-              .transition().duration(1000)
+              //.transition().duration(1000)
             .attr("opacity", 0)
             .remove();
 
@@ -114,19 +125,19 @@ const Piechart = ({width, graphData}:{width:number, graphData:graphDataI}):JSX.E
               tooltip.select("text.categoryValue").text('Rp ' + d3.format(",d")(graphData.total));
           }
 
-          const arcTween = (d) => {
-            var i = d3.interpolate(d.startAngle, d.endAngle);
-            return (t) => {
-                            d.endAngle = i(t); 
-                            return arc(d)
-            }
-          }
-
           const tooltip = createTooltip(canvas, height);
 
         },
         [graphData, width]
   );
+
+  const arcTween = (d, arc) => {
+    var i = d3.interpolate(d.startAngle, d.endAngle);
+    return (t) => {
+                    d.endAngle = i(t); 
+                    return arc(d)
+    }
+  }
   
   function createTooltip(mySvgCanvas, height){
     var tooltip = mySvgCanvas.append("g")
@@ -135,7 +146,7 @@ const Piechart = ({width, graphData}:{width:number, graphData:graphDataI}):JSX.E
         .style("opacity", 0)
         .style("pointer-events", "none")
         .attr("stroke", "black")
-        .attr("transform", "translate(-" + width/10 + ",-" + height/8.5 + ")");         
+        .attr("transform", "translate(-" + width/14 + ",-" + height/8.5 + ")");         
 
     tooltip.append("text")
         .attr("class", "subCategoryName")

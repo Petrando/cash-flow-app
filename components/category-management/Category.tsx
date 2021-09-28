@@ -1,7 +1,6 @@
 import {  useState } from 'react';
 import { Container, Button, Paper } from '@material-ui/core';
 import { ExpandLess, ExpandMore, Add}  from '@material-ui/icons/';
-import { addSubCategory, editSubCategory, deleteSubCategory } from "../../api/categoryApi";
 import fetchJson from "../../lib/fetchJson";
 import SubCategory from './SubCategory';
 import NewSubCategory from './NewSubCategory';
@@ -32,12 +31,7 @@ const submitAddAndRefresh = async (newSubCategory:newSubCategorySubmitI) => {
             body: JSON.stringify({categoryId:_id, subCategory:newSubCategory})
           });
                     
-          if(addResult.acknowledged && addResult.modifiedCount === 1){
-            setAddingNewSub(false)
-            refresh();
-          }else{
-            console.log(addResult)
-          }
+         processResult(addResult);
           
       } catch (error) {
           console.error("An unexpected error happened:", error);
@@ -54,33 +48,40 @@ const submitEditAndRefresh = async (sub_id:string, editedSubCategory:editSubCate
             },
             body: JSON.stringify({categoryId:_id, subCategoryId:sub_id, subCategory:editedSubCategory.newName})
           });          
-          console.log(editResult);  
-          if(editResult.acknowledged && editResult.modifiedCount === 1){
-            setSubEdited("")
-            refresh();
-          }else{
-            console.log(editResult)
-          }                
+           
+          processResult(editResult);              
       } catch (error) {
           console.error("An unexpected error happened:", error);
-          //dispatch({type:"TOGGLE_LOADING"});
       }      
 }
 
-const submitDeleteAndRefresh = () => {
-    deleteSubCategory(_id, idSubToDelete)
-        .then(data => {
-            if(typeof data === 'undefined'){
-            return;
-        }
+const submitDeleteAndRefresh = async () => { 
+    try {
+      const deleteResult = await fetchJson("/api/categories/delete-subcategory", {
+        method: "POST",            
+        headers: {
+          Accept: 'application/json',
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({categoryId:_id, subCategoryId:idSubToDelete})
+      });          
+       
+      processResult(deleteResult);     
+  } catch (error) {
+      console.error("An unexpected error happened:", error);
+  } 
+}
 
-        if(data.error){
-            console.log(data.error)
-        }else{
-            setIdSubToDelete('');
-            refresh();
-        }
-    })		
+const processResult = (result:{acknowledged:boolean, modifiedCount:number}) => {
+  if(result.acknowledged && result.modifiedCount === 1) {
+    setAddingNewSub(false);
+    setSubEdited("");
+    setIdSubToDelete("");
+
+    refresh();
+  }else{
+    console.log(result);
+  }
 }
 
 return (

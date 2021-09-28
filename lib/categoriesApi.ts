@@ -32,11 +32,7 @@ export const intitialize = async (incomeSub:string, expenseSub:string) => {
 
 export const addSubCategory = async (addData:{categoryId:string, subCategory:newSubCategorySubmitI}) => {
   const { db } = await connectToDatabase();
-
-  //categoryId:string, subCategory:newSubCategorySubmitI
-  //console.log(categoryId, subCategory)
-  console.log(addData);
-  console.log(typeof addData);
+  
   const {categoryId, subCategory} = addData;
   const addSubResult = await db 
                        .collection("categories")
@@ -48,7 +44,6 @@ export const addSubCategory = async (addData:{categoryId:string, subCategory:new
                      )
 
   return addSubResult;
-  //return {message:"add wele weleee"}
 }
 
 export const updateSubCategory = async (categoryId:string, subCategoryId:string, subCategory:string) => {
@@ -77,7 +72,7 @@ export const deleteSubCategory = async (categoryId:string, subCategoryId:string)
                       .collection("categories")
                       .updateOne(
                         { _id: new ObjectId(categoryId) },
-                        { $pull: { 'subCategories.$[element]._id': new ObjectId(subCategoryId) }}
+                        { $pull: { subCategories: {_id: new ObjectId(subCategoryId)} }}
                       )
 
   return deleteResult;

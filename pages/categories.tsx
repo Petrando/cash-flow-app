@@ -16,13 +16,10 @@ const Categories = () => {
 	const classes = useCategoryStyles();
 
   const { data, mutate, error } = useSWR('/api/categories/category-list', fetcher);
-	//const [categories, setCategoryData] = useState<categoryI[]>([]);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [refreshMe, setRefresh] = useState<boolean>(false);
-	//const [error, setError] = useState<string>("");
 
   useEffect(()=>{
-    console.log(data);
     if(data && isLoading){
       setIsLoading(false);
     }
@@ -30,32 +27,10 @@ const Categories = () => {
 
   useEffect(()=>{
     if(refreshMe){
-      console.log('changing data...')
       mutate();
       setRefresh(false);
     }
   }, [refreshMe]);
-  
-  /*
-	useEffect(()=>{
-		if(refreshMe){
-			setIsLoading(true);
-			getCategories()
-				.then(data=>{
-					if(typeof data==='undefined'){   
-						//setError("No data, please check your connection");                
-            			return;          
-          			}
-          			if(data.error){                    
-            			//setError("Please check your connection")
-          			} else {
-            			setCategoryData(data);            			
-          			}
-          			setIsLoading(false);
-          			setRefresh(false);
-				})
-		}		
-	}, [refreshMe]);*/
 
 	return (
 		<Layout>      

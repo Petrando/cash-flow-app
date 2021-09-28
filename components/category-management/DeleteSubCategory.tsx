@@ -42,13 +42,15 @@ function DeleteSubCategoryDialog({
       <Dialog fullWidth={true} maxWidth={'sm'}
         onClose={()=>{}} aria-labelledby="simple-dialog-title" open={true}>
         <DialogTitle id="simple-dialog-title">
-          {isCountingTransaction?'Counting transactions....':
+          {
+            isSubmittingData?"Deleting....":
+            isCountingTransaction?'Counting transactions....':
                                   transactionCount===0?'Delete this sub category?':
                                                        'There are transaction(s)'}        
         </DialogTitle>
         <DialogContent>
           {
-            isCountingTransaction && <LoadingDiv />
+            (isCountingTransaction || isSubmittingData) && <LoadingDiv />
           }
           {
             !isCountingTransaction &&
@@ -69,9 +71,12 @@ function DeleteSubCategoryDialog({
           {
             transactionCount === 0 &&
             <Button 
-              onClick={deleteSub} 
+              onClick={()=>{
+                setIsSubmitting(true);
+                deleteSub();
+              }} 
               color="primary"  
-              disabled={isCountingTransaction}        
+              disabled={isSubmittingData || isCountingTransaction}        
             >
               Delete
             </Button>

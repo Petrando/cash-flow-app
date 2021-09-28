@@ -21,19 +21,7 @@ const [isAddingNewSub, setAddingNewSub] = useState<boolean>(false);
 const [idSubEdited, setSubEdited] = useState<string>('');
 const [idSubToDelete, setIdSubToDelete] = useState<string>('');
 
-const submitAddAndRefresh = async (newSubCategory:newSubCategorySubmitI) => {
-    /*addSubCategory(_id, newSubCategory)
-        .then(data=>{
-            if(typeof data==='undefined'){
-                return;
-            }
-            if(data.error){
-                console.log(data.error)
-            }else{
-                setAddingNewSub(false);
-                refresh();
-            }
-        })		*/
+const submitAddAndRefresh = async (newSubCategory:newSubCategorySubmitI) => {    
       try {
           const addResult = await fetchJson("/api/categories/add-subcategory", {
             method: "POST",            
@@ -43,8 +31,7 @@ const submitAddAndRefresh = async (newSubCategory:newSubCategorySubmitI) => {
             },
             body: JSON.stringify({categoryId:_id, subCategory:newSubCategory})
           });
-          
-          console.log(addResult);
+                    
           if(addResult.acknowledged && addResult.modifiedCount === 1){
             setAddingNewSub(false)
             refresh();
@@ -54,11 +41,11 @@ const submitAddAndRefresh = async (newSubCategory:newSubCategorySubmitI) => {
           
       } catch (error) {
           console.error("An unexpected error happened:", error);
-          //dispatch({type:"TOGGLE_LOADING"});
       }
 }
 
-const submitEditAndRefresh = (sub_id:string, editedSubCategory:editSubCategorySubmitI):void => {		
+const submitEditAndRefresh = async (sub_id:string, editedSubCategory:editSubCategorySubmitI) => {		
+    /*
     editSubCategory(_id, sub_id, editedSubCategory)
         .then(data=>{
             if(typeof data==='undefined'){
@@ -70,7 +57,22 @@ const submitEditAndRefresh = (sub_id:string, editedSubCategory:editSubCategorySu
                 setSubEdited('');
                 refresh();
             }
-        })
+        })*/
+
+      try {
+          const editResult = await fetchJson("/api/categories/edit-subcategory", {
+            method: "POST",            
+            headers: {
+              Accept: 'application/json',
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({categoryId:_id, subCategoryId:sub_id, subCategory:editedSubCategory.newName})
+          });          
+          console.log(editResult);                  
+      } catch (error) {
+          console.error("An unexpected error happened:", error);
+          //dispatch({type:"TOGGLE_LOADING"});
+      }      
 }
 
 const submitDeleteAndRefresh = () => {

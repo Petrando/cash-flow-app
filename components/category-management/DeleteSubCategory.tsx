@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
+import fetchJson from '../../lib/fetchJson';
 import { Button, Dialog, DialogTitle, DialogActions, DialogContent } from '@material-ui/core';
 import { LoadingDiv } from "../globals/LoadingBackdrop";
-import { getTransactionCount } from "../../api/categoryApi";
 import { deleteSubCategoryI } from "../../types";
 
 function DeleteSubCategoryDialog({
@@ -15,23 +15,28 @@ function DeleteSubCategoryDialog({
     const [isCountingTransaction, setIsCountingTransaction] = useState<boolean>(true);
     const [transactionCount, setTransactionCount] = useState<number>(0);
   
-    useEffect(()=>{  
-        getTransactionCount(categoryId, _id)
-            .then(data=>{
-                if(typeof data === 'undefined'){
-                    console.log('No connection!?');
-                    setIsCountingTransaction(false);
-                    return;
-                }
-                if(data.error){
-                    console.log(data.error)
-                }else{
-                    const {transactionCount} = data;  				
-                    setTransactionCount(transactionCount);
-                }
-                setIsCountingTransaction(false);
-            })
+    useEffect(()=>{          
+        getTransactionCount();
     }, []);
+
+    const getTransactionCount = async () => {
+        try {
+          const transactionCount = await fetchJson("/api/categories/count-subcategory-transaction", {
+            method: "POST",            
+            headers: {
+              Accept: 'application/json',
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({categoryId, subCategoryId:_id})
+          });
+                  
+          setTransactionCount(transactionCount);
+          setIsCountingTransaction(false);
+        
+        } catch (error) {
+          console.error("An unexpected error happened:", error);
+        }
+    }
   
     return (
       <Dialog fullWidth={true} maxWidth={'sm'}

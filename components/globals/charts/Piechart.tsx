@@ -57,7 +57,7 @@ const Piechart = ({width, graphData}:{width:number, graphData:graphDataI}):JSX.E
 
               const tooltip = svg.select(".tooltip");
               tooltip
-                //.transition().duration(250)
+                .transition().duration(250)
                 .style("opacity", 1);
               processTooltip(d);
               
@@ -72,7 +72,7 @@ const Piechart = ({width, graphData}:{width:number, graphData:graphDataI}):JSX.E
 
               const tooltip = svg.select(".tooltip");
               tooltip
-                //.transition().duration(250)
+                .transition().duration(250)
                 .style("opacity", 0);
             })
               //.transition().duration(500)
@@ -89,7 +89,7 @@ const Piechart = ({width, graphData}:{width:number, graphData:graphDataI}):JSX.E
                 .style("opacity", 0.5);          
               
               tooltip
-                //.transition().duration(250)
+                .transition().duration(250)
                 .style("opacity", 1);
 
               processTooltip(d);
@@ -104,7 +104,7 @@ const Piechart = ({width, graphData}:{width:number, graphData:graphDataI}):JSX.E
                 .style("opacity", 1);
               
               tooltip
-                //.transition().duration(250)
+                .transition().duration(250)
                 .style("opacity", 0);
             })
               //.transition().duration(500)
@@ -142,7 +142,6 @@ const Piechart = ({width, graphData}:{width:number, graphData:graphDataI}):JSX.E
   function createTooltip(mySvgCanvas, height){
     var tooltip = mySvgCanvas.append("g")
         .attr("class", "tooltip")
-        //.style("display", "none")
         .style("opacity", 0)
         .style("pointer-events", "none")
         .attr("stroke", "black")
@@ -186,6 +185,7 @@ const Piechart = ({width, graphData}:{width:number, graphData:graphDataI}):JSX.E
     return tooltip;        
   
   }
+
   return (
     <>
     <svg

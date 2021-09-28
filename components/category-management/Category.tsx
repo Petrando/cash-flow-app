@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import {  useState } from 'react';
 import { Container, Button, Paper } from '@material-ui/core';
 import { ExpandLess, ExpandMore, Add}  from '@material-ui/icons/';
 import { addSubCategory, editSubCategory, deleteSubCategory } from "../../api/categoryApi";
+import fetchJson from "../../lib/fetchJson";
 import SubCategory from './SubCategory';
 import NewSubCategory from './NewSubCategory';
 import DeleteSubCategoryDialog from './DeleteSubCategory';
@@ -20,8 +21,8 @@ const [isAddingNewSub, setAddingNewSub] = useState<boolean>(false);
 const [idSubEdited, setSubEdited] = useState<string>('');
 const [idSubToDelete, setIdSubToDelete] = useState<string>('');
 
-const submitAddAndRefresh = (newSubCategory:newSubCategorySubmitI):void => {
-    addSubCategory(_id, newSubCategory)
+const submitAddAndRefresh = async (newSubCategory:newSubCategorySubmitI) => {
+    /*addSubCategory(_id, newSubCategory)
         .then(data=>{
             if(typeof data==='undefined'){
                 return;
@@ -32,7 +33,29 @@ const submitAddAndRefresh = (newSubCategory:newSubCategorySubmitI):void => {
                 setAddingNewSub(false);
                 refresh();
             }
-        })		
+        })		*/
+      try {
+          const addResult = await fetchJson("/api/categories/add-subcategory", {
+            method: "POST",            
+            headers: {
+              Accept: 'application/json',
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({categoryId:_id, subCategory:newSubCategory})
+          });
+          
+          console.log(addResult);
+          if(addResult.acknowledged && addResult.modifiedCount === 1){
+            setAddingNewSub(false)
+            refresh();
+          }else{
+            console.log(addResult)
+          }
+          
+      } catch (error) {
+          console.error("An unexpected error happened:", error);
+          //dispatch({type:"TOGGLE_LOADING"});
+      }
 }
 
 const submitEditAndRefresh = (sub_id:string, editedSubCategory:editSubCategorySubmitI):void => {		

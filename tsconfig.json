@@ -22,7 +22,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "lib/fetcher.ts"  ],
   "exclude": [
     "node_modules"
   ]

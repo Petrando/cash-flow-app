@@ -45,20 +45,6 @@ const submitAddAndRefresh = async (newSubCategory:newSubCategorySubmitI) => {
 }
 
 const submitEditAndRefresh = async (sub_id:string, editedSubCategory:editSubCategorySubmitI) => {		
-    /*
-    editSubCategory(_id, sub_id, editedSubCategory)
-        .then(data=>{
-            if(typeof data==='undefined'){
-                return;
-            }
-            if(data.error){
-                console.log(data.error)
-            }else{
-                setSubEdited('');
-                refresh();
-            }
-        })*/
-
       try {
           const editResult = await fetchJson("/api/categories/edit-subcategory", {
             method: "POST",            
@@ -68,7 +54,13 @@ const submitEditAndRefresh = async (sub_id:string, editedSubCategory:editSubCate
             },
             body: JSON.stringify({categoryId:_id, subCategoryId:sub_id, subCategory:editedSubCategory.newName})
           });          
-          console.log(editResult);                  
+          console.log(editResult);  
+          if(editResult.acknowledged && editResult.modifiedCount === 1){
+            setSubEdited("")
+            refresh();
+          }else{
+            console.log(editResult)
+          }                
       } catch (error) {
           console.error("An unexpected error happened:", error);
           //dispatch({type:"TOGGLE_LOADING"});

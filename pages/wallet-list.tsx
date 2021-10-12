@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import Head from 'next/head'
+import useSWR from 'swr';
 import { Box, Button, Container, Grid, Typography } from "@material-ui/core";
 import { AccountBalanceWallet, Add } from '@material-ui/icons';
 import Layout from '../components/layout'
@@ -10,21 +11,35 @@ import EditWalletDialog from '../components/wallets-management/EditWallet';
 import DeleteWalletDialog from '../components/wallets-management/DeleteWallet';
 import LoadingBackdrop from '../components/globals/LoadingBackdrop';
 import ShowAlert from '../components/globals/Alert';
+import fetcher from '../lib/fetcher';
 import { walletI } from '../types'; 
 import { useWalletStyles } from '../styles/material-ui.styles';
 
 export default function WalletList() {
   const classes = useWalletStyles();
 
-  const [wallets, setWallets] = useState<walletI[]>([]);
-  const [refreshMe, setRefresh] = useState<boolean>(true);
+  const {data:walletData, mutate, error:walletFetchErr} = useSWR('/api/wallets/wallet-list', fetcher);
+  const [refreshMe, setRefresh] = useState<boolean>(false);
   const [addingWallet, setAddingWallet] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [idEdited, setIdEdit] = useState<string>('');
   const [idToDelete, setIdToDelete] = useState<string>('');
 
   const [error, setError] = useState<string>("");
-  
+
+  useEffect(()=>{
+      walletData && isLoading && setIsLoading(false);
+      if(refreshMe){
+        setRefresh(false);
+      }
+  }, [walletData, walletFetchErr]);
+
+  useEffect(()=>{    
+    if(refreshMe){
+      mutate();
+    }
+  }, [refreshMe]);
+  /*
   useEffect(() => {
     if(refreshMe){   
       setIsLoading(true);   
@@ -43,7 +58,7 @@ export default function WalletList() {
           setRefresh(false);
         })   
     }        
-  }, [refreshMe]);
+  }, [refreshMe]);*/
 
   const deleteAndRefresh = () => {
     setIdToDelete("");
@@ -57,9 +72,9 @@ export default function WalletList() {
           Wallets
         </title>
       </Head>
-      {
-        isLoading &&
-        <LoadingBackdrop isLoading={isLoading} />
+      {        
+        !walletData &&
+        <LoadingBackdrop isLoading={true} />
       } 
       <ShowAlert severity="warning" label={"ATTENTION : this page is still under development"} />     
       <Box component="div" m={1} className={classes.newWalletContainer}>
@@ -79,18 +94,19 @@ export default function WalletList() {
       <Typography variant={"h4"} className={classes.walletListHeader}>My Wallets</Typography>              
       <Container>                
         {
-          !isLoading &&
-          error === "" &&
+          walletData &&
+          !walletFetchErr &&
           (
-            wallets.length > 0 ?
+            walletData.length > 0 ?
             <Grid container spacing={1}>
-              {wallets.map((d, i) => <Wallet 
-                                        key={d._id}
-                                        walletData={d}
-                                        setEdit={()=>{setIdEdit(d._id)}}
-                                        setDelete={()=>{setIdToDelete(d._id)}}
-                                     />
-                          )}
+              {walletData.map((d, i) => <Wallet 
+                                          key={d._id}
+                                          walletData={d}
+                                          setEdit={()=>{setIdEdit(d._id)}}
+                                          setDelete={()=>{setIdToDelete(d._id)}}
+                                          refresh={refreshMe}
+                                        />
+                            )}
             </Grid>
             :
             <p>No Wallets...</p>
@@ -111,11 +127,11 @@ export default function WalletList() {
           open={idEdited!==""} 
           cancelEdit={() => {setIdEdit("")}}
           finishAndRefresh={()=>{setRefresh(true); setIdEdit("");}}
-          walletToEdit={wallets.filter(d=>d._id===idEdited)[0]}
+          walletToEdit={walletData.filter(d=>d._id===idEdited)[0]}
           deleteInstead={()=>{
-            const walletToEdit = wallets.filter(d=>d._id===idEdited)[0];
+            const walletToEdit = walletData.filter(d=>d._id===idEdited)[0];
             setIdEdit("");
-            setIdToDelete(walletToEdit._id);            
+            setIdToDelete(walletToEdit._id);                        
           }}
         />
       }
@@ -125,18 +141,17 @@ export default function WalletList() {
           open={idToDelete!==""} 
           cancelDelete={() => {setIdToDelete("")}}
           deleteAndRefresh={()=>{deleteAndRefresh()}}
-          walletToDelete={wallets.filter(d=>d._id===idToDelete)[0]}
+          walletToDelete={walletData.filter(d=>d._id===idToDelete)[0]}
           editInstead={()=>{
-            const walletToDelete = wallets.filter(d=>d._id===idToDelete)[0];
+            const walletToDelete = walletData.filter(d=>d._id===idToDelete)[0];
             setIdToDelete("");
             setIdEdit(walletToDelete._id);
           }}
         />
       }
       {
-				!isLoading &&
-				error !== "" &&  
-				<ShowAlert severity={"error"} label={`ERROR : ${error}`} />
+				walletFetchErr &&
+				<ShowAlert severity={"error"} label={`ERROR : ${JSON.stringify(walletFetchErr)}`} />
 			}
     </Layout>       
   )

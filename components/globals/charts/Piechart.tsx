@@ -9,8 +9,6 @@ const Piechart = ({width, graphData}:{width:number, graphData:graphDataI}):JSX.E
           const height = 450;          
           const margin = { top: 20, right: 30, bottom: 30, left: 40 };
 
-          console.log(graphData);
-
           const pieData = graphData.layers;
 
           const color = graphData.name==="Expense"?

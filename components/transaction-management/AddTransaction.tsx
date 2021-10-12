@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react';
-import {addNewTransaction} from "../../api/transactionApi"
+import fetchJson from '../../lib/fetchJson';
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@material-ui/core';
 import SelectControl from '../globals/SelectControl';
 import { LoadingDiv } from '../globals/LoadingBackdrop';
@@ -27,39 +27,62 @@ export default function AddTransactionDialog({
         if(typeof categories[0] !== 'undefined'){
             setSelectedCategory(categories[0]._id);
             setSelectedSubCategory(categories[0].subCategories[0]._id);
+            toggleIsExpense(categories[0]._id);
         }  	
     }, []);
   
     const changeCategory = (newCategory:string) => {
         setSelectedCategory(newCategory);
         setSelectedSubCategory(categories.filter(d=>d._id===newCategory)[0].subCategories[0]._id);
-        const isExpense = newCategory===categories[1]._id;//because the second category is for Expense...
+        toggleIsExpense(newCategory);        
+    }
+
+    const toggleIsExpense = (newCategory:string) => {
+        const isExpense = categories.filter(d => d._id === newCategory)[0].name === "Expense";
         setIsExpense(isExpense);
+      
         if(isExpense && (balance > walletBalance)) {
-            setBalance(walletBalance);
+          setBalance(walletBalance);
         }
     }
   
-    const submitTransaction = (e) => {
+    const submitTransaction = async (e) => {
         e.preventDefault();  
-        if(balance===0){
+        if(balance<=0){
             cancelAdd();
             return;
         }
   
         setIsSubmitting(true);
-        addNewTransaction(walletId, {balance, description, selectedCategory, selectedSubCategory, transactionIsExpense})
-            .then(data=>{
-                if(typeof data=== 'undefined'){
-                    setIsSubmitting(false);
-                    return;
-                }
-                if(data.error){
-                    console.log(data.error)
-                }else{
-                    submitAdd(balance, transactionIsExpense);
-                }
-          })      
+          
+        const createParams =  {
+            balance, description, selectedCategory, selectedSubCategory, transactionIsExpense, 
+            walletToUpdateId:walletId
+        }
+
+        try {
+            const addResult = await fetchJson("/api/transactions/add-transaction", {
+              method: "POST",            
+              headers: {
+                Accept: 'application/json',
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({createParams})
+            });          
+            const {acknowledged, modifiedCount } = addResult; 
+            if(acknowledged && modifiedCount === 1){
+              submitAdd(balance, transactionIsExpense); 
+            }
+            else{
+              throw new Error("Add transaction failed");
+            }
+           
+        } catch (error) {
+            console.error("An unexpected error happened:", error);
+            
+        } finally {
+            setIsSubmitting(false)
+        }
     }
   
     return (
@@ -85,7 +108,6 @@ export default function AddTransactionDialog({
                             selectItems={categories}
                             value={selectedCategory}
                             onChange={changeCategory}
-                            disabled={transactionIsExpense && walletBalance===0}
                         />
                         <SelectControl 
                             labelId={"subcategory-select-label"} 
@@ -145,7 +167,7 @@ export default function AddTransactionDialog({
                 <Button 
                     onClick={submitTransaction} 
                     color="primary"          
-                    disabled={isSubmittingData}
+                    disabled={isSubmittingData || (transactionIsExpense && walletBalance===0)}
                 >
                     Submit
                 </Button>

@@ -28,6 +28,13 @@ export const useCommonStyles = makeStyles((theme: Theme) =>
     formControl: {
       margin: theme.spacing(1),
       width:'100%'
+    },
+    themeSpacing1: {
+      marginRight: theme.spacing(1),
+    },
+    topBottomSpacing1: {
+      marginTop: theme.spacing(1),
+      marginBottom: theme.spacing(1),
     }
   }),
 );
@@ -160,6 +167,10 @@ export const useWalletStyles = makeStyles({
       top:'0px',
       width:'100%',
       height:'194px'      
+    },
+    walletIcon: {
+      width:'100%',
+      height:'194px'
     }
 })
 
@@ -183,17 +194,34 @@ export const useTransactionStyles = makeStyles((theme: Theme) => ({
       marginTop:'15px',
       padding:'5px 5px 5px 15px',
   },
+  controlContainer: {
+    display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center'
+  },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 140,
+    minWidth: "140px",
+    marginRight: "5px"
+  },
+  formInput: {
+    minWidth:"140px",
+    marginRight: "5px"
   },
   selectEmpty: {
+    minWidth:"140px",
     marginTop: theme.spacing(2),
   },
   transactionsPage: {
     width:'100%',
     minHeight:'80vh'
-  }
+  },
+  [theme.breakpoints.down('xs')]: {
+      formControl: {
+        minWidth:'130px'
+      },
+      formInput: {
+        minWidth:'130px'
+      }
+    }
 }));
 
 export const useTransactionTableStyles = makeStyles({

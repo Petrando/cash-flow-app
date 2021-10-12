@@ -8,7 +8,7 @@ import { rupiahFormatter } from '../util-functions';
 import Layout from '../components/layout'
 import WalletTransactions from '../components/transaction-management/WalletTransactions';
 import WalletGraph from '../components/transaction-management/WalletGraph';
-import getCurrentMonthName from '../api/currentMonthName';
+import {getCurrentMonthName} from '../lib/timeApi';
 import ShowAlert from '../components/globals/Alert';
 import TabPanel, {a11yProps} from "../components/transaction-management/TransactionTab"
 import { transactionFilter, transactionFilterReducer } from '../components/transaction-management/StoreNReducer';
@@ -22,7 +22,7 @@ export default function Transactions():JSX.Element {
   const [walletBalance, setBalance] = useState<number>(0);
   
   useEffect(()=>{
-    setBalance(parseInt(router.query.balance.toString()));
+    router.query.balance && setBalance(parseInt(router.query.balance.toString()));
   }, []);
 
   const [filter, dispatchFilter] = useReducer(transactionFilterReducer, transactionFilter);
@@ -81,17 +81,21 @@ export default function Transactions():JSX.Element {
         index={tabIdx}
         onChangeIndex={handleChangeIndex}
       >
-        <TabPanel value={tabIdx} index={0} dir={theme.direction}>         
-          <WalletTransactions 
-            filter={filter}
-            dispatchFilter={dispatchFilter}
-            _id={_id.toString()}
-            name={name.toString()}
-            walletBalance={walletBalance}
-            setWalletBalance={(newBalance:number)=>{
+        <TabPanel value={tabIdx} index={0} dir={theme.direction}>
+          {
+            typeof _id!=="undefined" &&
+            typeof name!=="undefined" &&
+            <WalletTransactions 
+              filter={filter}
+              dispatchFilter={dispatchFilter}
+              _id={_id.toString()}
+              name={name.toString()}
+              walletBalance={walletBalance}
+              setWalletBalance={(newBalance:number)=>{
                                                       setBalance(newBalance);
                                                     }}
-          />
+            />
+          }                   
         </TabPanel>
         <TabPanel value={tabIdx} index={1} dir={theme.direction}>
           <WalletGraph 

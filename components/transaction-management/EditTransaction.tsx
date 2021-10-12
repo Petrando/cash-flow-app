@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react';
-import {updateTransaction} from "../../api/transactionApi"
+import fetchJson from '../../lib/fetchJson';
 import { 
             Button, 
             Dialog, 
@@ -45,9 +45,9 @@ export default function EditTransactionDialog({
     useEffect(()=>{    	
         initializeData();
   
-        let itIsExpense = categories[0]._id !== editedTransaction.category.categoryId;
-        setIsExpense(itIsExpense);
-        if(!itIsExpense){
+        let isExpense = categories.filter(d => d._id === editedTransaction.category.categoryId)[0].name === "Expense";
+        setIsExpense(isExpense);
+        if(!isExpense){
             if(walletBalance >= editedTransaction.amount){
                 setLimitBalance(1);
             }else{
@@ -72,7 +72,7 @@ export default function EditTransactionDialog({
         setEditDirty(false);
     }
   
-    const submitData = (e) => {
+    const submitData = async (e) => {
         e.preventDefault();       
         if(!editDirty){
             cancelEdit();
@@ -80,9 +80,8 @@ export default function EditTransactionDialog({
       
         const balanceChange = balance - editedTransaction.amount;
   
-        const updatedWalletBalance = transactionIsExpense?  walletBalance - balanceChange
-                                                            :
-                                                            walletBalance + balanceChange;
+        const walletChange = transactionIsExpense?-Math.abs(balanceChange):balanceChange
+        const updatedWalletBalance = walletBalance + walletChange;
   
         const updatedTransaction = {
             amount:balance,
@@ -98,21 +97,31 @@ export default function EditTransactionDialog({
   
         const transactionId = editedTransaction._id;	
   
-        setIsSubmitting(true);
-        updateTransaction(walletId, transactionId, updatedWalletBalance, updatedTransaction)
-            .then(data=>{
-                if(typeof data==='undefined'){
-                    console.log('Connection error?!');
-                    setIsSubmitting(false);
-                    return;
-                }
-  
-                if(data.error){
-                    console.log(data.error);
-                }else{
-                    submitEdit(updatedWalletBalance)
-                }
-        }); 
+        setIsSubmitting(true);        
+        
+        try {
+          const editResult = await fetchJson("/api/transactions/update-transaction", {
+            method: "POST",            
+            headers: {
+              Accept: 'application/json',
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({transactionId, updatedTransaction, walletChange})
+          });          
+          const {acknowledged, modifiedCount } = editResult; 
+          if(acknowledged && modifiedCount === 1){
+            submitEdit(updatedWalletBalance); 
+          }
+          else{
+            throw new Error("Edit transaction failed");
+          }
+         
+      } catch (error) {
+          console.error("An unexpected error happened:", error);
+          
+      } finally {
+          setIsSubmitting(false)
+      }
     } 
   
     const balanceAdjusting = ():boolean => {
@@ -132,7 +141,6 @@ export default function EditTransactionDialog({
         if(adjusted){
             setBalance(adjustedBalance);
             setEditDirty(true);   
-            console.log(adjusted);
         }
         return adjusted;  
     }

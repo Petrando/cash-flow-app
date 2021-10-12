@@ -1,3 +1,4 @@
+import { useEffect, useState} from 'react';
 import Link from 'next/link';
 import { 
           Grid, 
@@ -6,19 +7,20 @@ import {
           IconButton, 
           Card, 
           CardHeader,
-          CardMedia,
           CardActionArea,           
           CardActions, 
       } from '@material-ui/core';
 import { List, Edit, Delete } from '@material-ui/icons';
+import WalletIcon from './WalletIcon';
 import { rupiahFormatter } from '../../util-functions';
-import { API } from "../../config";
+import fetchJson from '../../lib/fetchJson';
 import { walletDisplayI } from '../../types';
 import {useWalletStyles} from '../../styles/material-ui.styles';
 
-const Wallet = ({ walletData, setEdit, setDelete}:walletDisplayI):JSX.Element => {
+const Wallet = ({ walletData, setEdit, setDelete, refresh}:walletDisplayI):JSX.Element => {
     const classes = useWalletStyles();    
-    const {_id, name, icon, balance} = walletData;
+    const {_id, name, balance} = walletData;   
+    //`${API}/wallet/photo/${_id}?random=${Math.floor(Math.random() * 100)}`
 
     return (
       <Grid item lg={3} md={4} sm={6} xs={12} key={_id}>
@@ -28,11 +30,7 @@ const Wallet = ({ walletData, setEdit, setDelete}:walletDisplayI):JSX.Element =>
               title={name}
               subheader={rupiahFormatter(balance)}
             />
-            <CardMedia 
-              component="img"
-              height="194"
-              src={`${API}/wallet/photo/${_id}?random=${Math.floor(Math.random() * 100)}`}
-            />            
+            <WalletIcon id={_id} refresh={refresh} />                     
           </CardActionArea>
           <CardActions >                                          
             <Link href={{ pathname: `/transactions`, query: { _id, name, balance } }} >

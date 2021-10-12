@@ -9,7 +9,6 @@ import InitializeCategory from '../components/category-management/InitializeCate
 import LoadingBackdrop from '../components/globals/LoadingBackdrop';
 import Category from '../components/category-management/Category';
 import ShowAlert from '../components/globals/Alert';
-import { categoryI } from '../types';
 import { useCategoryStyles } from '../styles/material-ui.styles';
 
 const Categories = () => {	
@@ -23,7 +22,7 @@ const Categories = () => {
     if(data && isLoading){
       setIsLoading(false);
     }
-  }, [data])
+  }, [data, error])
 
   useEffect(()=>{
     if(refreshMe){

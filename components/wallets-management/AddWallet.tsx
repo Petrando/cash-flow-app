@@ -6,6 +6,7 @@ import {
 import { PhotoCamera } from '@material-ui/icons';       
 import DialogSlide from '../globals/DialogSlide';
 import ShowAlert from '../globals/Alert';
+import fetchJson from '../../lib/fetchJson';
 import { createWallet } from "../../api/walletApi";
 import { useWalletStyles } from "../../styles/material-ui.styles";
 import { addWalletI} from "../../types";
@@ -21,7 +22,7 @@ function AddWalletDialog({ open, cancelAdd, finishAndRefresh }:addWalletI):JSX.E
     const [isSubmittingData, setIsSubmitting] = useState<boolean>(false);
     const [submitError, setSubmitError] = useState<string>("");
       
-    const submitData = (e) => {
+    const submitData = async (e) => {
         e.preventDefault();       
         if(imgFile===null){      
             setImgError("Wallet Icon is required.")
@@ -36,21 +37,27 @@ function AddWalletDialog({ open, cancelAdd, finishAndRefresh }:addWalletI):JSX.E
         formData.set("icon", imgFile);
   
         setIsSubmitting(true);
-        createWallet(formData)
-            .then(data => {
-                if(typeof data==='undefined'){
-                    setSubmitError("No return type?");
-                    setIsSubmitting(false);
-                    return;          
-                }
-                if(data.error){          
-                    setSubmitError("Please check your connection");
-                    setIsSubmitting(false);
-                } else {                    
-                    setIsSubmitting(false);
-                    finishAndRefresh();
-                }
-            })   
+    
+        try {
+          const addResult = await fetchJson("/api/wallets/create-wallet", {
+              method: "POST",              
+              headers: {
+                          Accept: 'application/json'
+                        },
+              body: formData
+          });
+              
+          if(addResult.message==="success"){
+            setIsSubmitting(false);
+            finishAndRefresh();
+          }else{
+            setIsSubmitting(false);
+          }
+              
+        } catch (error) {
+            console.error("An unexpected error happened:", error);
+            setIsSubmitting(false);
+        }
     }
   
     return (

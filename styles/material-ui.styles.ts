@@ -195,7 +195,7 @@ export const useTransactionStyles = makeStyles((theme: Theme) => ({
       padding:'5px 5px 5px 15px',
   },
   controlContainer: {
-    display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center'
+    display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', flexWrap:'wrap'
   },
   formControl: {
     margin: theme.spacing(1),
@@ -216,7 +216,7 @@ export const useTransactionStyles = makeStyles((theme: Theme) => ({
   },
   [theme.breakpoints.down('xs')]: {
       formControl: {
-        minWidth:'130px'
+        minWidth:'50%'
       },
       formInput: {
         minWidth:'130px'
